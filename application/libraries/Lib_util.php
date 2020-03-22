@@ -46,6 +46,43 @@ class lib_util {
 
 	}
 
+
+	function hitungLamaPerjalanan2($iOpsiHariLibur, $iOpsiHariSabtu, $iOpsiHariMinggu, $dstart, $dend){
+		$start 		= new DateTime($dstart);
+		$end 		= new DateTime($dend);
+		$end->modify('+1 day');
+		$period 	= new DatePeriod($start, new DateInterval('P1D'), $end);
+
+		$holidays = $this->getHolyday($dstart,$dend);
+
+		
+		$lama = 0;
+		foreach($period as $dt) {
+			
+			$tanggal = $dt->format('Y-m-d');
+			$D = $dt->format('D');
+
+			if (in_array($dt->format('Y-m-d'), $holidays) && $iOpsiHariLibur==1) {
+				continue;
+			}
+
+			if ($iOpsiHariSabtu==1 && $D == 'Sat'){
+				continue;
+			}
+
+			if ($iOpsiHariMinggu==1 && $D == 'Sun'){
+				continue;
+			}
+
+
+			$lama++;
+			
+		}
+
+		return $lama;
+
+	}
+
 	function getHolyday($dstart,$dend){
 		$holidays = array();
     	

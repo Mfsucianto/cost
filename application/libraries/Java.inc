@@ -337,6 +337,7 @@ public $isAsync = 0;
 public $currentCacheKey, $currentArgumentsFormat;
 public $cachedJavaPrototype;
 public $sendBuffer, $preparedToSendBuffer;
+public $cancelProxyCreationTag;
 function java_Client() {
 $this->RUNTIME = array();
 $this->RUNTIME["NOTICE"]='***USE echo java_inspect(jVal) OR print_r(java_values(jVal)) TO SEE THE CONTENTS OF THIS JAVA OBJECT!***';

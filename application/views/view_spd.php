@@ -194,7 +194,7 @@ $this->load->view('template/sidebar');
                 $query  = $this->db->query($sql);
                 if ($query->num_rows() > 0) {
                     foreach($query->result_array() as $row) {
-                        $datatmcs[$row['vNip']] = $row['vName'];
+                        $datatmcs[$row['vName']] = $row['vName'];
                     }
                 }
                 echo $this->lib_util->drawcombo('vNip_ppk','NIP/Nama PPK',$datatmcs,'300px');
@@ -207,7 +207,7 @@ $this->load->view('template/sidebar');
                 echo $this->lib_util->drawFiledText('Tanggal SPD','dTglSPPD','100px');
                 echo $this->lib_util->drawFiledText('Jenis SPD','vJenisSPD','100px');
                 echo $this->lib_util->drawcombo('iJenisAkomodasi','Jenis Akomodasi ',array(0=>'',1=>'Fullboard',2=>'Non Fullboard'));
-                echo $this->lib_util->drawFiledText('NIP / Nama','vNip','100px');
+                echo $this->lib_util->drawFiledText('NIP / Nama','vNip','300px');
 
                  echo '<div class="form-group">
                           <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">Tanggal Perjalanan</label>
@@ -247,7 +247,7 @@ $this->load->view('template/sidebar');
                 echo $this->lib_util->drawFiledTextarea('Maksud Perjalanan','vUraianPenugasan');
 
                 echo $this->lib_util->drawFiledText('Dikeluarkan Di ','diKelurkandi','200px');
-                echo $this->lib_util->drawFiledText('Tanggal ','dKeluarkanTgl','100px');
+                echo $this->lib_util->drawFiledText('Tanggal ','dKeluarkanTgl','200px');
 
                 ?>
 
@@ -260,10 +260,14 @@ $this->load->view('template/sidebar');
         <button type="button" onclick="simpanData()" class="btn btn-outline">Save</button>
     </div>
 
+    
+
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
+<iframe height="0" width="0" id="iframe_preview"></iframe>
 
 <?php 
 $this->load->view('template/js');
@@ -280,6 +284,12 @@ $this->load->view('template/foot');
 
     $(document).ready(function() {
        
+        $('#dKeluarkanTgl').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose : true,
+            todayHighlight : true,
+            disableTouchKeyboard : true
+        });
     });
 
 
@@ -293,6 +303,13 @@ $this->load->view('template/foot');
         var diKelurkandi = $('#diKelurkandi').val();
         var dKeluarkanTgl = $('#dKeluarkanTgl').val();
 
+        var url = "<?php echo site_url();?>/spd/cetakspd?id="+id+"&pejabatTTD="+pejabatTTD+"&vNip_ppk="+vNip_ppk+"&jabatan1="+jabatan1+"&jabatan2="+jabatan2+"&diKelurkandi="+diKelurkandi+"&dKeluarkanTgl="+dKeluarkanTgl
+
+        var jwb = confirm('Cetak Data Cost Sheet ?');
+
+        if (jwb==1){
+            document.getElementById('iframe_preview').src = url;
+        }
 
 
     }
@@ -394,7 +411,7 @@ $this->load->view('template/foot');
         $('#vJenisSPD').val(rowData['vJenisSPD']).val();
         $('#dTglSPPD').val(rowData['dTglSPPD']).val();
         $('#iJenisAkomodasi').val(rowData['iJenisAkomodasi']).trigger('change');
-        $('#vNip').val(rowData['vNip']);
+        $('#vNip').val(rowData['vNip']+' / '+rowData['vName']);
         $('#dPerjalananStart').val(rowData['dPerjalananStart']);
         $('#dPerjalananEnd').val(rowData['dPerjalananEnd']);
         $('#vDari').val(rowData['vDari']);

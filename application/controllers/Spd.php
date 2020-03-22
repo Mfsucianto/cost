@@ -8,7 +8,7 @@ class spd extends CI_Controller {
         parent::__construct();
        
         $this->load->library('lib_util');
-    
+    	$this->load->library('report');
     }
 
 	public function index(){
@@ -176,7 +176,7 @@ class spd extends CI_Controller {
 			left join cost.cs_header as c on c.iCsId=a.iCsId 
 			left join cost.st_header as st on st.iStId=c.iStId
 			left join cost.ms_bidang as bd on bd.iBidangId =st.iBidangId
-			where date_format(a.dTglSPPD,'%Y')='2020' and a.lDeleted=0 ".$qb;
+			where date_format(a.dTglSPPD,'%Y')='{$cTahun}' and a.lDeleted=0 ".$qb;
 
 		$query = $this->db->query($sql);
 
@@ -233,6 +233,42 @@ class spd extends CI_Controller {
 		echo $html;
 		exit();
 
+	}
+
+	function cetakspd(){
+		$this->load->helper('download'); 
+		
+		$path = $this->config->item('report_path');
+		
+
+		$id 			= $_GET['id'];
+		$pejabatTTD 	= $_GET['pejabatTTD'];
+		$vNip_ppk 		= $_GET['vNip_ppk'];
+		$jabatan1 		= $_GET['jabatan1'];
+		$jabatan2 		= $_GET['jabatan2'];
+		$diKelurkandi 	= $_GET['diKelurkandi'];
+		$dKeluarkanTgl 	= $_GET['dKeluarkanTgl'];
+		
+		
+		$params = new Java("java.util.HashMap");
+		$params->put('id', (int)$id);	
+		$params->put('SUBREPORT_DIR', $path);		
+		$params->put('dikeluarkan', $diKelurkandi);		
+		$params->put('tglKeluar', $dKeluarkanTgl);		
+		$params->put('baris1', $jabatan1);		
+		$params->put('baris2', $jabatan2);		
+		$params->put('Nama_pejabat', $vNip_ppk);		
+		
+		$reportAsal   = "spd.jrxml";
+		$reportTujuan = "spd.pdf";
+
+				
+		$nama_file = explode('.', $reportAsal);		
+		
+		$this->report->showReport($path, $reportAsal, $reportTujuan, $params,1);	
+		$open_file = file_get_contents($path.$reportTujuan);
+		
+		force_download($nama_file[0], $open_file);	
 	}
 	
 

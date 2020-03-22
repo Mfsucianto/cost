@@ -20,23 +20,32 @@ class vspd extends CI_Controller {
 	}
 
 	public function getData(){
-		$iBarcode = $_POST['iBarcode'];
-		$vNomorCs = $_POST['vNomorCs'];
 		
-		if ($vNomorCs!=''){
-			$q = " AND st.vNomorCs='".$vNomorCs."' ";
+		$vNip 				= $_POST['vNip'];
+		$iBidangId 			= $_POST['iBidangId'];
+		$dPerjalananStart 	= date('Y-m-d',strtotime($_POST['dPerjalananStart']));
+		$dPerjalananEnd 	= date('Y-m-d',strtotime($_POST['dPerjalananEnd']));
+	
+		if ($vNip!=''){
+			$q = " a.vNip='".$vNip."' ";
+		}else if ($iBidangId!=''){
+			$q = " e.iBidangId='".$iBidangId."' ";
 		}else{
-			$q = "";
+			$q = " a.lDeleted=0 ";
 		}
 
 
 
-		$sql = "select a.id,st.iBarcode,st.cNomorST,c.vNomorCs,a.vNip,b.vName,a.vNoSPPD,a.dTglSPPD 
+		$sql = "select a.vNip,e.vName,a.dPerjalananStart,a.dPerjalananEnd,a.dTglSPPD,a.vNoSPPD,b.vTujuan,c.cNomorST,
+				a.iOpsiHariLibur,a.iOpsiHariSabtu,a.iOpsiHariMinggu,f.vBidangName 
 				from cost.cs_detail as a
-				left join cost.ms_pegawai as b on b.vNip=a.vNip
-				inner join cost.cs_header as c on c.iCsId=a.iCsId
-				inner join cost.st_header as st on st.iStId=c.iStId
-				where st.iBarcode='".$iBarcode."' ".$q." and a.lDeleted=0 and c.lDeleted=0";
+				inner join cost.cs_header as b on b.iCsId=a.iCsId
+				inner join cost.st_header as c on c.iStId=b.iStId
+				inner join cost.ms_pegawai as e on e.vNip=a.vNip
+				inner join cost.ms_bidang as f on f.iBidangId=e.iBidangId
+				where ".$q." and 
+				(a.dPerjalananStart between '{$dPerjalananStart}' and '{$dPerjalananEnd}' 
+				or a.dPerjalananEnd between '{$dPerjalananStart}' and '{$dPerjalananEnd}') and a.lDeleted=0";
 
 
 		$query 	= $this->db->query($sql);
@@ -45,13 +54,15 @@ class vspd extends CI_Controller {
 			<thead>
               <tr>
                	<td>No</td>
-               	<td>ID ST</td>
-               	<td>Nomor Cost Sheet</td>
-               	<td>NIP</td>
-               	<td>Nama</td>
-               	<td>Nomor SPPD</td>
+               	<td>Nomor ST</td>
+               	<td>Nama Penugasan</td>
+               	<td>Bidang</td>
+               	<td>No SPPD</td>
                	<td>Tgl SPPD</td>
-               	<td></td>
+               	<td>Tujuan</td>
+               	<td>Tgl Berangkat</td>
+               	<td>Tgl Kembali</td>
+               	<td>Jumlah Hari</td>
                
               </tr>
             </thead>
@@ -60,31 +71,26 @@ class vspd extends CI_Controller {
 		if ($query->num_rows() > 0) {
 			foreach($query->result_array() as $row) {
 				$no++;
-				$id = $row['id'];
-
 				
-				$html .= "<tr>";
-                $html .= "<td width='50px'>".$no."</td>";
-                /*$html .= "<td align='center'  width='100px' >
-                        <a  href='javasript:void(0)' data-toggle='modal' data-target='#modal-info' onclick='edit(\"".$id."\")' ><i class='fa fa-edit'></i></a> || 
-                        <a  href='#' onclick='hapus(\"".$id."\")' ><i class='fa fa-trash-o'></i></a>
-                </td>";*/
-                
-             	if ($row['dTglSPPD']=='' || $row['dTglSPPD']=='0000-00-00'){
+				if ($row['dTglSPPD']=='' || $row['dTglSPPD']=='0000-00-00'){
              		$dTglSPPD = '';
              	}else{
              		$dTglSPPD =  date('d-m-Y',strtotime($row['dTglSPPD']));
              	}
-				
-				
-				$html .= "<td>".$row['iBarcode']."</td>";
-				$html .= "<td>".$row['vNomorCs']."</td>";
-				$html .= "<td>".$row['vNip']."</td>";
+
+             	$nLama = $this->lib_util->hitungLamaPerjalanan2($row['iOpsiHariLibur'],$row['iOpsiHariSabtu'],$row['iOpsiHariMinggu'],$row['dPerjalananStart'],$row['dPerjalananEnd']);
+
+				$html .= "<tr>";
+                $html .= "<td width='50px'>".$no."</td>";
+				$html .= "<td>".$row['cNomorST']."</td>";
 				$html .= "<td>".$row['vName']."</td>";
+				$html .= "<td>".$row['vBidangName']."</td>";
 				$html .= "<td>".$row['vNoSPPD']."</td>";
 				$html .= "<td>".$dTglSPPD."</td>";
-				$html .= "<td style='text-align:center;' ><a  href='javasript:void(0)' data-toggle='modal' data-target='#modal-info' onclick='edit(\"".$id."\")' ><i class='fa fa-edit'></i></a></td>";
-				
+				$html .= "<td>".$row['vTujuan']."</td>";
+				$html .= "<td>".date('d-m-Y',strtotime($row['dPerjalananStart']))."</td>";
+				$html .= "<td>".date('d-m-Y',strtotime($row['dPerjalananEnd']))."</td>";
+				$html .= "<td>".$nLama."</td>";
                 $html .= "</tr>";
 
 			}

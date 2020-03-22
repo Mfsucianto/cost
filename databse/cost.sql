@@ -59,6 +59,17 @@ CREATE TABLE `cs_detail` (
   `dTglSPPD` date DEFAULT NULL,
   `vNoSPPD` varchar(30) DEFAULT NULL,
   `vJenisSPD` varchar(30) DEFAULT NULL,
+  `iCheckSuratTugas` tinyint(1) NOT NULL DEFAULT '0',
+  `iChekSpd` tinyint(1) NOT NULL DEFAULT '0',
+  `iChekPenginapan` tinyint(1) NOT NULL DEFAULT '0',
+  `iChekTransportasi` tinyint(1) NOT NULL DEFAULT '0',
+  `iChekPengeluaran` tinyint(1) NOT NULL DEFAULT '0',
+  `dTerimaSpj` date DEFAULT NULL,
+  `vNomorKwitansi` varchar(30) DEFAULT NULL,
+  `dTglKwitansi` date DEFAULT NULL,
+  `dLumpsumpAwal` date DEFAULT NULL,
+  `dLumpsumpAkhir` date DEFAULT NULL,
+  `nNilaiKwitansi` bigint(20) DEFAULT NULL,
   `tCreated` datetime DEFAULT NULL,
   `cCreatedby` varchar(20) DEFAULT NULL,
   `tUpdated` datetime DEFAULT NULL,
@@ -72,10 +83,36 @@ CREATE TABLE `cs_detail` (
 
 /*Data for the table `cs_detail` */
 
-insert  into `cs_detail`(`id`,`iCsId`,`dPerjalananStart`,`dPerjalananEnd`,`nLama`,`iAlatAngkut`,`iOpsiHariLibur`,`iOpsiHariSabtu`,`iOpsiHariMinggu`,`vNip`,`nBiayaUangHarian`,`nTotalUangHarian`,`nBiayaRepre`,`nBiayaTransport`,`nTotalTransport`,`iJenisAkomodasi`,`nBiayaPenginapan`,`nTotalPenginapan`,`nHonorJasa`,`nTotalBiaya`,`dTglSPPD`,`vNoSPPD`,`vJenisSPD`,`tCreated`,`cCreatedby`,`tUpdated`,`cUpdatedby`,`lDeleted`) values 
-(6,5,'2020-03-04','2020-03-09',4,1,1,1,3,'44411122',10000,40000,50000,5000,10000,1,10000,30000,500000,630000,'2020-03-11','SPD-2/PW4/3/2020','A','2020-03-07 23:10:30','rava','2020-03-14 06:00:59','rava',0),
-(7,8,'2020-03-09','2020-03-09',1,0,0,0,0,'197706121998111001',0,0,0,0,0,0,0,0,0,0,NULL,NULL,NULL,'2020-03-09 05:28:02','rava','2020-03-09 05:28:09','rava',0),
-(8,5,'2020-03-04','2020-03-05',2,1,1,1,1,'999999999X',30000,60000,20000,10000,20000,1,10000,10000,40000,150000,NULL,NULL,NULL,'2020-03-16 05:41:28',NULL,NULL,NULL,0);
+insert  into `cs_detail`(`id`,`iCsId`,`dPerjalananStart`,`dPerjalananEnd`,`nLama`,`iAlatAngkut`,`iOpsiHariLibur`,`iOpsiHariSabtu`,`iOpsiHariMinggu`,`vNip`,`nBiayaUangHarian`,`nTotalUangHarian`,`nBiayaRepre`,`nBiayaTransport`,`nTotalTransport`,`iJenisAkomodasi`,`nBiayaPenginapan`,`nTotalPenginapan`,`nHonorJasa`,`nTotalBiaya`,`dTglSPPD`,`vNoSPPD`,`vJenisSPD`,`iCheckSuratTugas`,`iChekSpd`,`iChekPenginapan`,`iChekTransportasi`,`iChekPengeluaran`,`dTerimaSpj`,`vNomorKwitansi`,`dTglKwitansi`,`dLumpsumpAwal`,`dLumpsumpAkhir`,`nNilaiKwitansi`,`tCreated`,`cCreatedby`,`tUpdated`,`cUpdatedby`,`lDeleted`) values 
+(6,5,'2020-03-04','2020-03-09',4,1,1,1,3,'44411122',10000,40000,50000,5000,10000,1,10000,30000,500000,630000,'2020-03-11','SPD-2/PW4/3/2020','A',1,1,1,0,0,'2020-03-06','1234','2020-03-04','2020-03-17','2020-03-18',2100000,'2020-03-07 23:10:30','rava','2020-03-23 05:34:11','rava',0),
+(7,8,'2020-03-09','2020-03-09',1,0,0,0,0,'197706121998111001',0,0,0,0,0,0,0,0,0,0,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2020-03-09 05:28:02','rava','2020-03-09 05:28:09','rava',0),
+(8,5,'2020-03-04','2020-03-05',2,1,1,1,1,'999999999X',30000,60000,20000,10000,20000,1,10000,10000,40000,150000,'2020-03-13','SPD-123','SA',0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2020-03-16 05:41:28',NULL,'2020-03-21 04:04:39','rava',0);
+
+/*Table structure for table `cs_detail_kwitansi` */
+
+DROP TABLE IF EXISTS `cs_detail_kwitansi`;
+
+CREATE TABLE `cs_detail_kwitansi` (
+  `iCsDetailId` int(11) DEFAULT NULL,
+  `iJenis` tinyint(1) DEFAULT NULL,
+  `nHari` int(4) NOT NULL DEFAULT '0',
+  `nBiaya` bigint(20) NOT NULL DEFAULT '0',
+  `nJumlah` bigint(20) NOT NULL DEFAULT '0',
+  `vTransDari` varchar(30) DEFAULT NULL,
+  `vTransTujuan` varchar(30) DEFAULT NULL,
+  KEY `iCsDetailId` (`iCsDetailId`),
+  KEY `iCsDetailId_2` (`iCsDetailId`,`iJenis`),
+  KEY `iJenis` (`iJenis`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `cs_detail_kwitansi` */
+
+insert  into `cs_detail_kwitansi`(`iCsDetailId`,`iJenis`,`nHari`,`nBiaya`,`nJumlah`,`vTransDari`,`vTransTujuan`) values 
+(6,1,1,100000,100000,NULL,NULL),
+(6,1,2,50000,100000,NULL,NULL),
+(6,2,2,200000,400000,NULL,NULL),
+(6,3,3,100000,300000,NULL,NULL),
+(6,4,0,0,1200000,'Jakarta','Palembang');
 
 /*Table structure for table `cs_header` */
 
@@ -426,7 +463,7 @@ CREATE TABLE `st_header` (
   `cUpdatedBy` varchar(20) DEFAULT NULL,
   `lDeleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`iStId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 /*Data for the table `st_header` */
 
@@ -434,7 +471,8 @@ insert  into `st_header`(`iStId`,`iBarcode`,`vNomorCs`,`iBidangId`,`iSubBidangId
 (1,200001,'CS-5/PW04/3/2020',3,NULL,1,1,'KEGIATAN BIDANG AKUNTABILITAS PEMDA','Dasar Penugasan membuat segal','121-1123','2020-03-04','Obejek','Melaksanakan kegiatang yang menjadi tanggung jawab team kita dan memberikan edukasi terhadap masyarakat terkait bayanya Virus Korona','2020-03-04',5,1,1,'',NULL,NULL,NULL,'ST-/SSS/SDS','2020-03-04','2020-03-05 05:41:01','rava','2020-03-08 04:33:42','rava',0),
 (2,200002,'CS-1/PW04/1/2020',1,NULL,1,1,'RAPAT KOORDINASI','Pembuatan','123456','2020-03-03','Pembuatan ','dddd','2020-03-04',4,3,0,'Relasisasi dari orang sana',NULL,NULL,NULL,NULL,NULL,'2020-03-06 05:32:45','rava','2020-03-06 06:27:32','rava',0),
 (3,200003,'CS-2/PW04/1/2020',1,NULL,0,2,'KEGIATAN SUB BAG UMUM','asa','asa','2020-03-06','ass','aaaa','2020-03-03',23,3,0,'asa',NULL,NULL,NULL,NULL,NULL,'2020-03-06 06:25:20','rava','2020-03-06 09:11:10','rava',1),
-(4,200004,NULL,3,NULL,0,1,'KEGIATAN BIDANG AKUNTABILITAS PEMDA','a','w','2020-03-04','q','q','2020-03-04',45,1,1,'',NULL,NULL,NULL,'','0000-00-00','2020-03-09 05:23:38','rava','2020-03-09 05:29:00','rava',0);
+(4,200004,NULL,3,NULL,0,1,'KEGIATAN BIDANG AKUNTABILITAS PEMDA','a','w','2020-03-04','q','q','2020-03-04',45,1,1,'',NULL,NULL,NULL,'','0000-00-00','2020-03-09 05:23:38','rava','2020-03-09 05:29:00','rava',0),
+(5,200007,NULL,3,NULL,0,1,'KEGIATAN BIDANG AKUNTABILITAS PEMDA','a','ss','2020-03-16','asa','as','2020-03-17',1,4,0,'asa',NULL,NULL,NULL,NULL,NULL,'2020-03-16 09:13:29','rava',NULL,NULL,0);
 
 /*Table structure for table `sysparam` */
 
@@ -467,7 +505,7 @@ CREATE TABLE `tabcount` (
 /*Data for the table `tabcount` */
 
 insert  into `tabcount`(`cCode`,`cTahun`,`iLastNumber`,`vDesc`) values 
-('BAR','2020',4,'Counter For Barcode Cost Sheet');
+('BAR','2020',7,'Counter For Barcode Cost Sheet');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

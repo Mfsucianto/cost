@@ -55,7 +55,7 @@
                          <a href="<?php echo site_url('/spd') ?>"> <i><span class="glyphicon glyphicon-file"></span></i> <span>SPD</span> <span class="pull-right-container"> </span> </a> 
                     </li>
 
-                    <li>
+                    <li  id="side_menu_spj">
                          <a href="<?php echo site_url('?id=4') ?>"> <i><span class="glyphicon glyphicon-file"></span></i> <span>SPJ</span> <span class="pull-right-container"> </span> </a> 
                     </li>
 
