@@ -178,7 +178,7 @@ $this->load->view('template/sidebar');
             
             <button type="button" class="btn btn-info "  onclick="backToRencana()" ><i class="fa  fa-backward"></i> Kembali Ke Data Rencana</button>
             <button type="button" class="btn bg-navy "  onclick="simpanDataKwitansi()" >Simpan</button>
-            <button type="button" class="btn bg-navy "  onclick="cetakKwitansi()" >Cetak</button>
+            <button type="button" class="btn bg-navy "  onclick="cetakKwitansi()" >Cetak Kwitansi</button>
             <button type="button" class="btn btn-info pull-right "  onclick="nextDpr()" >Lanjut Ke DPR <i class="fa  fa-forward"></i></button>
             
         </div><!-- /.box-footer-->
@@ -187,6 +187,50 @@ $this->load->view('template/sidebar');
 </section><!-- /.content -->
 
 
+
+<!-- Main content -->
+<section class="content" id="sec_dpr" style="display: none;"  >
+
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">DPR</h3>
+            <div class="box-tools pull-right">
+                
+               
+            </div>
+        </div>
+        <div class="box-body">
+            <div >
+                <form class="form-horizontal" id="form_data_dpr" name="form_data_dpr" autocomplete="off">
+                <?php
+                    
+                    echo '<input type="hidden" readonly class="form-control input-sm" id="id_dpr" name="id_dpr" value="0">';
+
+                    echo $this->lib_util->drawFiledText('Nomor Kwitansi','vNomorKwitansiDPR','200px');
+                    echo $this->lib_util->drawFiledText('Tanggal Kwitansi','dTglKwitansiDPR','200px');
+                   
+                   
+                    echo "<legend></legend>";
+                    $this->load->view('view_dpr');
+                ?>
+                
+
+            </form>
+            </div>
+        </div><!-- /.box-body -->
+        <div class="box-footer" >
+            
+            <button type="button" class="btn btn-info "  onclick="nextKwitansi()" ><i class="fa  fa-backward"></i> Kembali Ke Kwitansi</button>
+            <button type="button" class="btn bg-navy "  onclick="simpanDataDpr()" >Simpan</button>
+            <button type="button" class="btn bg-navy "  onclick="cetakDpr()" >Cetak DPR</button>
+            <button type="button" class="btn bg-navy "  onclick="cetakRincian()" >Cetak Rincian Biaya Perjadin</button>
+            
+            
+        </div><!-- /.box-footer-->
+    </div><!-- /.box -->
+
+</section><!-- /.content -->
 
 
 <!--  Modal content for the above example -->
@@ -201,6 +245,50 @@ $this->load->view('template/sidebar');
         <div class="modal-body" id="list_data_spd">
            
         </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+
+
+<!--  Modal content for the above example -->
+  <div class="modal fade modal_cetak_kwitansi" tabindex="-1" role="dialog" aria-labelledby="label_modal_kwitansi">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="label_modal_kwitansi">Cetak Kwitansi </h4>
+        </div>
+        <div class="modal-body">
+            <div>
+                <form class="form-horizontal" id="form_data_dpr" name="form_data_dpr" autocomplete="off">
+                    <?php
+                        $datatmcs = array();
+                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.lDeleted=0 ";
+                        $query  = $this->db->query($sql);
+                        if ($query->num_rows() > 0) {
+                            foreach($query->result_array() as $row) {
+                                $datatmcs[$row['vName']] = $row['vName'];
+                            }
+                        }
+                        echo $this->lib_util->drawcombo('vPejabatKwitansi','Pilih Pejabat Pembuat Komitmen',$datatmcs,'300px');
+                        echo $this->lib_util->drawcombo('vBendaharaKwitansi','Pilih Bendahara',$datatmcs,'300px');
+
+                        echo $this->lib_util->drawFiledText('Dibuat Di ','dibuatdiKwitansi','300px');
+                        echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatKwitansi','100px');
+                   ?>
+                </form>
+            </div>
+           
+        </div>
+        <div class="box-footer" >
+            <center>
+            <button type="button" class="btn btn-info "  onclick="prosesCetakKwitansi()" ><i class="fa  fa-print"></i> Cetak</button>
+           </center>
+            
+        </div><!-- /.box-footer-->
+
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
@@ -246,6 +334,11 @@ $this->load->view('template/foot');
         $('#nNilaiKwitansi').prop('disabled', true);
         $('#nSisaPaguAwal').prop('disabled', true);
         $('#nSisaPaguAkhir').prop('disabled', true);
+        $('#vNomorKwitansiDPR').prop('disabled', true);
+        $('#dTglKwitansiDPR').prop('disabled', true);
+
+
+
 
 
 
@@ -271,6 +364,13 @@ $this->load->view('template/foot');
         });
 
         $('#dLumpsumpAkhir').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose : true,
+            todayHighlight : true,
+            disableTouchKeyboard : true
+        });
+
+        $('#tgl_dibuat').datepicker({
             format: 'dd-mm-yyyy',
             autoclose : true,
             todayHighlight : true,
@@ -353,6 +453,7 @@ $this->load->view('template/foot');
 
         $('#sec_rencana').hide(200);
         $('#sec_kwitansi').show(200);
+        $('#sec_dpr').hide(200);
 
     }
 
@@ -360,6 +461,13 @@ $this->load->view('template/foot');
     function backToRencana() {
         $('#sec_kwitansi').hide(200);
         $('#sec_rencana').show(200);
+        $('#sec_dpr').hide(200);
+    }
+
+    function nextDpr() {
+        $('#sec_rencana').hide(200);
+        $('#sec_kwitansi').hide(200);
+        $('#sec_dpr').show(200);
     }
     function cetakDataSPD() {
         var id = $('#id').val();
@@ -467,9 +575,16 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
         $('#vDari').val(vDari)
         $('#vTujuan').val(vTujuan)
 
+
+        $('#id_dpr').val(id);
+        $('#vNomorKwitansiDPR').val(vNomorKwitansi);
+        $('#dTglKwitansiDPR').val(dTglKwitansi);
+
+
         $('.bs-example-modal-lg').modal('hide')
 
         drawTabelKwitansi(id);
+        drawTabelDpr(id);
 
     }
 
@@ -550,6 +665,38 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
     function  getListKwitansi(id) {
         var url = "<?php echo site_url().'/rencana/getListKwitansi'; ?>";
+        return $.ajax({
+            type: 'POST',
+            data:'id='+id, 
+            url: url,
+            async:false
+        }).responseText
+    }
+
+    function drawTabelDpr(id) {
+        $("#tabel_detail_dpr > tbody").html("");
+        var list_item = getListDpr(id);
+        var pt = JSON.parse(list_item);
+        no = 0;
+        for(i=0;i<pt.length;i++) {
+            no++;
+            var row_content = '';
+            row_content   = '<tr>';
+            row_content  += '<td><span class="tabel_detail_dpr_num">'+no+'</span></td>';
+
+            row_content  += '<td><input style="width: 90%;text-align:left;" type="text" class="dpr_vPerincian" name="dpr_vPerincian[]" value="'+pt[i].vPerincian+'"  ></td>'
+            row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="dpr_nJumlah" name="dpr_nJumlah[]" value="'+pt[i].nJumlah+'" data-a-dec="." data-a-sep=","  ></td>'
+            row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_dpr(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
+            row_content  += '</tr>';
+            jQuery("#tabel_detail_dpr tbody").append(row_content);
+
+        }
+        sum_value_dpr();
+
+    }
+
+    function getListDpr(id) {
+        var url = "<?php echo site_url().'/rencana/getListDpr'; ?>";
         return $.ajax({
             type: 'POST',
             data:'id='+id, 
@@ -693,117 +840,91 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
     }
 
-    function edit(id){
-        
-        $('.bs-example-modal-lg').modal({
-            backdrop: 'static',
-            keyboard: false
-            })
+    function simpanDataDpr() {
 
-
-        var list_data = getFormDataSPD(id);
-        rowData  = JSON.parse(list_data);
-
-        $('#id').val(id).val();
-        $('#vNoSPPD').val(rowData['vNoSPPD']).val();
-        $('#vJenisSPD').val(rowData['vJenisSPD']).val();
-        $('#dTglSPPD').val(rowData['dTglSPPD']).val();
-        $('#iJenisAkomodasi').val(rowData['iJenisAkomodasi']).trigger('change');
-        $('#vNip').val(rowData['vNip']+' / '+rowData['vName']);
-        $('#dPerjalananStart').val(rowData['dPerjalananStart']);
-        $('#dPerjalananEnd').val(rowData['dPerjalananEnd']);
-        $('#vDari').val(rowData['vDari']);
-        $('#vTujuan').val(rowData['vTujuan']);
-        $('#vUraianPenugasan').val(rowData['vUraianPenugasan']);
-        $('#iAlatAngkut').val(rowData['iAlatAngkut']).trigger('change');
-        $('#iSumberDana').val(rowData['iSumberDana']).trigger('change');
-
-        $('.bs-example-modal-lg').modal('show');
-
-        $("#iJenisAkomodasi").prop('disabled', true);
-        $("#vNip").prop('disabled', true);
-        $("#dPerjalananStart").prop('disabled', true);
-        $("#dPerjalananEnd").prop('disabled', true);
-        $("#vDari").prop('disabled', true);
-        $("#vTujuan").prop('disabled', true);
-        $("#iAlatAngkut").prop('disabled', true);
-        $("#iSumberDana").prop('disabled', true);
-        $("#vUraianPenugasan").prop('disabled', true);
-
-        // iJenisAkomodasi
-        // vNip
-        // dPerjalananStart
-        // dPerjalananEnd
-        // vDari
-        // vTujuan
-        // iAlatAngkut
-        // iSumberDana
-
-        $('#dTglSPPD').datepicker({
-            format: 'dd-mm-yyyy',
-            autoclose : true,
-            todayHighlight : true
-      
-        });
-
-    }
-
-
-
-    function getFormDataSPD(id) {
-         var url = "<?php echo site_url().'/spd/getFormDataSPD'; ?>";
-        return $.ajax({
-            type: 'POST', 
-            url: url,
-            data:'id='+id,
-            async:false
-        }).responseText
-    }
-
-   
-    function monitoringSPD() {
-        $('#sec_spd').hide(200);
-        $('#sec_monitoring').show(200);
-        $('#section_list_spd').hide();
-        $('#isi_table').html('');
-    }
-
-    
-    function searchMonitoring() {
-        if ($('#cTahun')==''){
-            custom_alert('','Masukan Tahun');
+        if ($('#id_dpr').val()==0){
+            custom_alert('Opps','Please select Data SPD');
             return false;
         }
 
-         $('#section_list_spd').show();
-         $('#isi_table').html('<center>--please wait while colecting data--</center>');
+        if ($('.dpr_vPerincian').val() == undefined) {
+            custom_alert('','Tidak ada data untuk disimpan!');
+            return false;
+        }else{
+            i=0;
+            tot_err=0;
 
-        var data = loadDataMonitoring();
-        $('#isi_table').html(data);
-        
-        $('#example1').DataTable({
-            scrollY:        300,
-            scrollX:        true,
-            scrollCollapse: true,
-            fixedColumns:   {
-                leftColumns: 3,
-                rightColumns: 0,
+            $('.dpr_vPerincian').each(function() {
+                if ($('.dpr_vPerincian').eq(i).val() == '') {                                                  
+                        custom_alert('','Lengkapi Perincian Biaya');
+                        $('.dpr_vPerincian').eq(i).focus();
+                        tot_err++;              
+                }
+                i++;                                                                                
+            });
+    
+            if (tot_err > 0) {
+                return false;
             }
-        });
 
+            i=0;
+            $('.dpr_nJumlah').each(function() {
+                if ($('.dpr_nJumlah').eq(i).val() == '' || $('.dpr_nJumlah').eq(i).val() == 0) {
+                        custom_alert('','Lengkapi Jumlah');
+                        $('.dpr_nJumlah').eq(i).focus();
+                        tot_err++;              
+                }
+                i++;                                                                                
+            });
+    
+            if (tot_err > 0) {
+                return false;
+            }
+
+
+            var url = "<?php echo site_url().'/rencana/simpanDataDpr'; ?>";
+            var jwb = confirm("Simpan data ini ?");
+            if (jwb==1){
+
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: $('#form_data_dpr').serialize(),
+                    success: function(data) {
+                        if (data == 1) {
+                            custom_alert('',"Data berhasil disimpan",'success');
+                            return false;
+                        }else {
+                           alert("Data Gagal disimpan");
+                           return false;
+                        }
+                    }
+                })
+               
+            }
+        }
     }
 
-    function loadDataMonitoring(){
-        var cTahun = $('#cTahun').val(); 
-        var iBidangId = $('#iBidangId').val();
-        var url = "<?php echo site_url().'/spd/loadDataMonitoring'; ?>";
-        return $.ajax({
-            type: 'POST',
-            data: 'cTahun='+cTahun+'&iBidangId='+iBidangId, 
-            url: url,
-            async:false
-        }).responseText
+
+    function cetakKwitansi() {
+        $('.modal_cetak_kwitansi').modal('show');
     }
 
+    function prosesCetakKwitansi() {
+        var id = $('#id').val();
+        var vPejabatKwitansi    = $('#vPejabatKwitansi').val();
+        var vBendaharaKwitansi  = $('#vBendaharaKwitansi').val();
+        var dibuatdiKwitansi    = $('#dibuatdiKwitansi').val();
+        var tgl_dibuatKwitansi  = $('#tgl_dibuatKwitansi').val();
+
+        var url = "<?php echo site_url();?>/rencana/cetakkwitansi?id="+id+"&pejabatTTD="+pejabatTTD+"&vNip_ppk="+vNip_ppk+"&jabatan1="+jabatan1+"&jabatan2="+jabatan2+"&diKelurkandi="+diKelurkandi+"&dKeluarkanTgl="+dKeluarkanTgl
+
+        var jwb = confirm('Cetak Data Cost Sheet ?');
+
+        if (jwb==1){
+            document.getElementById('iframe_preview').src = url;
+        }
+        
+    }
     
 </script>

@@ -14,6 +14,23 @@ MySQL - 5.6.16 : Database - cost
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 USE `cost`;
 
+/*Table structure for table `cd_detail_dpr` */
+
+DROP TABLE IF EXISTS `cd_detail_dpr`;
+
+CREATE TABLE `cd_detail_dpr` (
+  `iCsDetailId` int(11) DEFAULT NULL,
+  `vPerincian` varchar(100) DEFAULT NULL,
+  `nJumlah` bigint(20) NOT NULL DEFAULT '0',
+  KEY `iCsDetailId` (`iCsDetailId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `cd_detail_dpr` */
+
+insert  into `cd_detail_dpr`(`iCsDetailId`,`vPerincian`,`nJumlah`) values 
+(6,'Makan di kulkas',13000),
+(6,'Jalan2 bersama pasangan',12000);
+
 /*Table structure for table `counter_cs` */
 
 DROP TABLE IF EXISTS `counter_cs`;
@@ -84,7 +101,7 @@ CREATE TABLE `cs_detail` (
 /*Data for the table `cs_detail` */
 
 insert  into `cs_detail`(`id`,`iCsId`,`dPerjalananStart`,`dPerjalananEnd`,`nLama`,`iAlatAngkut`,`iOpsiHariLibur`,`iOpsiHariSabtu`,`iOpsiHariMinggu`,`vNip`,`nBiayaUangHarian`,`nTotalUangHarian`,`nBiayaRepre`,`nBiayaTransport`,`nTotalTransport`,`iJenisAkomodasi`,`nBiayaPenginapan`,`nTotalPenginapan`,`nHonorJasa`,`nTotalBiaya`,`dTglSPPD`,`vNoSPPD`,`vJenisSPD`,`iCheckSuratTugas`,`iChekSpd`,`iChekPenginapan`,`iChekTransportasi`,`iChekPengeluaran`,`dTerimaSpj`,`vNomorKwitansi`,`dTglKwitansi`,`dLumpsumpAwal`,`dLumpsumpAkhir`,`nNilaiKwitansi`,`tCreated`,`cCreatedby`,`tUpdated`,`cUpdatedby`,`lDeleted`) values 
-(6,5,'2020-03-04','2020-03-09',4,1,1,1,3,'44411122',10000,40000,50000,5000,10000,1,10000,30000,500000,630000,'2020-03-11','SPD-2/PW4/3/2020','A',1,1,1,0,0,'2020-03-06','1234','2020-03-04','2020-03-17','2020-03-18',2100000,'2020-03-07 23:10:30','rava','2020-03-23 05:34:11','rava',0),
+(6,5,'2020-03-04','2020-03-09',4,1,1,1,3,'44411122',10000,40000,50000,5000,10000,1,10000,30000,500000,630000,'2020-03-11','SPD-2/PW4/3/2020','A',1,1,1,0,0,'2020-03-06','1234','2020-03-04','2020-03-17','2020-03-18',2100000,'2020-03-07 23:10:30','rava','2020-03-24 05:57:04','rava',0),
 (7,8,'2020-03-09','2020-03-09',1,0,0,0,0,'197706121998111001',0,0,0,0,0,0,0,0,0,0,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2020-03-09 05:28:02','rava','2020-03-09 05:28:09','rava',0),
 (8,5,'2020-03-04','2020-03-05',2,1,1,1,1,'999999999X',30000,60000,20000,10000,20000,1,10000,10000,40000,150000,'2020-03-13','SPD-123','SA',0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2020-03-16 05:41:28',NULL,'2020-03-21 04:04:39','rava',0);
 

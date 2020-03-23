@@ -524,6 +524,63 @@ class rencana extends CI_Controller {
 		echo json_encode($data);
 		exit;	
 	}
+
+
+	function simpanDataDpr(){
+		$id = $_POST['id_dpr'];
+
+		$post = $_POST;
+
+		$vPerincian = array();
+		$nJumlah	= array();
+
+		foreach($post as $k=>$v) {
+		
+			if (preg_match('/^dpr_vPerincian(.*)$/', $k, $match)) {
+				$vPerincian[] = $v;
+			}
+
+			if (preg_match('/^dpr_nJumlah(.*)$/', $k, $match)) {
+				$nJumlah[] = str_replace(",", "", $v);
+			}
+		}
+
+		$sql = "DELETE FROM cost.cd_detail_dpr WHERE iCsDetailId='".$id."' ";
+		$this->db->query($sql);
+
+		foreach($vPerincian as $key=>$value) {
+			foreach($value as $k=>$v) {
+				
+				$data_dpr = array(
+						'iCsDetailId' => $id,
+						'vPerincian'  => $v,
+						'nJumlah'	  => $nJumlah[0][$k]
+					);
+
+				$this->db->insert('cost.cd_detail_dpr',$data_dpr);
+			}
+		}
+
+		echo '1';
+	}
+
+	function getListDpr(){
+		$iCsDetailId = $_POST['id'];
+		$data = array();
+
+		$sql = "SELECT vPerincian,nJumlah FROM cost.cd_detail_dpr WHERE iCsDetailId='".$iCsDetailId."'";
+
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0) {
+			foreach($query->result_array() as $row) {
+				$r_data['vPerincian'] 		= $row['vPerincian'];
+				$r_data['nJumlah'] 		= number_format($row['nJumlah']);
+				array_push($data, $r_data);
+			}
+		}
+		echo json_encode($data);
+		exit;	
+	}
 }
 
 ?>
