@@ -971,7 +971,7 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
         var url = "<?php echo site_url();?>/rencana/cetakkwitansi?id="+id+"&vPejabatKwitansi="+vPejabatKwitansi+"&vBendaharaKwitansi="+vBendaharaKwitansi+"&dibuatdiKwitansi="+dibuatdiKwitansi+"&tgl_dibuatKwitansi="+tgl_dibuatKwitansi+'&terbilang='+terbilang
 
-        var jwb = confirm('Cetak Data Cost Sheet ?');
+        var jwb = confirm('Cetak Kwitansi ?');
 
         if (jwb==1){
             document.getElementById('iframe_preview').src = url;
@@ -995,7 +995,7 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
         var url = "<?php echo site_url();?>/rencana/cetakperjadin?id="+id+"&vPejabatperjadin="+vPejabatperjadin+"&vBendaharaperjadin="+vBendaharaperjadin+"&dibuatdiperjadin="+dibuatdiperjadin+"&tgl_dibuatperjadin="+tgl_dibuatperjadin+'&terbilang='+terbilang
 
-        var jwb = confirm('Cetak Data Cost Sheet ?');
+        var jwb = confirm('Cetak Rincian Biaya Perjadin ?');
 
         if (jwb==1){
             document.getElementById('iframe_preview').src = url;
