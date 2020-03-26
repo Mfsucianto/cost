@@ -1,4 +1,4 @@
-<div class="form-group" id="div_detail_rkt" >
+<div class="form-group" >
 	<label for="username" class="col-sm-4 control-label" ></label>
 	  <div class="col-sm-8">
 	    <div class="input-group input-group-sm" style="width: 100%;">
@@ -10,13 +10,14 @@
 		                
 		                <thead>
 		                	<tr style="background-color: #de95ba;">
-		                		<td colspan="4" align="center" ><b>Biaya Representattif</b></td>
+		                		<td colspan="5" align="center" ><b>Biaya Representattif</b></td>
 		                	</tr>
 		                	<tr style="background-color: #de95ba;">
 				                <th style="width: 100px;text-align: center;" >Lama (Hari)</th>
-				                <th style="width: 200px;text-align: center;" >Biaya</th>
-				                <th style="width: 200px;text-align: center;" >Jumlah</th>
-				                <th style="width: 10px"></th>
+				                <th style="width: 100px;text-align: center;" >Biaya</th>
+				                <th style="width: 100px;text-align: center;" >Jumlah</th>
+				                <th style="width: 200px;text-align: center;" >Keterangan</th>
+				                <th style="width: 10px;"></th>
 			                </tr>
 		                </thead>
 		                <tbody>
@@ -24,17 +25,12 @@
 		              	</tbody>
 		              	<tfoot>
 		              		<tr>
-		              			<td colspan="2" align="center"><b>Total Biaya Representattif</b></td>
+		              			<td colspan="3" align="center"><b>Total Biaya Representattif</b></td>
 		              			<td align="right"><span id="total_repre" >0</span></td>
 		              			<td><button type="button" onclick="addrow_repre()" class="btn btn-block btn-info btn-sm">Tambah</button></td>
 		              		</tr>
 
-		              		<tr>
-		              			<td  colspan="2"></td>
-		              			<td colspan="2" >
-		              				
-		              			</td>
-		              		</tr>
+		              		
 		              	</tfoot>
 		          	</table>
 	            </div>
@@ -88,6 +84,7 @@
 
         row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="repre_nJumlah" name="repre_nJumlah[]" value="" data-a-dec="." data-a-sep="," readonly ></td>'
 
+        row_content += '<td><textarea style="width: 100%;" class="repre_vKeterangan" name="repre_vKeterangan[]" ></textarea></td>';
 
         row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_repre(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
 

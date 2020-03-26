@@ -101,7 +101,7 @@ CREATE TABLE `cs_detail` (
 /*Data for the table `cs_detail` */
 
 insert  into `cs_detail`(`id`,`iCsId`,`dPerjalananStart`,`dPerjalananEnd`,`nLama`,`iAlatAngkut`,`iOpsiHariLibur`,`iOpsiHariSabtu`,`iOpsiHariMinggu`,`vNip`,`nBiayaUangHarian`,`nTotalUangHarian`,`nBiayaRepre`,`nBiayaTransport`,`nTotalTransport`,`iJenisAkomodasi`,`nBiayaPenginapan`,`nTotalPenginapan`,`nHonorJasa`,`nTotalBiaya`,`dTglSPPD`,`vNoSPPD`,`vJenisSPD`,`iCheckSuratTugas`,`iChekSpd`,`iChekPenginapan`,`iChekTransportasi`,`iChekPengeluaran`,`dTerimaSpj`,`vNomorKwitansi`,`dTglKwitansi`,`dLumpsumpAwal`,`dLumpsumpAkhir`,`nNilaiKwitansi`,`tCreated`,`cCreatedby`,`tUpdated`,`cUpdatedby`,`lDeleted`) values 
-(6,5,'2020-03-04','2020-03-09',4,1,1,1,3,'44411122',10000,40000,50000,5000,10000,1,10000,30000,500000,630000,'2020-03-11','SPD-2/PW4/3/2020','A',1,1,1,0,0,'2020-03-06','1234','2020-03-04','2020-03-17','2020-03-18',2100000,'2020-03-07 23:10:30','rava','2020-03-24 05:57:04','rava',0),
+(6,5,'2020-03-04','2020-03-09',4,1,1,1,3,'44411122',10000,40000,50000,5000,10000,1,10000,30000,500000,630000,'2020-03-11','SPD-2/PW4/3/2020','A',1,1,1,0,0,'2020-03-06','1234','2020-03-04','2020-03-17','2020-03-18',2100000,'2020-03-07 23:10:30','rava','2020-03-26 07:09:46','rava',0),
 (7,8,'2020-03-09','2020-03-09',1,0,0,0,0,'197706121998111001',0,0,0,0,0,0,0,0,0,0,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2020-03-09 05:28:02','rava','2020-03-09 05:28:09','rava',0),
 (8,5,'2020-03-04','2020-03-05',2,1,1,1,1,'999999999X',30000,60000,20000,10000,20000,1,10000,10000,40000,150000,'2020-03-13','SPD-123','SA',0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,'2020-03-16 05:41:28',NULL,'2020-03-21 04:04:39','rava',0);
 
@@ -115,6 +115,7 @@ CREATE TABLE `cs_detail_kwitansi` (
   `nHari` int(4) NOT NULL DEFAULT '0',
   `nBiaya` bigint(20) NOT NULL DEFAULT '0',
   `nJumlah` bigint(20) NOT NULL DEFAULT '0',
+  `vKeterangan` text NOT NULL,
   `vTransDari` varchar(30) DEFAULT NULL,
   `vTransTujuan` varchar(30) DEFAULT NULL,
   KEY `iCsDetailId` (`iCsDetailId`),
@@ -124,12 +125,12 @@ CREATE TABLE `cs_detail_kwitansi` (
 
 /*Data for the table `cs_detail_kwitansi` */
 
-insert  into `cs_detail_kwitansi`(`iCsDetailId`,`iJenis`,`nHari`,`nBiaya`,`nJumlah`,`vTransDari`,`vTransTujuan`) values 
-(6,1,1,100000,100000,NULL,NULL),
-(6,1,2,50000,100000,NULL,NULL),
-(6,2,2,200000,400000,NULL,NULL),
-(6,3,3,100000,300000,NULL,NULL),
-(6,4,0,0,1200000,'Jakarta','Palembang');
+insert  into `cs_detail_kwitansi`(`iCsDetailId`,`iJenis`,`nHari`,`nBiaya`,`nJumlah`,`vKeterangan`,`vTransDari`,`vTransTujuan`) values 
+(6,1,1,100000,100000,'Tas',NULL,NULL),
+(6,1,2,50000,100000,'aa',NULL,NULL),
+(6,2,2,200000,400000,'By',NULL,NULL),
+(6,3,3,100000,300000,'BB',NULL,NULL),
+(6,4,0,0,1200000,'As','Jakarta','Palembang');
 
 /*Table structure for table `cs_header` */
 

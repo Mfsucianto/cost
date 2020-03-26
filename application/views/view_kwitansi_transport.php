@@ -15,7 +15,8 @@
 		                	<tr style="background-color: #00adb5;">
 				                <th style="width: 200px;text-align: center;" >Dari</th>
 				                <th style="width: 200px;text-align: center;" >Tujuan PP</th>
-				                <th style="width: 200px;text-align: center;" >Jumlah</th>
+				                <th style="width: 100px;text-align: center;" >Jumlah</th>
+				                <th style="width: 200px;text-align: center;" >Keterangan</th>
 				                
 			                </tr>
 		                </thead>
@@ -29,6 +30,8 @@
 		                		<td>
 		                			<input style="width: 90%;text-align:right;" type="text" class="trans_nBiaya" name="trans_nBiaya" value="" data-a-dec="." data-a-sep="," onkeyup="sum_nilaikwitansi()" >
 		                		</td>
+
+		                		<td><textarea style="width: 100%;" class="trans_vKeterangan" name="trans_vKeterangan"></textarea></td>
 		                	</tr>
 		              	</tbody>
 		              	

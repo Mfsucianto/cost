@@ -1,9 +1,9 @@
-<div class="form-group" id="div_detail_rkt" >
+<div class="form-group"  >
 	<label for="username" class="col-sm-4 control-label" ></label>
 	  <div class="col-sm-8">
 	    <div class="input-group input-group-sm" style="width: 100%;">
 	        
-	        <input type="hidden" name="list_rkt_dipilih" id="list_rkt_dipilih" value="">
+	       
 
 	        <div class="box box-warning" style="width: 95%;border: 1px solid #74f9ff;">
 	           
@@ -13,12 +13,13 @@
 		                
 		                <thead>
 		                	<tr style="background-color: #fffcca;">
-		                		<td colspan="4" align="center" ><b>Biaya Penugasan</b></td>
+		                		<td colspan="5" align="center" ><b>Biaya Penugasan</b></td>
 		                	</tr>
 		                	<tr style="background-color: #fffcca;">
 				                <th style="width: 100px;text-align: center;" >Lama (Hari)</th>
-				                <th style="width: 200px;text-align: center;" >Biaya</th>
-				                <th style="width: 200px;text-align: center;" >Jumlah</th>
+				                <th style="width: 100px;text-align: center;" >Biaya</th>
+				                <th style="width: 100px;text-align: center;" >Jumlah</th>
+				                <th style="width: 200px;text-align: center;" >Keterangan</th>
 				                <th style="width: 10px"></th>
 			                </tr>
 		                </thead>
@@ -27,17 +28,12 @@
 		              	</tbody>
 		              	<tfoot>
 		              		<tr>
-		              			<td colspan="2" align="center"><b>Total Biaya Penugasan</b></td>
+		              			<td colspan="3" align="center"><b>Total Biaya Penugasan</b></td>
 		              			<td align="right"><span id="total_penugasan" >0</span></td>
 		              			<td><button type="button" onclick="addrow_penugasan()" class="btn btn-block btn-info btn-sm">Tambah</button></td>
 		              		</tr>
 
-		              		<tr>
-		              			<td  colspan="2"></td>
-		              			<td colspan="2" >
-		              				
-		              			</td>
-		              		</tr>
+		              		
 		              	</tfoot>
 		          	</table>
 	            </div>
@@ -69,7 +65,6 @@
 
 
 	function hitungSubTotalPenugasan(ix) {
-		console.log(ix);
 		var nHari  = stripCharacters($('.penugasan_nHari').eq(ix).val());
 		var nBiaya  = stripCharacters($('.penugasan_nBiaya').eq(ix).val());
 		var jumlah = nHari * nBiaya;
@@ -91,6 +86,7 @@
 
         row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penugasan_nJumlah" name="penugasan_nJumlah[]" value="" data-a-dec="." data-a-sep="," readonly ></td>'
 
+        row_content += '<td><textarea style="width: 100%;" class="penugasan_vKeterangan" name="penugasan_vKeterangan[]" ></textarea></td>';
 
         row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_penugasan(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
 
@@ -136,13 +132,12 @@
 	function sum_nilaikwitansi() {
 		var total 		= 0;
 
-
 		var i			=0;
 		$('.penugasan_nJumlah').each(function() {
 			if ($('.penugasan_nJumlah').eq(i).val() != '') {				
 				total += parseInt(stripCharacters($('.penugasan_nJumlah').eq(i).val()));
+				
 			}
-
 			i++;
 		});
 
@@ -174,7 +169,7 @@
 
 		var say = terbilang(total);
 
-		$('#terbilang').val(say);
+		$('#terbilang').val(say.trim());
 		$('#nNilaiKwitansi').val(addCommas(total));
 		$('#nNilaiKwitansi2').val(addCommas(total));
 

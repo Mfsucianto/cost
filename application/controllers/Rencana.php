@@ -367,16 +367,20 @@ class rencana extends CI_Controller {
 		
 		$penugasan_nHari 	= array();
 		$penugasan_nBiaya 	= array();
+		$penugasan_vKeterangan 	= array();
 
 		$penginapan_nHari	= array();
 		$penginapan_nBiaya  = array();
+		$penginapan_vKeterangan  = array();
 
 		$repre_nHari 		= array();
 		$repre_nBiaya		= array();
+		$repre_vKeterangan		= array();
 
 		$vTransDari 		= $post['vTransDari'];
 		$vTransTujuan 		= $post['vTransTujuan'];
 		$trans_nBiaya 		= str_replace(",", '', $post['trans_nBiaya']);
+		$trans_vKeterangan 		= $post['trans_vKeterangan'];
 
 
 		
@@ -393,6 +397,10 @@ class rencana extends CI_Controller {
 				$penugasan_nBiaya[] = str_replace(",", "", $v);
 			}
 
+			if (preg_match('/^penugasan_vKeterangan(.*)$/', $k, $match)) {
+				$penugasan_vKeterangan[] = $v;
+			}
+
 			if (preg_match('/^penginapan_nHari(.*)$/', $k, $match)) {
 				$penginapan_nHari[] = str_replace(",", "", $v);
 			}
@@ -401,12 +409,22 @@ class rencana extends CI_Controller {
 				$penginapan_nBiaya[] = str_replace(",", "", $v);
 			}
 
+			if (preg_match('/^penginapan_vKeterangan(.*)$/', $k, $match)) {
+				$penginapan_vKeterangan[] = $v;
+			}
+
+
+
 			if (preg_match('/^repre_nHari(.*)$/', $k, $match)) {
 				$repre_nHari[] = str_replace(",", "", $v);
 			}
 
 			if (preg_match('/^repre_nBiaya(.*)$/', $k, $match)) {
 				$repre_nBiaya[] = str_replace(",", "", $v);
+			}
+
+			if (preg_match('/^repre_vKeterangan(.*)$/', $k, $match)) {
+				$repre_vKeterangan[] = $v;
 			}
 
 		}
@@ -426,6 +444,7 @@ class rencana extends CI_Controller {
 						'iJenis'	  =>1,
 						'nHari'		  => $v,
 						'nBiaya'	  => $penugasan_nBiaya[0][$k],
+						'vKeterangan' => $penugasan_vKeterangan[0][$k],
 						'nJumlah'	  => $nJumlah
 					);
 				$this->db->insert('cost.cs_detail_kwitansi',$data_kwitansi);
@@ -444,6 +463,7 @@ class rencana extends CI_Controller {
 						'iJenis'	  => 2,
 						'nHari'		  => $v,
 						'nBiaya'	  => $penginapan_nBiaya[0][$k],
+						'vKeterangan' => $penginapan_vKeterangan[0][$k],
 						'nJumlah'	  => $nJumlah
 					);
 				$this->db->insert('cost.cs_detail_kwitansi',$data_kwitansi);
@@ -461,6 +481,7 @@ class rencana extends CI_Controller {
 						'iJenis'	  =>3,
 						'nHari'		  => $v,
 						'nBiaya'	  => $repre_nBiaya[0][$k],
+						'vKeterangan' => $repre_vKeterangan[0][$k],
 						'nJumlah'	  => $nJumlah
 					);
 
@@ -477,6 +498,7 @@ class rencana extends CI_Controller {
 						'iJenis'	  =>4,
 						'vTransDari'  => $vTransDari,
 						'vTransTujuan' => $vTransTujuan,
+						'vKeterangan' => $trans_vKeterangan,
 						'nJumlah'	  => $trans_nBiaya
 					);
 
@@ -507,7 +529,7 @@ class rencana extends CI_Controller {
 		$iCsDetailId = $_POST['id'];
 		$data = array();
 
-		$sql = "SELECT iJenis,nHari,nBiaya,nJumlah,vTransDari,vTransTujuan FROM cost.cs_detail_kwitansi WHERE iCsDetailId='".$iCsDetailId."'";
+		$sql = "SELECT iJenis,nHari,nBiaya,nJumlah,vTransDari,vTransTujuan,vKeterangan FROM cost.cs_detail_kwitansi WHERE iCsDetailId='".$iCsDetailId."'";
 
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0) {
@@ -518,6 +540,7 @@ class rencana extends CI_Controller {
 				$r_data['nJumlah'] 		= number_format($row['nJumlah']);
 				$r_data['vTransDari'] 	= $row['vTransDari'];
 				$r_data['vTransTujuan'] = $row['vTransTujuan'];
+				$r_data['vKeterangan'] = $row['vKeterangan'];
 				array_push($data, $r_data);
 			}
 		}
@@ -580,6 +603,87 @@ class rencana extends CI_Controller {
 		}
 		echo json_encode($data);
 		exit;	
+	}
+
+
+	function cetakkwitansi(){
+		$this->load->helper('download');
+		$path = $this->config->item('report_path'); 
+		$id = $_GET['id'];
+
+		$x_vPejabatKwitansi 	= explode("|", $_GET['vPejabatKwitansi']);
+		$x_vBendaharaKwitansi 	= explode("|", $_GET['vBendaharaKwitansi']);
+
+		$nm_bendahara 	= $x_vBendaharaKwitansi['1'];
+		$nip_bendahara 	= $x_vBendaharaKwitansi['0'];
+		$nip_pejabat  	= $x_vPejabatKwitansi['0'];
+		$nm_pejabat 	= $x_vPejabatKwitansi['1'];
+		$dibuat_di 		= $_GET['dibuatdiKwitansi'];
+		$tgl_dibuat 	= $_GET['tgl_dibuatKwitansi'];
+		$terbilang 	= $_GET['terbilang'];
+
+		$params = new Java("java.util.HashMap");
+		$params->put('id', (int)$id);	
+		$params->put('SUBREPORT_DIR', $path);		
+		$params->put('nm_bendahara', $nm_bendahara);		
+		$params->put('nip_bendahara', $nip_bendahara);		
+		$params->put('nip_pejabat', $nip_pejabat);		
+		$params->put('nm_pejabat', $nm_pejabat);		
+		$params->put('dibuat_di', $dibuat_di);		
+		$params->put('tgl_dibuat', $tgl_dibuat);		
+		$params->put('terbilang', $terbilang);		
+		
+		$reportAsal   = "kwitansi.jrxml";
+		$reportTujuan = "kwitansi_.pdf";
+
+				
+		$nama_file = explode('.', $reportAsal);		
+		
+		$this->report->showReport($path, $reportAsal, $reportTujuan, $params,1);	
+		$open_file = file_get_contents($path.$reportTujuan);
+		
+		force_download($nama_file[0], $open_file);
+
+
+	}
+
+	function cetakperjadin(){
+		$this->load->helper('download');
+        $path = $this->config->item('report_path'); 
+        $id = $_GET['id'];
+
+        $x_vPejabatperjadin     = explode("|", $_GET['vPejabatperjadin']);
+        $x_vBendaharaperjadin   = explode("|", $_GET['vBendaharaperjadin']);
+
+        $nm_bendahara   = $x_vBendaharaperjadin['1'];
+        $nip_bendahara  = $x_vBendaharaperjadin['0'];
+        $nip_pejabat    = $x_vPejabatperjadin['0'];
+        $nm_pejabat     = $x_vPejabatperjadin['1'];
+        $dibuat_di      = $_GET['dibuatdiperjadin'];
+        $tgl_dibuat     = $_GET['tgl_dibuatperjadin'];
+        $terbilang  = $_GET['terbilang'];
+
+        $params = new Java("java.util.HashMap");
+        $params->put('id', (int)$id);   
+        $params->put('SUBREPORT_DIR', $path);       
+        $params->put('nm_bendahara', $nm_bendahara);        
+        $params->put('nip_bendahara', $nip_bendahara);      
+        $params->put('nip_pejabat', $nip_pejabat);      
+        $params->put('nm_pejabat', $nm_pejabat);        
+        $params->put('dibuat_di', $dibuat_di);      
+        $params->put('tgl_dibuat', $tgl_dibuat);        
+        $params->put('terbilang', $terbilang);      
+        
+        $reportAsal   = "perjadin.jrxml";
+        $reportTujuan = "perjadin_.pdf";
+
+                
+        $nama_file = explode('.', $reportAsal);     
+        
+        $this->report->showReport($path, $reportAsal, $reportTujuan, $params,1);    
+        $open_file = file_get_contents($path.$reportTujuan);
+        
+        force_download($nama_file[0], $open_file);
 	}
 }
 

@@ -224,7 +224,7 @@ $this->load->view('template/sidebar');
             <button type="button" class="btn btn-info "  onclick="nextKwitansi()" ><i class="fa  fa-backward"></i> Kembali Ke Kwitansi</button>
             <button type="button" class="btn bg-navy "  onclick="simpanDataDpr()" >Simpan</button>
             <button type="button" class="btn bg-navy "  onclick="cetakDpr()" >Cetak DPR</button>
-            <button type="button" class="btn bg-navy "  onclick="cetakRincian()" >Cetak Rincian Biaya Perjadin</button>
+            <button type="button" class="btn bg-navy "  onclick="cetakRincianPerjadin()" >Cetak Rincian Biaya Perjadin</button>
             
             
         </div><!-- /.box-footer-->
@@ -269,7 +269,7 @@ $this->load->view('template/sidebar');
                         $query  = $this->db->query($sql);
                         if ($query->num_rows() > 0) {
                             foreach($query->result_array() as $row) {
-                                $datatmcs[$row['vName']] = $row['vName'];
+                                $datatmcs[$row['vNip']."|".$row['vName']] = $row['vName'];
                             }
                         }
                         echo $this->lib_util->drawcombo('vPejabatKwitansi','Pilih Pejabat Pembuat Komitmen',$datatmcs,'300px');
@@ -295,6 +295,50 @@ $this->load->view('template/sidebar');
 
 
 
+
+
+
+<!--  Modal content for Cetak Perjadin -->
+  <div class="modal fade modal_cetak_perjadin" tabindex="-1" role="dialog" aria-labelledby="label_modal_perjadin">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="label_modal_perjadin">Cetak Rincian Biaya Perjadin </h4>
+        </div>
+        <div class="modal-body">
+            <div>
+                <form class="form-horizontal" id="form_data_dpr" name="form_data_dpr" autocomplete="off">
+                    <?php
+                        $datatmcs = array();
+                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.lDeleted=0 ";
+                        $query  = $this->db->query($sql);
+                        if ($query->num_rows() > 0) {
+                            foreach($query->result_array() as $row) {
+                                $datatmcs[$row['vNip']."|".$row['vName']] = $row['vName'];
+                            }
+                        }
+                        echo $this->lib_util->drawcombo('vPejabatperjadin','Pilih Pejabat Pembuat Komitmen',$datatmcs,'300px');
+                        echo $this->lib_util->drawcombo('vBendaharaperjadin','Pilih Bendahara',$datatmcs,'300px');
+
+                        echo $this->lib_util->drawFiledText('Dibuat Di ','dibuatdiperjadin','300px');
+                        echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatperjadin','100px');
+                   ?>
+                </form>
+            </div>
+           
+        </div>
+        <div class="box-footer" >
+            <center>
+            <button type="button" class="btn btn-info "  onclick="prosesCetakperjadin()" ><i class="fa  fa-print"></i> Cetak</button>
+           </center>
+            
+        </div><!-- /.box-footer-->
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
 
 <iframe height="0" width="0" id="iframe_preview"></iframe>
@@ -336,6 +380,8 @@ $this->load->view('template/foot');
         $('#nSisaPaguAkhir').prop('disabled', true);
         $('#vNomorKwitansiDPR').prop('disabled', true);
         $('#dTglKwitansiDPR').prop('disabled', true);
+        $('#nNilaiKwitansi2').prop('readonly', true);
+        $('#terbilang').prop('readonly', true);
 
 
 
@@ -609,6 +655,7 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
                 row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penugasan_nJumlah" name="penugasan_nJumlah[]" value="'+pt[i].nJumlah+'" data-a-dec="." data-a-sep="," readonly ></td>'
 
+                row_content += '<td><textarea style="width: 100%;" class="penugasan_vKeterangan" name="penugasan_vKeterangan[]" >'+pt[i].vKeterangan+'</textarea></td>';
 
                 row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_penugasan(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
 
@@ -626,6 +673,7 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
                 row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penginapan_nJumlah" name="penginapan_nJumlah[]" value="'+pt[i].nJumlah+'" data-a-dec="." data-a-sep="," readonly ></td>'
 
+                row_content += '<td><textarea style="width: 100%;" class="penginapan_vKeterangan" name="penginapan_vKeterangan[]" >'+pt[i].vKeterangan+'</textarea></td>';
 
                 row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_penginapan(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
 
@@ -644,6 +692,7 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
                 row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="repre_nJumlah" name="repre_nJumlah[]" value="'+pt[i].nJumlah+'" data-a-dec="." data-a-sep="," readonly ></td>'
 
+                row_content += '<td><textarea style="width: 100%;" class="repre_vKeterangan" name="repre_vKeterangan[]" >'+pt[i].vKeterangan+'</textarea></td>';
 
                 row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_repre(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
 
@@ -657,6 +706,7 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
                 $('.vTransDari').val(pt[i].vTransDari);
                 $('.vTransTujuan').val(pt[i].vTransTujuan);
                 $('.trans_nBiaya').val(pt[i].nJumlah);
+                $('.trans_vKeterangan').val(pt[i].vKeterangan);
 
                 sum_nilaikwitansi();
             }
@@ -916,8 +966,10 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
         var vBendaharaKwitansi  = $('#vBendaharaKwitansi').val();
         var dibuatdiKwitansi    = $('#dibuatdiKwitansi').val();
         var tgl_dibuatKwitansi  = $('#tgl_dibuatKwitansi').val();
+        var terbilang  = $('#terbilang').val();
 
-        var url = "<?php echo site_url();?>/rencana/cetakkwitansi?id="+id+"&pejabatTTD="+pejabatTTD+"&vNip_ppk="+vNip_ppk+"&jabatan1="+jabatan1+"&jabatan2="+jabatan2+"&diKelurkandi="+diKelurkandi+"&dKeluarkanTgl="+dKeluarkanTgl
+
+        var url = "<?php echo site_url();?>/rencana/cetakkwitansi?id="+id+"&vPejabatKwitansi="+vPejabatKwitansi+"&vBendaharaKwitansi="+vBendaharaKwitansi+"&dibuatdiKwitansi="+dibuatdiKwitansi+"&tgl_dibuatKwitansi="+tgl_dibuatKwitansi+'&terbilang='+terbilang
 
         var jwb = confirm('Cetak Data Cost Sheet ?');
 
@@ -925,6 +977,29 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
             document.getElementById('iframe_preview').src = url;
         }
         
+    }
+
+
+    function cetakRincianPerjadin() {
+        $('.modal_cetak_perjadin').modal('show');
+    }
+
+    function prosesCetakperjadin() {
+        var id = $('#id').val();
+        var vPejabatperjadin    = $('#vPejabatperjadin').val();
+        var vBendaharaperjadin  = $('#vBendaharaperjadin').val();
+        var dibuatdiperjadin    = $('#dibuatdiperjadin').val();
+        var tgl_dibuatperjadin  = $('#tgl_dibuatperjadin').val();
+        var terbilang  = $('#terbilang').val();
+
+
+        var url = "<?php echo site_url();?>/rencana/cetakperjadin?id="+id+"&vPejabatperjadin="+vPejabatperjadin+"&vBendaharaperjadin="+vBendaharaperjadin+"&dibuatdiperjadin="+dibuatdiperjadin+"&tgl_dibuatperjadin="+tgl_dibuatperjadin+'&terbilang='+terbilang
+
+        var jwb = confirm('Cetak Data Cost Sheet ?');
+
+        if (jwb==1){
+            document.getElementById('iframe_preview').src = url;
+        }
     }
     
 </script>

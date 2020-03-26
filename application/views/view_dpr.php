@@ -118,57 +118,7 @@
 		sum_nilaikwitansi();
 	}
 
-	function sum_nilaikwitansi() {
-		var total 		= 0;
-
-
-		var i			=0;
-		$('.dpr_nJumlah').each(function() {
-			if ($('.dpr_nJumlah').eq(i).val() != '') {				
-				total += parseInt(stripCharacters($('.dpr_nJumlah').eq(i).val()));
-			}
-
-			i++;
-		});
-
-
-		var i			=0;
-		$('.penginapan_nJumlah').each(function() {
-			if ($('.penginapan_nJumlah').eq(i).val() != '') {				
-				total += parseInt(stripCharacters($('.penginapan_nJumlah').eq(i).val()));
-			}
-
-			i++;
-		});
-
-
-		var i			=0;
-		$('.repre_nJumlah').each(function() {
-			if ($('.repre_nJumlah').eq(i).val() != '') {				
-				total += parseInt(stripCharacters($('.repre_nJumlah').eq(i).val()));
-			}
-
-			i++;
-		});
-
-		
-		if ($('.trans_nBiaya').val() != ''){
-			total += parseInt(stripCharacters($('.trans_nBiaya').val()));
-		}
-		//total += parseInt(stripCharacters($('.trans_nBiaya').val()));
-
-		var say = terbilang(total);
-
-		$('#terbilang').val(say);
-		$('#nNilaiKwitansi').val(addCommas(total));
-		$('#nNilaiKwitansi2').val(addCommas(total));
-
-		var paguawal = parseInt(stripCharacters($('#nSisaPaguAwal').val()));
-		paguakhir = paguawal - total;
-
-		$('#nSisaPaguAkhir').val(addCommas(paguakhir));
-
-	}
+	
 	
 
 </script>

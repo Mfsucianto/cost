@@ -195,6 +195,8 @@
 	        if ((angka[5] == "0") && (angka[6] == "0")){
 	            kalimat = kalimat.replace("Satu Ribu","Seribu");
 	        }
+
+	        kalimat = kalimat+" Rupiah";
 	    }
 
 	    

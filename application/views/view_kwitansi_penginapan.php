@@ -10,12 +10,13 @@
 		                
 		                <thead>
 		                	<tr style="background-color: #d9faff;">
-		                		<td colspan="4" align="center" ><b>Biaya penginapan</b></td>
+		                		<td colspan="5" align="center" ><b>Biaya penginapan</b></td>
 		                	</tr>
 		                	<tr style="background-color: #d9faff;">
 				                <th style="width: 100px;text-align: center;" >Lama (Hari)</th>
-				                <th style="width: 200px;text-align: center;" >Biaya</th>
-				                <th style="width: 200px;text-align: center;" >Jumlah</th>
+				                <th style="width: 100px;text-align: center;" >Biaya</th>
+				                <th style="width: 100px;text-align: center;" >Jumlah</th>
+				                <th style="width: 200px;text-align: center;" >Keterangan</th>
 				                <th style="width: 10px"></th>
 			                </tr>
 		                </thead>
@@ -24,17 +25,12 @@
 		              	</tbody>
 		              	<tfoot>
 		              		<tr>
-		              			<td colspan="2" align="center"><b>Total Biaya penginapan</b></td>
+		              			<td colspan="3" align="center"><b>Total Biaya penginapan</b></td>
 		              			<td align="right"><span id="total_penginapan" >0</span></td>
 		              			<td><button type="button" onclick="addrow_penginapan()" class="btn btn-block btn-info btn-sm">Tambah</button></td>
 		              		</tr>
 
-		              		<tr>
-		              			<td  colspan="2"></td>
-		              			<td colspan="2" >
-		              				
-		              			</td>
-		              		</tr>
+		              		
 		              	</tfoot>
 		          	</table>
 	            </div>
@@ -87,6 +83,8 @@
         row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penginapan_nBiaya" name="penginapan_nBiaya[]" value="" data-a-dec="." data-a-sep="," ></td>'
 
         row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penginapan_nJumlah" name="penginapan_nJumlah[]" value="" data-a-dec="." data-a-sep="," readonly ></td>'
+
+        row_content += '<td><textarea style="width: 100%;" class="penginapan_vKeterangan" name="penginapan_vKeterangan[]" ></textarea></td>';
 
 
         row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_penginapan(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
