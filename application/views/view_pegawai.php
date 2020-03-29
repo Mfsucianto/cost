@@ -123,7 +123,7 @@ if (isset($dataFrom['changeFiled'])){
 
                     echo $this->lib_util->drawcombo('iJabatanId','Jabatan',$datchg,'300px');
                     echo $this->lib_util->drawFiledText('Golongan','cGolongan','300px');
-                    echo $this->lib_util->drawFiledText('Tarif','nGolTarif','300px');
+                    echo $this->lib_util->drawFiledText('Golongan Tarif','nGolTarif','300px');
 
 
                     $datchgbid = array();
@@ -258,7 +258,7 @@ $this->load->view('template/foot');
     $(document).ready(function() {
         refreshData();
 
-        $('#nGolTarif').autoNumeric('init', {vMin:'-999999999999999999', vMax:'999999999999999999'});
+        //$('#nGolTarif').autoNumeric('init', {vMin:'-999999999999999999', vMax:'999999999999999999'});
 
         $( "#iBidangId" ).change(function() {
             

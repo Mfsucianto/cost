@@ -60,7 +60,7 @@
                     </li>
 
                     <li>
-                         <a href="<?php echo site_url('?id=5') ?>"> <i><span class="glyphicon glyphicon-search"></span></i> <span>Monitoring</span> <span class="pull-right-container"> </span> </a> 
+                         <a href="<?php echo site_url('/monitoring_anggaran') ?>"> <i><span class="glyphicon glyphicon-search"></span></i> <span>Monitoring</span> <span class="pull-right-container"> </span> </a> 
                     </li>
 
 

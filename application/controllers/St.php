@@ -380,9 +380,16 @@ class st extends CI_Controller {
 		$cTahun 	= date('Y',strtotime($_POST['cTahun']));
 		$iBidangId 	= $_POST['iBidangId'];
 
+		
 		$sql = "SELECT a.id,a.cTahun,a.cKodeDipa,a.vNamaItem,a.cKodeAccount,a.iJenis,a.fJumlahAnggaran,
-				(SELECT COALESCE(SUM(fAnggaran),0) AS fAnggaran FROM cost.rkt WHERE iDipaId=a.id) AS anggaran_rkt
-				FROM cost.dipa AS a WHERE a.cTahun='{$cTahun}' AND a.iBidangId='{$iBidangId}' AND  a.lDeleted=0";
+				(select coalesce(sum(dt.nNilaiKwitansi),0) as nNilaiKwitansi
+				from cost.cs_detail as dt
+				where dt.iDipaId=a.id and dt.lDeleted=0 ) as nNilaiKwitansi,
+				(select coalesce(sum(dt.nTotalBiaya),0) as nTotalBiaya
+				from cost.cs_detail as dt
+				where dt.iDipaId=a.id  and  dt.lDeleted=0 and dt.nNilaiKwitansi=0 ) as nTotalBiaya
+				FROM cost.dipa AS a WHERE a.cTahun='{$cTahun}' AND a.iBidangId='{$iBidangId}' AND a.lDeleted=0;";
+
 		$query = $this->db->query($sql);
 
 		$html 	= '<table id="list_popup" class="table table-bordered table-striped" style="width:100%">
@@ -402,7 +409,7 @@ class st extends CI_Controller {
 			foreach($query->result_array() as $row) {
 				$no++;
 
-				$tersedia = $row['fJumlahAnggaran'] - $row['anggaran_rkt'];
+				$tersedia = $row['fJumlahAnggaran'] - $row['nTotalBiaya'] - $row['nNilaiKwitansi'];
 				
 				$html .= "<tr>";
                 
@@ -422,19 +429,25 @@ class st extends CI_Controller {
 							
 							<table>
 								<tr>
-									<td>Anggaran DIPA</td>
+									<td>Anggaran DIPA </td>
 									<td>: </td>
 									<td>".number_format($row['fJumlahAnggaran'])."</td>
 								</tr>
 
 								<tr>
-									<td>Dianggarkan ke-RKT</td>
+									<td>Outstanding </td>
 									<td>: </td>
-									<td>".number_format($row['anggaran_rkt'])."</td>
+									<td>".number_format($row['nTotalBiaya'])."</td>
 								</tr>
 
 								<tr>
-									<td>Anggaran Tersedia</td>
+									<td>Realisasi </td>
+									<td>: </td>
+									<td>".number_format($row['nNilaiKwitansi'])."</td>
+								</tr>
+
+								<tr>
+									<td>Sisa Anggaran </td>
 									<td>: </td>
 									<td>".number_format($tersedia)."</td>
 								</tr>
@@ -679,7 +692,7 @@ class st extends CI_Controller {
 
 
 
-		$sql = "select vNip,vName,cGolongan from cost.ms_pegawai where iBidangId='".$iBidangId."' ".$xc." and lDeleted = 0";
+		$sql = "select vNip,vName,cGolongan from cost.ms_pegawai where lDeleted = 0  ".$xc."  ";
 		$query = $this->db->query($sql);
 
 		$html 	= '<table id="list_popup" class="table table-bordered table-striped" style="width:100%">
@@ -833,7 +846,14 @@ class st extends CI_Controller {
 	}
 
 	function cetakCs(){
-		$iCsId = $_GET['iCsId'];
+		$iCsId 		= $_GET['iCsId'];
+		$nipDalnis 	= explode("|", $_GET['nipDalnis']);
+		$nipKabag 	= explode("|", $_GET['nipKabag']);
+		$iKabag 	= $_GET['iKabag'];
+		$nipiKaPer 	= explode("|",$_GET['nipiKaPer']);
+		$iKaPer 	= $_GET['iKaPer'];
+		$diKelurkandi 	= $_GET['diKelurkandi'];
+		$dKeluarkanTgl 	= $_GET['dKeluarkanTgl'];
 
 		$this->load->helper('download'); 
 		
@@ -844,6 +864,14 @@ class st extends CI_Controller {
 		$params = new Java("java.util.HashMap");
 		$params->put('icsId', (int)$iCsId);	
 		$params->put('SUBREPORT_DIR', $path);		
+		$params->put('nip_kaper', $nipiKaPer['0']);		
+		$params->put('nama_kaper', $nipiKaPer['1']);		
+		$params->put('nip_kabag', $nipKabag['0']);		
+		$params->put('nama_kabag', $nipKabag['1']);		
+		$params->put('nip_kasubag', $nipDalnis['0']);		
+		$params->put('nama_kasubag', $nipDalnis['1']);
+		$params->put('diKelurkandi',$diKelurkandi);		
+		$params->put('dKeluarkanTgl',$dKeluarkanTgl);		
 		
 		$reportAsal   = "cs.jrxml";
 		$reportTujuan = "cost_sheet.pdf";

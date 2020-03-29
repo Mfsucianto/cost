@@ -34,19 +34,19 @@ $this->load->view('template/sidebar');
 
                 <?php
                     
-                    echo $this->lib_util->drawFiledText('ID ST','iBarcode','300px');
-                    /*echo '<div class="form-group" id="div_iBarcode">
+                    //echo $this->lib_util->drawFiledText('ID ST','iBarcode','300px');
+                    echo '<div class="form-group" id="div_iBarcode">
                               <label for="username" class="col-sm-4 control-label" style="font-weight: 300;">ID ST</label>
                               <div class="col-sm-7">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" readonly id="iBarcode" name="iBarcode" class="form-control">
+                                <div class="input-group input-group-sm" style="width:300px;">
+                                    <input type="text"  id="iBarcode" name="iBarcode" class="form-control">
                                         <span class="input-group-btn">
-                                          <button type="button" onclick="search()"  class="btn btn-info btn-flat" >Search</button>
+                                          <button type="button" onclick="showST()"  class="btn btn-info btn-flat" > <i class="fa fa-search"   ></i> ...</button>
                                         </span>
                                 </div>
                                 
                               </div>
-                            </div>';*/
+                            </div>';
 
                     echo $this->lib_util->drawFiledText('Nomor Cost Sheet','vNomorCs','300px');
 
@@ -70,7 +70,11 @@ $this->load->view('template/sidebar');
                 ?>
                 
 
-            </form>
+                </form>
+                <legend></legend>
+                <div id="isi_table" >
+                
+                </div>
             </div>
         </div><!-- /.box-body -->
         <div class="box-footer">
@@ -127,8 +131,13 @@ $this->load->view('template/sidebar');
                 ?>
                 
 
-            </form>
+                </form>
+                <legend></legend>
+                <div id="isi_table_monitoring" >
+                
+                </div>
             </div>
+
         </div><!-- /.box-body -->
         <div class="box-footer">
             
@@ -145,26 +154,6 @@ $this->load->view('template/sidebar');
 <!-- ==============================================end of section monitoring spd============================================ -->
 
 
-
-<section class="content" style="display: none;" id="section_list_spd">
-
-    <!-- Default box -->
-    <div class="box">
-        <div class="box-header with-border">
-            <h3 class="box-title" id="box_title_list" >List SPD</h3>
-            <div class="box-tools pull-right">
-            
-            </div>
-        </div>
-        <div class="box-body">
-            <div id="isi_table" >
-                
-            </div>
-        </div><!-- /.box-body -->
-       
-    </div><!-- /.box -->
-
-</section><!-- /.content -->
 
 
 
@@ -267,6 +256,23 @@ $this->load->view('template/sidebar');
 </div><!-- /.modal -->
 
 
+
+<!--  Modal content for the above example -->
+  <div class="modal fade modal_search_st" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabelST">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myLargeModalLabelST">List ST </h4>
+        </div>
+        <div class="modal-body" >
+           <div id="list_data_spd" ></div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
 <iframe height="0" width="0" id="iframe_preview"></iframe>
 
 <?php 
@@ -323,7 +329,7 @@ $this->load->view('template/foot');
             return false
         }
 
-        $('#section_list_spd').show(200);
+        
         $('#isi_table').html('<center>--please wait while colecting data--</center>');
         refreshData();
 
@@ -466,7 +472,7 @@ $this->load->view('template/foot');
     function monitoringSPD() {
         $('#sec_spd').hide(200);
         $('#sec_monitoring').show(200);
-        $('#section_list_spd').hide();
+     
         $('#isi_table').html('');
     }
 
@@ -477,11 +483,11 @@ $this->load->view('template/foot');
             return false;
         }
 
-         $('#section_list_spd').show();
-         $('#isi_table').html('<center>--please wait while colecting data--</center>');
+       
+         $('#isi_table_monitoring').html('<center>--please wait while colecting data--</center>');
 
         var data = loadDataMonitoring();
-        $('#isi_table').html(data);
+        $('#isi_table_monitoring').html(data);
         
         $('#example1').DataTable({
             scrollY:        300,
@@ -507,5 +513,36 @@ $this->load->view('template/foot');
         }).responseText
     }
 
+
+    function  showST() {
+        $('.modal_search_st').modal({
+            backdrop: 'static',
+            keyboard: false
+            })
+
+       
+        var list_data = getListDataST();
+        $('#list_data_spd').html(list_data);
+        $('#tabel_list_st').DataTable();
+
+
+        $('.modal_search_st').modal('show');
+    }
+
+    function getListDataST() {
+        var url = "<?php echo site_url().'/spd/getListDataST'; ?>";
+        return $.ajax({
+            type: 'POST',
+            url: url,
+            async:false
+        }).responseText
+    }
     
+
+    function select_row_st(iBarcode) {
+        $('#iBarcode').val(iBarcode);
+        $('.modal_search_st').modal('hide');
+    }
 </script>
+
+

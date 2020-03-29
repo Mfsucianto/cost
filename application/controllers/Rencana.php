@@ -506,11 +506,12 @@ class rencana extends CI_Controller {
 
 
 		$data = array(
-			'vNomorKwitansi' => $vNomorKwitansi,
-			'dTglKwitansi'	=> $dTglKwitansi,
-			'dLumpsumpAwal' => $dLumpsumpAwal,
-			'dLumpsumpAkhir' => $dLumpsumpAkhir,
-			'nNilaiKwitansi' => $nNilaiKwitansi
+			'vNomorKwitansi' 	=> $vNomorKwitansi,
+			'dTglKwitansi'		=> $dTglKwitansi,
+			'cTahunKwitansi'	=> date('Y',strtotime($dTglKwitansi)),
+			'dLumpsumpAwal' 	=> $dLumpsumpAwal,
+			'dLumpsumpAkhir' 	=> $dLumpsumpAkhir,
+			'nNilaiKwitansi' 	=> $nNilaiKwitansi
 		);
 
 		try {
@@ -676,6 +677,40 @@ class rencana extends CI_Controller {
         
         $reportAsal   = "perjadin.jrxml";
         $reportTujuan = "perjadin_.pdf";
+
+                
+        $nama_file = explode('.', $reportAsal);     
+        
+        $this->report->showReport($path, $reportAsal, $reportTujuan, $params,1);    
+        $open_file = file_get_contents($path.$reportTujuan);
+        
+        force_download($nama_file[0], $open_file);
+	}
+
+
+	function cetakdpr(){
+		$this->load->helper('download');
+        $path = $this->config->item('report_path'); 
+        $id = $_GET['id'];
+
+        $x_vPejabatdpr     = explode("|", $_GET['vPejabatdpr']);
+       
+        
+        $nip_pejabat    = $x_vPejabatdpr['0'];
+        $nm_pejabat     = $x_vPejabatdpr['1'];
+        $dibuat_di      = $_GET['dibuatdidpr'];
+        $tgl_dibuat     = $_GET['tgl_dibuatdpr'];
+       
+        $params = new Java("java.util.HashMap");
+        $params->put('id', (int)$id);   
+        $params->put('SUBREPORT_DIR', $path);            
+        $params->put('nip_pejabat', $nip_pejabat);      
+        $params->put('nm_pejabat', $nm_pejabat);        
+        $params->put('dibuat_di', $dibuat_di);      
+        $params->put('tgl_dibuat', $tgl_dibuat);        
+      
+        $reportAsal   = "dpr.jrxml";
+        $reportTujuan = "dpr_.pdf";
 
                 
         $nama_file = explode('.', $reportAsal);     

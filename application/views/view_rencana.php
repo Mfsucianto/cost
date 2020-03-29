@@ -276,7 +276,7 @@ $this->load->view('template/sidebar');
                         echo $this->lib_util->drawcombo('vBendaharaKwitansi','Pilih Bendahara',$datatmcs,'300px');
 
                         echo $this->lib_util->drawFiledText('Dibuat Di ','dibuatdiKwitansi','300px');
-                        echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatKwitansi','100px');
+                        echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatKwitansi','200px');
                    ?>
                 </form>
             </div>
@@ -295,6 +295,48 @@ $this->load->view('template/sidebar');
 
 
 
+
+
+<!--  Modal content cetak DPR -->
+  <div class="modal fade modal_cetak_dpr" tabindex="-1" role="dialog" aria-labelledby="label_modal_dpr">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="label_modal_dpr">Cetak dpr </h4>
+        </div>
+        <div class="modal-body">
+            <div>
+                <form class="form-horizontal" id="form_data_dpr" name="form_data_dpr" autocomplete="off">
+                    <?php
+                        $datatmcs = array();
+                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.lDeleted=0 ";
+                        $query  = $this->db->query($sql);
+                        if ($query->num_rows() > 0) {
+                            foreach($query->result_array() as $row) {
+                                $datatmcs[$row['vNip']."|".$row['vName']] = $row['vName'];
+                            }
+                        }
+                        echo $this->lib_util->drawcombo('vPejabatdpr','Pilih Pejabat Pembuat Komitmen',$datatmcs,'300px');
+                      
+                        echo $this->lib_util->drawFiledText('Dibuat Di ','dibuatdidpr','300px');
+                        echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatdpr','200px');
+                   ?>
+                </form>
+            </div>
+           
+        </div>
+        <div class="box-footer" >
+            <center>
+            <button type="button" class="btn btn-info "  onclick="prosesCetakdpr()" ><i class="fa  fa-print"></i> Cetak</button>
+           </center>
+            
+        </div><!-- /.box-footer-->
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
 
 
@@ -323,7 +365,7 @@ $this->load->view('template/sidebar');
                         echo $this->lib_util->drawcombo('vBendaharaperjadin','Pilih Bendahara',$datatmcs,'300px');
 
                         echo $this->lib_util->drawFiledText('Dibuat Di ','dibuatdiperjadin','300px');
-                        echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatperjadin','100px');
+                        echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatperjadin','200px');
                    ?>
                 </form>
             </div>
@@ -996,6 +1038,27 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
         var url = "<?php echo site_url();?>/rencana/cetakperjadin?id="+id+"&vPejabatperjadin="+vPejabatperjadin+"&vBendaharaperjadin="+vBendaharaperjadin+"&dibuatdiperjadin="+dibuatdiperjadin+"&tgl_dibuatperjadin="+tgl_dibuatperjadin+'&terbilang='+terbilang
 
         var jwb = confirm('Cetak Rincian Biaya Perjadin ?');
+
+        if (jwb==1){
+            document.getElementById('iframe_preview').src = url;
+        }
+    }
+
+
+    function cetakDpr() {
+         $('.modal_cetak_dpr').modal('show');
+    }
+
+    function prosesCetakdpr() {
+        var id = $('#id').val();
+        var vPejabatdpr    = $('#vPejabatdpr').val();
+        var dibuatdidpr    = $('#dibuatdidpr').val();
+        var tgl_dibuatdpr  = $('#tgl_dibuatdpr').val();
+        
+
+        var url = "<?php echo site_url();?>/rencana/cetakdpr?id="+id+"&vPejabatdpr="+vPejabatdpr+"&dibuatdidpr="+dibuatdidpr+"&tgl_dibuatdpr="+tgl_dibuatdpr
+
+        var jwb = confirm('Cetak DPR ?');
 
         if (jwb==1){
             document.getElementById('iframe_preview').src = url;

@@ -208,7 +208,7 @@
 
 <!--  Modal content for the above example -->
 <div class="modal fade dialog_cetak" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabeldialog_cetak">
-<div class="modal-dialog  modal-dialog-centered" role="document">
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
   <div class="modal-content">
 
     <div class="modal-header">
@@ -218,9 +218,88 @@
     <div class="modal-body" id="div_from_cetak">
         <form class="form-horizontal" id="form_data_cetak" name="form_data_cetak" autocomplete="off">
             <?php
-                echo $this->lib_util->drawcombo('iDalnis','Dalnis/KaSubBag ',array(0=>'',1=>'Yulissa Ananda, SE'));
-                echo $this->lib_util->drawcombo('iKabag','Kepala Bidang/Bagian ',array(0=>'',1=>'Yulissa Ananda, SE'));
-                echo $this->lib_util->drawcombo('iKaPer','Kepala Perwakilan ',array(0=>'',1=>'Yulissa Ananda, SE'));
+
+                $datatmcs = array();
+                $opt = '<option></option>';
+                $sql = "select vNip,vName from cost.ms_pegawai WHERE lDeleted=0 ";
+                $query  = $this->db->query($sql);
+                if ($query->num_rows() > 0) {
+                    foreach($query->result_array() as $row) {
+                       
+                        $opt .= '<option value="'.$row['vNip']."|".$row['vName'].'"  >'.$row['vNip']." - ".$row['vName'].'</option>';
+                    }
+                }
+
+
+     
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Dalnis/KaSubBag</label>
+                          <div class="col-sm-7">
+                                <select class="orm-control input-sm select2" style="width:300px;" id="nipDalnis" name="nipDalnis">
+                                    '.$opt.'
+                                </select>
+                          </div>
+                        </div>';
+
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Kepala Bidang/Bagian</label>
+                          <div class="col-sm-7">
+                                
+
+                                
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <select class="orm-control input-sm select2" style="width:300px;" id="nipKabag" name="nipiKabag">
+                                                '.$opt.'
+                                            </select>
+                                        </td>
+                                        <td> &nbsp &nbsp </td>
+                                        <td>
+                                           <select class="orm-control input-sm select2" style="width:200px;" id="iKabag" name="iKabag">
+                                                <option value="Kepala Bagian" >Kabid/Kabag</option>
+                                                <option value="Pelaksana Harian Kepala Bagian" >Plh Kabid/Kabag</option>
+                                                <option value="Pelaksana Tugas Kepala Bagian" >Plt Kabid/Kabag</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+                          </div>
+                        </div>';
+
+
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-4 control-label" style="font-weight: 400;width:200px;">Kepala Perwakilan</label>
+                          <div class="col-sm-7">
+
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <select class="orm-control input-sm select2" style="width:300px;" id="nipiKaPer" name="nipiKaPer">
+                                                '.$opt.'
+                                            </select>
+                                        </td>
+                                        <td> &nbsp &nbsp </td>
+                                        <td>
+                                            <select class="orm-control input-sm select2" style="width:300px;" id="iKaPer" name="iKaPer">
+                                                <option value="Kepala Perwakilan" >Kepala Perwakilan</option>
+                                                <option value="Pelaksana Harian Kepala Perwakilan" >Plh Kepala Perwakilan</option>
+                                                <option value="Pelaksana Tugas Kepala Perwakilan" >Plt Kepala Perwakilan</option>
+
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+
+                                
+                          </div>
+                        </div>';
+
+                echo $this->lib_util->drawFiledText('Dikeluarkan Di ','diKelurkandi','200px');
+                echo $this->lib_util->drawFiledText('Tanggal ','dKeluarkanTgl','200px');
                
             ?>
         </form>
@@ -228,11 +307,13 @@
     <div  class="box-footer">
         <button type="button" class="btn btn-warning" onclick="batal_cetak()" >Cancel</button>
        
-        <button type="button" onclick="proses_cetak()" class="btn btn-info pull-right">Print</button> &nbsp
+        <button type="button" onclick="proses_cetak_cs()" class="btn btn-info pull-right">Print</button> &nbsp
     </div>
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -266,9 +347,9 @@
         for (i = 0; i < nJangkaWaktu; ++i) {
             var dm  = dateAkhir.getDay();
             if(dm==6){
-                 dateAkhir.setDate(s.getDate() + 3);
+                 dateAkhir.setDate(dateAkhir.getDate() + 3);
             }else{
-                dateAkhir.setDate(s.getDate() + 1);
+                dateAkhir.setDate(dateAkhir.getDate() + 1);
             }
             
         }
@@ -626,6 +707,7 @@
 
     function simpanDataPersonilCs() {
         
+        var iDipaId      = $('#iDipaId').val()
         var iStId           = $('#iStId').val();
         var vNip_cs          = $('#vNip_cs').val();
         var iJenisPerDinas = $('#iJenisPerDinas').val();
@@ -710,8 +792,9 @@
             }
 
             if (nHonorJasa==''){
-                custom_alert('Lengkapi Honor Jasa Profesi');
-                return false;
+                nHonorJasa = 0;
+                //custom_alert('Lengkapi Honor Jasa Profesi');
+                //return false;
             }
         }
 
@@ -735,7 +818,7 @@
             $.ajax({
                 url: url,
                 type: 'post',
-                data: 'iCsId='+iCsId+'&iCsDetailId='+iCsDetailId+'&vNip='+vNip_cs+'&nBiayaUangHarian='+nBiayaUangHarian+'&nBiayaRepre='+nBiayaRepre+'&nBiayaTransport='+nBiayaTransport+'&iJenisAkomodasi='+iJenisAkomodasi+'&nBiayaPenginapan='+nBiayaPenginapan+'&nHonorJasa='+nHonorJasa+'&dPerjalananStart='+dPerjalananStart+ '&dPerjalananEnd='+dPerjalananEnd+ '&iAlatAngkut='+iAlatAngkut+ '&iOpsiHariLibur='+iOpsiHariLibur+ '&iOpsiHariSabtu='+iOpsiHariSabtu+ '&iOpsiHariMinggu='+iOpsiHariMinggu+'&iStId='+iStId,
+                data: 'iCsId='+iCsId+'&iCsDetailId='+iCsDetailId+'&vNip='+vNip_cs+'&nBiayaUangHarian='+nBiayaUangHarian+'&nBiayaRepre='+nBiayaRepre+'&nBiayaTransport='+nBiayaTransport+'&iJenisAkomodasi='+iJenisAkomodasi+'&nBiayaPenginapan='+nBiayaPenginapan+'&nHonorJasa='+nHonorJasa+'&dPerjalananStart='+dPerjalananStart+ '&dPerjalananEnd='+dPerjalananEnd+ '&iAlatAngkut='+iAlatAngkut+ '&iOpsiHariLibur='+iOpsiHariLibur+ '&iOpsiHariSabtu='+iOpsiHariSabtu+ '&iOpsiHariMinggu='+iOpsiHariMinggu+'&iStId='+iStId+'&iDipaId='+iDipaId,
                 success: function(data) {
                     if (data == '') {
                         
@@ -761,9 +844,9 @@
         var nBiayaRepre      = stripCharacters($('#nBiayaRepre').val());
         var nBiayaTransport  = stripCharacters($('#nBiayaTransport').val());
         var nBiayaPenginapan = stripCharacters($('#nBiayaPenginapan').val());
-        var nHonorJasa       = stripCharacters($('#nHonorJasa').val());
+        //var nHonorJasa       = stripCharacters($('#nHonorJasa').val());
 
-        var total = parseInt(nBiayaUangHarian) +  parseInt(nBiayaRepre) +  parseInt(nBiayaTransport) +  parseInt(nBiayaPenginapan) +  parseInt(nHonorJasa);
+        var total = parseInt(nBiayaUangHarian) +  parseInt(nBiayaRepre) +  parseInt(nBiayaTransport) +  parseInt(nBiayaPenginapan);
 
         return total;
     }
@@ -878,15 +961,29 @@
 
 
     function cetak_cs() {
-       var iCsId   = $('#iCsId').val()
-       var url = "<?php echo site_url().'/st/cetakCs?iCsId='; ?>"+iCsId;
+        $('.dialog_cetak').modal('show');
+    }
 
-       var jwb = confirm('Cetak Data Cost Sheet ?');
+     function proses_cetak_cs() {
+        var iCsId       = $('#iCsId').val();
+        var nipDalnis   = $('#nipDalnis').val();
+        var nipKabag    = $('#nipKabag').val();
+        var iKabag      = $('#iKabag').val();
+        var nipiKaPer   = $('#nipiKaPer').val();
+        var iKaPer      = $('#iKaPer').val();
+        var diKelurkandi = $('#diKelurkandi').val();
+        var dKeluarkanTgl = $('#dKeluarkanTgl').val();
 
-       if (jwb==1){
+
+        var url = "<?php echo site_url().'/st/cetakCs?iCsId='; ?>"+iCsId+"&nipDalnis="+nipDalnis+"&nipKabag="+nipKabag+"&iKabag="+iKabag+"&nipiKaPer="+nipiKaPer+"&iKaPer="+iKaPer+'&diKelurkandi='+diKelurkandi+'&dKeluarkanTgl='+dKeluarkanTgl;
+
+        var jwb = confirm('Cetak Data Cost Sheet ?');
+
+        if (jwb==1){
             document.getElementById('iframe_preview').src = url;
-       }
-     } 
+        }
+    } 
+
 
 
      function batal_cetak() {

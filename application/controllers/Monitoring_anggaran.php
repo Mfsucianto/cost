@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class spd extends CI_Controller {
+class monitoring_anggaran extends CI_Controller {
 
 
     function __construct() {
@@ -13,30 +13,26 @@ class spd extends CI_Controller {
 
 	public function index(){
 		if ($this->session->userdata('cUserId') && $this->session->userdata('iPeran')==1) {
-	       $this->load->view('view_spd');
+	       $this->load->view('view_monitoring_anggaran');
 	    }else{
 	    	$this->load->view('view_login');
 	    }		
 	}
 
 	public function getData(){
-		$iBarcode = $_POST['iBarcode'];
-		$vNomorCs = $_POST['vNomorCs'];
+		$cTahun = $_POST['cTahun'];
 		
-		if ($vNomorCs!=''){
-			$q = " AND st.vNomorCs='".$vNomorCs."' ";
-		}else{
-			$q = "";
-		}
 
-
-
-		$sql = "select a.id,st.iBarcode,st.cNomorST,c.vNomorCs,a.vNip,b.vName,a.vNoSPPD,a.dTglSPPD 
-				from cost.cs_detail as a
-				left join cost.ms_pegawai as b on b.vNip=a.vNip
-				inner join cost.cs_header as c on c.iCsId=a.iCsId
-				inner join cost.st_header as st on st.iStId=c.iStId
-				where st.iBarcode='".$iBarcode."' ".$q." and a.lDeleted=0 and c.lDeleted=0";
+		$sql = "select a.cTahun,a.iBidangId,a.cKodeDipa,a.vNamaItem,a.cKodeAccount,
+				a.fJumlahAnggaran,
+				(select coalesce(sum(dt.nNilaiKwitansi),0) as nNilaiKwitansi
+				from cost.cs_detail as dt
+				where dt.iDipaId=a.id and dt.lDeleted=0 ) as nNilaiKwitansi,
+				(select coalesce(sum(dt.nTotalBiaya),0) as nTotalBiaya
+				from cost.cs_detail as dt
+				where dt.iDipaId=a.id  and dt.lDeleted=0 and dt.nNilaiKwitansi=0 ) as nTotalBiaya,
+				(select vNickName from cost.ms_bidang where iBidangId=a.iBidangId) as nama_bidang
+				from cost.dipa  as a where a.cTahun='{$cTahun}' and a.lDeleted = 0";
 
 
 		$query 	= $this->db->query($sql);
@@ -45,45 +41,30 @@ class spd extends CI_Controller {
 			<thead>
               <tr>
                	<td>No</td>
-               	<td>ID ST</td>
-               	<td>Nomor Cost Sheet</td>
-               	<td>NIP</td>
-               	<td>Nama</td>
-               	<td>Nomor SPPD</td>
-               	<td>Tgl SPPD</td>
-               	<td></td>
-               
+               	<td>Bidang</td>
+               	<td>Kode DIPA/RKAKL</td>
+               	<td>Kode Mata Anggaran</td>
+               	<td>Anggaran</td>
+               	<td>Realisasi</td>
+               	<td>Outstanding</td>
+               	<td>Saldo/Sisa</td>
               </tr>
             </thead>
             <tbody>';
         $no=0;
 		if ($query->num_rows() > 0) {
 			foreach($query->result_array() as $row) {
+				$sisa = $row['fJumlahAnggaran'] - $row['nNilaiKwitansi'] - $row['nTotalBiaya'];
 				$no++;
-				$id = $row['id'];
-
-				
 				$html .= "<tr>";
                 $html .= "<td width='50px'>".$no."</td>";
-                /*$html .= "<td align='center'  width='100px' >
-                        <a  href='javasript:void(0)' data-toggle='modal' data-target='#modal-info' onclick='edit(\"".$id."\")' ><i class='fa fa-edit'></i></a> || 
-                        <a  href='#' onclick='hapus(\"".$id."\")' ><i class='fa fa-trash-o'></i></a>
-                </td>";*/
-                
-             	if ($row['dTglSPPD']=='' || $row['dTglSPPD']=='0000-00-00'){
-             		$dTglSPPD = '';
-             	}else{
-             		$dTglSPPD =  date('d-m-Y',strtotime($row['dTglSPPD']));
-             	}
-				
-				
-				$html .= "<td>".$row['iBarcode']."</td>";
-				$html .= "<td>".$row['vNomorCs']."</td>";
-				$html .= "<td>".$row['vNip']."</td>";
-				$html .= "<td>".$row['vName']."</td>";
-				$html .= "<td>".$row['vNoSPPD']."</td>";
-				$html .= "<td>".$dTglSPPD."</td>";
-				$html .= "<td style='text-align:center;' ><a  href='javasript:void(0)' data-toggle='modal' data-target='#modal-info' onclick='edit(\"".$id."\")' ><i class='fa fa-edit'></i></a></td>";
+				$html .= "<td>".$row['nama_bidang']."</td>";
+				$html .= "<td>".$row['cKodeDipa']."</td>";
+				$html .= "<td>".$row['cKodeAccount']."</td>";
+				$html .= "<td align='right' >".number_format($row['fJumlahAnggaran'])."</td>";
+				$html .= "<td align='right' >".number_format($row['nNilaiKwitansi'])."</td>";
+				$html .= "<td align='right' >".number_format($row['nTotalBiaya'])."</td>";
+				$html .= "<td align='right' >".number_format($sisa)."</td>";
 				
                 $html .= "</tr>";
 
@@ -271,52 +252,6 @@ class spd extends CI_Controller {
 		force_download($nama_file[0], $open_file);	
 	}
 	
-
-	function getListDataST(){
-		$sql = "select a.iStId,a.iBarcode,a.iBidangId,a.cNomorST,a.vUraianPenugasan,
-				(select vNickName from cost.ms_bidang where iBidangId=a.iBidangId) as nama_bidang
-				from st_header as a where a.lDeleted=0  order by a.iBarcode DESC";
-
-		$query 	= $this->db->query($sql);
-	
-		$html 	= '<table id="tabel_list_st" class="table table-bordered table-striped" style="width: 100%;" >
-			<thead>
-              <tr>
-               	<td  >No</td>
-               	<td>Pilih</td>
-               	<td>ID ST</td>
-               	<td>Nomor ST</td>
-               	<td>Bidang</td>
-               	<td>Uraian Penugasan</td>
-              </tr>
-            </thead>
-            <tbody>';
-        $no=0;
-		if ($query->num_rows() > 0) {
-			foreach($query->result_array() as $row) {
-				$no++;
-				$html .= "<tr>";
-                $html .= "<td style='width:5%;' >".$no."</td>";
-               	$html .= "<td  style='width:5%' align='center'  > 
-                			<input type='radio' onclick='select_row_st(
-                			\"".$row['iBarcode']."\"
-
-                			)' />
-                		</td>";	
-  
-				$html .= "<td>".$row['iBarcode']."</td>";
-				$html .= "<td>".$row['cNomorST']."</td>";
-				$html .= "<td>".$row['nama_bidang']."</td>";
-				$html .= "<td>".$row['vUraianPenugasan']."</td>";
-                $html .= "</tr>";
-			}
-		}
-
-		$html .= '</tbody> </table>';
-		echo $html;
-		exit();
-
-	}
 
 }
 

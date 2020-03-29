@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dpr" language="groovy" pageWidth="612" pageHeight="792" columnWidth="532" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20">
+	<parameter name="nip_pejabat" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["1111.11.1111"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nm_pejabat" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Nanama Pejabat"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dibuat_di" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Pekanbaru"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tgl_dibuat" class="java.lang.String">
+		<defaultValueExpression><![CDATA["25 Maret 2020"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select 
+b.vNip,p.vName,(select vJabatanName from cost.ms_jabatan where iJabatanId=p.iJabatanId) as vJabatanName,
+date_format(b.dTglSPPD,'%d %M %Y') as dTglSPPD,b.vNoSPPD,
+a.vPerincian,a.nJumlah,format(a.nJumlah,0) as jumlah 
+from cost.cd_detail_dpr as a
+inner join cost.cs_detail as b on b.id=a.iCsDetailId 
+inner join cost.cs_header as c on c.iCsId=b.iCsId
+inner join cost.st_header as st on st.iStId= c.iStId
+left join cost.dipa as d on d.id=st.iDipaId
+left join cost.ms_pegawai as p on p.vNip=b.vNip
+where b.id = $P{id}]]>
+	</queryString>
+	<field name="vNip" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vJabatanName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dTglSPPD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vNoSPPD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vPerincian" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nJumlah" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jumlah" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="nJumlah_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{nJumlah}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="38" y="0" width="494" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BADAN PENGAWASAN KEUANGAN DAN PEMBANGUNAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="38" y="19" width="494" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PERWAKILAN PROVINSI RIAU]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="0" y="0" width="105" height="50"/>
+				<imageExpression class="java.lang.String"><![CDATA["D:\\xampp\\htdocs\\cost\\report\\logo_bpkp.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="38" y="0" width="494" height="35"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DAFTAR PENGELUARAN RIIL]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="147" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="188" height="15"/>
+				<textElement/>
+				<text><![CDATA[Yang bertanda tangan dibawah ini :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="105" height="15"/>
+				<textElement/>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="105" height="15"/>
+				<textElement/>
+				<text><![CDATA[NIP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="45" width="105" height="15"/>
+				<textElement/>
+				<text><![CDATA[Jabatan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="15" width="13" height="15"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="30" width="13" height="15"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="45" width="13" height="15"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="118" y="15" width="283" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="30" width="283" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vNip}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="45" width="283" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vJabatanName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="78" width="532" height="31"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Berdasarkan surat perjalanan dinas SPD tanggal "+$F{dTglSPPD}+", nomor "+$F{vNoSPPD}+" dengan ini kami menyatakan dengan sesungguhnya bahwa : "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="109" width="532" height="18"/>
+				<textElement/>
+				<text><![CDATA[1.   Biaya Transport Pegawai di bawah ini yang tidak dapat diperoleh bukti-bukti pengeluaran,meliputi :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="132" width="31" height="15"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="132" width="330" height="15"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Perincian Biaya]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="379" y="132" width="100" height="15"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jumlah]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="18" y="0" width="31" height="20"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="49" y="0" width="330" height="20"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vPerincian}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="379" y="0" width="100" height="20"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Rp. "+$F{jumlah}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="305" splitType="Stretch">
+			<staticText>
+				<reportElement x="18" y="0" width="361" height="20"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[JUMLAH]]></text>
+			</staticText>
+			<textField pattern="###0">
+				<reportElement x="379" y="0" width="100" height="20"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$V{nJumlah_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="18" y="33" width="514" height="50"/>
+				<textElement/>
+				<text><![CDATA[Jumlah uang tersebut pada angka 1 diatas benar-benar dikeluarkan untuk pelaksanaan perjalanan dinas diaksud dan apabila dikemudian hari terdapat kelebihan atas pembayaran, kami bersedia untuk menyetorkan kelebihan tersebut ke Kas Negara. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="33" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[2.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="94" width="532" height="32"/>
+				<textElement/>
+				<text><![CDATA[Demikian pernyataan ini kami buat dengan sebenarnya, untuk dipergunakan sebagaimana mestinya.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="313" y="138" width="219" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{dibuat_di}+", "+$P{tgl_dibuat}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="313" y="158" width="219" height="33"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Pejabat Negara/Pegawai Negari
+Yang Melakukan Perjalanan Dinas
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="158" width="201" height="33"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Mengetahui/Menyetujui
+Pejabat Pembuat Komitmen
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="313" y="260" width="219" height="15"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vNip}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="313" y="245" width="219" height="15"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="245" width="201" height="15"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{nm_pejabat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="260" width="201" height="15"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{nip_pejabat}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

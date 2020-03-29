@@ -138,7 +138,7 @@ class cost_sheet extends CI_Controller {
 		$cUserId 	= $this->session->userdata('cUserId');
 		$post = $_POST;
 		$iCsId = $post['iCsId'];
-
+		
 
 		$post['dTanggalCS'] = date('Y-m-d',strtotime($post['dTanggalCS']));
 		$post['dMasaStrat'] = date('Y-m-d',strtotime($post['dMasaStrat']));
@@ -354,7 +354,7 @@ class cost_sheet extends CI_Controller {
 		$post['nLama'] = $nLama;
 
 
-		$post['nTotalBiaya'] = $post['nTotalUangHarian'] + $post['nBiayaRepre'] + $post['nTotalTransport'] + $post['nTotalPenginapan'] + $post['nHonorJasa'];
+		$post['nTotalBiaya'] = $post['nTotalUangHarian'] + $post['nBiayaRepre'] + $post['nTotalTransport'] + $post['nTotalPenginapan'];
 
 		//cek plafon yg tersedia
 		$sqlc = "SELECT coalesce(sum(nValueAju),0) as nValueAju,

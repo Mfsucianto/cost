@@ -3,6 +3,30 @@
 	<parameter name="icsid" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[5]]></defaultValueExpression>
 	</parameter>
+	<parameter name="nip_kaper" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["19651030 199303 1 001"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nama_kaper" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Ichsan Fuady"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nip_kabag" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["19660627 198803 1 001"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nama_kabag" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Daridin"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nip_kasubag" class="java.lang.String">
+		<defaultValueExpression><![CDATA["19770612 199811 1 001"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nama_kasubag" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Indra Kurniawan"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="diKelurkandi" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Pekanbaru"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dKeluarkanTgl" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["21 Maret 2020"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select a.iCsId,a.dPerjalananStart,a.dPerjalananEnd,a.nLama,a.vNip,b.vName,b.cGolongan,a.nTotalUangHarian,a.nBiayaRepre,a.nTotalTransport,a.nTotalPenginapan,a.nHonorJasa,a.nTotalBiaya,
 a.dTglSPPD,a.vNoSPPD,c.vTujuan,e.dTglST,e.cNomorST,e.vUraianPenugasan,c.vNomorCs,f.vBidangName,
@@ -115,9 +139,9 @@ where a.icsid=$P{icsid}]]>
 	<title>
 		<band height="91" splitType="Stretch">
 			<staticText>
-				<reportElement x="4" y="31" width="1356" height="20"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<reportElement x="4" y="20" width="1356" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PERMOHONAN PERJALANAN DINAS]]></text>
 			</staticText>
@@ -141,12 +165,12 @@ where a.icsid=$P{icsid}]]>
 				<textElement/>
 				<text><![CDATA[:]]></text>
 			</staticText>
-			<image onErrorType="Blank">
-				<reportElement x="4" y="0" width="67" height="55"/>
+			<image scaleImage="RetainShape" onErrorType="Blank">
+				<reportElement x="4" y="0" width="97" height="55"/>
 				<imageExpression class="java.lang.String"><![CDATA["D:\\xampp\\htdocs\\cost\\images\\logo_bpkp.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="71" y="0" width="199" height="20"/>
+				<reportElement x="112" y="0" width="199" height="20"/>
 				<textElement/>
 				<text><![CDATA[  PERWAKILAN BPKP PROVINSI RIAU]]></text>
 			</staticText>
@@ -273,6 +297,11 @@ where a.icsid=$P{icsid}]]>
 				<reportElement x="205" y="45" width="542" height="30"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vUraianPenugasan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1055" y="45" width="287" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{sumber_anggaran}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -627,7 +656,7 @@ where a.icsid=$P{icsid}]]>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -714,7 +743,7 @@ where a.icsid=$P{icsid}]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{vNoSPPD_1}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1202" y="0" width="151" height="20"/>
@@ -759,19 +788,8 @@ where a.icsid=$P{icsid}]]>
 				<text><![CDATA[Kepala Perwakilan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="79" width="260" height="96"/>
-				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="5" y="175" width="260" height="96"/>
-				<box>
+				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -779,17 +797,6 @@ where a.icsid=$P{icsid}]]>
 				</box>
 				<textElement textAlignment="Justified"/>
 				<text><![CDATA[Catatan Kepala Perwakilan :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="265" y="79" width="269" height="96"/>
-				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="265" y="59" width="269" height="20"/>
@@ -811,11 +818,11 @@ where a.icsid=$P{icsid}]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[Persetujuan]]></text>
+				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="265" y="175" width="269" height="96"/>
-				<box>
+				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -833,7 +840,7 @@ where a.icsid=$P{icsid}]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["Indra Kurniawan\nNIP 19770612 199811 1 001"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{nama_kasubag}+"\nNIP "+$P{nip_kasubag}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="534" y="59" width="275" height="20"/>
@@ -855,11 +862,11 @@ where a.icsid=$P{icsid}]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[Persetujuan]]></text>
+				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="534" y="175" width="275" height="96"/>
-				<box>
+				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -899,11 +906,11 @@ where a.icsid=$P{icsid}]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[Persetujuan]]></text>
+				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="809" y="175" width="270" height="96"/>
-				<box>
+				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -934,7 +941,7 @@ where a.icsid=$P{icsid}]]>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Kepala Perwakilan]]></text>
 			</staticText>
-			<staticText>
+			<textField>
 				<reportElement x="1079" y="39" width="274" height="20"/>
 				<box>
 					<topPen lineWidth="0.5"/>
@@ -942,12 +949,12 @@ where a.icsid=$P{icsid}]]>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[Persetujuan]]></text>
-			</staticText>
+				<textElement textAlignment="Center" markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{diKelurkandi}+", "+$P{dKeluarkanTgl}]]></textFieldExpression>
+			</textField>
 			<staticText>
 				<reportElement x="1079" y="175" width="274" height="96"/>
-				<box>
+				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -956,6 +963,28 @@ where a.icsid=$P{icsid}]]>
 				<textElement textAlignment="Justified"/>
 				<text><![CDATA[Catatan Kepala Perwakilan :]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="5" y="79" width="260" height="96"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{nama_kaper}+"\nNIP "+$P{nip_kaper}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="79" width="269" height="96"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{nama_kabag}+"\nNIP "+$P{nip_kabag}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
