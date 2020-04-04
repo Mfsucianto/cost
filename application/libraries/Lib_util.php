@@ -234,7 +234,7 @@ class lib_util {
 	function drawBindFiled($value,$text,$dbname){
 		$datchg = array();
         $sql = "SELECT iJabatanId,vJabatanName FROM  ms_jabatan order by vJabatanName ASC";
-        $query 	= $this->db->query($sql);
+        $query 	= $this->dbset->query($sql);
         if ($query->num_rows() > 0) {
 			foreach($query->result_array() as $row) {
 				$datchg[$row['iJabatanId']] = $row['vJabatanName'];
@@ -243,6 +243,38 @@ class lib_util {
 	}
 
 	
+	function getListIdST($vNip){
+		$list = '0';
+		$sql = "SELECT iStId FROM cost.st_detail_team WHERE vNip='".$vNip."' AND lDeleted=0";
+		$query 	= $this->dbset->query($sql);
+        if ($query->num_rows() > 0) {
+			foreach($query->result_array() as $row) {
+				$list .= $row['iStId'].",";
+			}
+		}
+
+		$list = rtrim($list,",");
+
+		return $list;
+	}
+
+	function getListIdDipa($vNip){
+		$list = '0';
+		$sql = "SELECT st.iDipaId
+				FROM cost.st_detail_team AS a
+				inner join cost.st_header as st on st.iStId = a.iStId 
+				WHERE a.vNip='".$vNip."' AND a.lDeleted=0";
+		$query 	= $this->dbset->query($sql);
+        if ($query->num_rows() > 0) {
+			foreach($query->result_array() as $row) {
+				$list .= $row['iDipaId'].",";
+			}
+		}
+
+		$list = rtrim($list,",");
+
+		return $list; 
+	}
 
 	function force_download($filename, $data){
 		$mimes = array(	'hqx'	=>	'application/mac-binhex40',

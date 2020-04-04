@@ -28,6 +28,7 @@ class Auth extends CI_Controller {
 
 		if ($userid == $vU && $password==$vP){
 			$sess_data['logged_in'] 		= TRUE;
+          	$sess_data['nip'] 			= 'root';
           	$sess_data['cUserId'] 			= $vU;
           	$sess_data['vUserName']	 		= 'Super Admin';
           	$sess_data['vImage'] 			= '';
@@ -62,6 +63,7 @@ class Auth extends CI_Controller {
 
 			   	$sess_data['logged_in'] 		= TRUE;
 	          	$sess_data['cUserId'] 			= $row->cUserId;
+	          	$sess_data['nip'] 				= $row->vNip;
 	          	$sess_data['vUserName']	 		= $row->vName;
 	          	$sess_data['vImage'] 			= $row->vImage;
 	          	$sess_data['iPeran'] 			= $row->iPeran;

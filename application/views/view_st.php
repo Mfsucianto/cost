@@ -90,7 +90,8 @@ $arryCapFildJs .= ']';
                     if ($this->session->userdata('iPeran')==1 || $this->session->userdata('iPeran')==6 ){
                         $sql = "SELECT iBidangId,vBidangName FROM  ms_bidang ";
                     }else{
-                        $sql = "SELECT iBidangId,vBidangName FROM  ms_bidang WHERE iBidangId='".$this->session->userdata('iBidangId')."' ";
+                        //$sql = "SELECT iBidangId,vBidangName FROM  ms_bidang WHERE iBidangId='".$this->session->userdata('iBidangId')."' ";
+                        $sql = "SELECT iBidangId,vBidangName FROM  ms_bidang ";
                     }
                     
                     $query  = $this->db->query($sql);
@@ -105,7 +106,17 @@ $arryCapFildJs .= ']';
 
                     if ($this->session->userdata('iBidangId') ==1){
                         $datchgsubbid = array();
-                        $sql = "SELECT iSubBidangId,vSubBidangName FROM cost.ms_sub_bidang WHERE lDeleted=0";
+                        if ($this->session->userdata('iPeran')==2){ 
+                            //jik pegawai
+                             /*$sql = "SELECT iSubBidangId,vSubBidangName FROM cost.ms_sub_bidang 
+                                    WHERE iSubBidangId='".$this->session->userdata('iSubBidangId')."' AND lDeleted=0";*/
+
+                            $sql = "SELECT iSubBidangId,vSubBidangName FROM cost.ms_sub_bidang WHERE lDeleted=0";
+
+                        }else{
+                             $sql = "SELECT iSubBidangId,vSubBidangName FROM cost.ms_sub_bidang WHERE lDeleted=0";
+                        }
+                       
                         $query  = $this->db->query($sql);
                         if ($query->num_rows() > 0) {
                             foreach($query->result_array() as $row) {

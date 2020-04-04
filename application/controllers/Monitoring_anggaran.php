@@ -12,7 +12,7 @@ class monitoring_anggaran extends CI_Controller {
     }
 
 	public function index(){
-		if ($this->session->userdata('cUserId') && $this->session->userdata('iPeran')==1) {
+		if ($this->session->userdata('cUserId') /*&& $this->session->userdata('iPeran')==1*/) {
 	       $this->load->view('view_monitoring_anggaran');
 	    }else{
 	    	$this->load->view('view_login');
@@ -22,6 +22,17 @@ class monitoring_anggaran extends CI_Controller {
 	public function getData(){
 		$cTahun = $_POST['cTahun'];
 		
+		if ($this->session->userdata('iPeran')==1 || $this->session->userdata('iPeran')==6 ){
+		 	$qb = "";
+		}else{
+		 	$qb = " a.iBidangId='".$this->session->userdata('iBidangId')."' AND ";
+		}
+
+
+		if ($this->session->userdata('iPeran')==2){
+			$listidDipa = $this->lib_util->getListIdDipa($this->session->userdata('nip'));
+			$qb = " a.id in (".$listidDipa.") AND ";
+		}
 
 		$sql = "select a.cTahun,a.iBidangId,a.cKodeDipa,a.vNamaItem,a.cKodeAccount,
 				a.fJumlahAnggaran,
@@ -32,7 +43,7 @@ class monitoring_anggaran extends CI_Controller {
 				from cost.cs_detail as dt
 				where dt.iDipaId=a.id  and dt.lDeleted=0 and dt.nNilaiKwitansi=0 ) as nTotalBiaya,
 				(select vNickName from cost.ms_bidang where iBidangId=a.iBidangId) as nama_bidang
-				from cost.dipa  as a where a.cTahun='{$cTahun}' and a.lDeleted = 0";
+				from cost.dipa  as a where ".$qb." a.cTahun='{$cTahun}' and a.lDeleted = 0";
 
 
 		$query 	= $this->db->query($sql);

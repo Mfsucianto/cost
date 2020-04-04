@@ -8,9 +8,16 @@ class Home extends CI_Controller {
         
     }
 	public function index()
-	{
+	{	
+		$iPeran      = $this->session->userdata('iPeran');
+
 		if ($this->session->userdata('cUserId')) {
-	       $this->load->view('view_home');
+			if ($iPeran==1){
+				$this->load->view('view_home');
+			}else{
+				$this->load->view('view_home_pegawai');
+			}
+	       
 	    }else{
 	    	$this->load->view('view_login');
 	    }

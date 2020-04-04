@@ -12,7 +12,7 @@ class penugasan extends CI_Controller {
     }
 
 	public function index(){
-		if ($this->session->userdata('cUserId') && $this->session->userdata('iPeran')==1) {
+		if ($this->session->userdata('cUserId') /*&& $this->session->userdata('iPeran')==1*/) {
 	       $this->load->view('view_penugasan');
 	    }else{
 	    	$this->load->view('view_login');
@@ -26,6 +26,22 @@ class penugasan extends CI_Controller {
 		$arr_jenis = array(''=>'',0=>'PKAU',1=>'PKPT',2=>'NON PKPT');
 		$arr_sumberdana = array(0=>'',1=>'DIPA PERWAKILAN',2=>'SKPA',3=>'DROPING',4=>'PIHAK III',4=>'UNIT BPKP LAIN',5=>'SHARING');
 		
+		if ($this->session->userdata('iPeran')==1 || $this->session->userdata('iPeran')==6 ){
+		 	$qb = "";
+		 }else{
+		 	$qb = " a.iBidangId='".$this->session->userdata('iBidangId')."' AND ";
+		 }
+
+		/*if ($this->session->userdata('iPeran')==2 && $this->session->userdata('iBidangId') ==1){
+		 	//jika pegawai dan bidang TU
+		 	$qb .= " a.iSubBidangId = '".$this->session->userdata('iSubBidangId')."' AND  ";
+		}*/
+
+		if ($this->session->userdata('iPeran')==2){
+			$listST = $this->lib_util->getListIdST($this->session->userdata('nip'));
+			$qb = " a.iStId in (".$listST.") AND ";
+		}
+
 
 		$sql = "SELECT a.iStId,a.iBidangId,a.iJenisRkt,a.cNomorST,a.dTglST,a.iSumberDana,a.vUraianPenugasan,
 				a.dMulai,a.nNilaiPengajuan,a.nRealiasi,b.vBidangName,
@@ -35,7 +51,7 @@ class penugasan extends CI_Controller {
 					from cost.st_detail_rkt where  iStId=a.iStId and lDeleted=0)  as nilai_realisasi
 				FROM cost.st_header as a
 				left join cost.ms_bidang as b on b.iBidangId=a.iBidangId
-				where a.lDeleted=0";
+				where {$qb} a.lDeleted=0";
 
 		$query 	= $this->db->query($sql);
 	

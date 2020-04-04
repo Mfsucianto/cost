@@ -327,7 +327,7 @@ insert  into `ms_pegawai`(`iPegawaiId`,`vNip`,`vName`,`cSex`,`vGelar`,`iJabatanI
 (1,'197706121998111001','Rava','L','S1',1,'IV','0',3,0,1,'rava','81dc9bdb52d04dc20036dbd8313ed055','user_5e567f443c34d.jpg','2020-02-24 14:45:54','root','2020-02-26 21:40:47','root',0),
 (3,'999999999X','MF Sucianto','L','S1',2,'a','0',3,0,1,'anto','c116819bb770ace40c51166f19d7e526','user_5e5685051198d.jpg','2020-02-24 14:45:54','root','2020-02-26 21:48:34','root',0),
 (4,'999999999','MF Sucianto','L','S1',1,'a','0',3,0,1,'','1234','5e5679c8b2568.jpeg','2020-02-24 14:45:54','root','2020-02-26 21:02:57','root',0),
-(17,'44411122','LARA ATI','P','S1',1,'IV','234',1,2,3,'',NULL,NULL,'2020-03-01 21:39:33','rava',NULL,NULL,0);
+(17,'44411122','LARA ATI','P','S1',1,'IV','234',1,2,2,'lara','81dc9bdb52d04dc20036dbd8313ed055',NULL,'2020-03-01 21:39:33','rava','2020-04-04 05:56:04','rava',0);
 
 /*Table structure for table `ms_sub_bidang` */
 
@@ -448,7 +448,9 @@ CREATE TABLE `st_detail_team` (
   `cUpdatedby` varchar(20) DEFAULT NULL,
   `lDeleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `iStId` (`iStId`,`vNip`)
+  UNIQUE KEY `iStId` (`iStId`,`vNip`),
+  KEY `vNip` (`vNip`,`lDeleted`),
+  KEY `vNip_2` (`vNip`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `st_detail_team` */
@@ -502,7 +504,7 @@ CREATE TABLE `st_header` (
 
 insert  into `st_header`(`iStId`,`iBarcode`,`vNomorCs`,`iBidangId`,`iSubBidangId`,`iJenisRkt`,`iJenisSt`,`vJenisPenugasan`,`vDasarPenugasan`,`cNoSrtDasar`,`dTglSrtDasar`,`cObyekPenugasan`,`vUraianPenugasan`,`dMulai`,`nJangkaWaktu`,`iSumberDana`,`iDipaId`,`vUraianSumberDana`,`vDaerahTujuan`,`nNilaiPengajuan`,`nRealiasi`,`cNomorST`,`dTglST`,`tCreated`,`cCreatedBy`,`tUpdated`,`cUpdatedBy`,`lDeleted`) values 
 (1,200001,'CS-5/PW04/3/2020',3,NULL,1,1,'KEGIATAN BIDANG AKUNTABILITAS PEMDA','Dasar Penugasan membuat segal','121-1123','2020-03-04','Obejek','Melaksanakan kegiatang yang menjadi tanggung jawab team kita dan memberikan edukasi terhadap masyarakat terkait bayanya Virus Korona','2020-03-04',5,1,1,'',NULL,NULL,NULL,'ST-/SSS/SDS','2020-03-04','2020-03-05 05:41:01','rava','2020-03-29 18:45:51','rava',0),
-(2,200002,'CS-1/PW04/1/2020',1,NULL,1,1,'RAPAT KOORDINASI','Pembuatan','123456','2020-03-03','Pembuatan ','dddd','2020-03-04',4,3,0,'Relasisasi dari orang sana',NULL,NULL,NULL,NULL,NULL,'2020-03-06 05:32:45','rava','2020-03-06 06:27:32','rava',0),
+(2,200002,'CS-1/PW04/1/2020',1,2,1,1,'RAPAT KOORDINASI','Pembuatan','123456','2020-03-03','Pembuatan ','dddd','2020-03-04',4,3,0,'Relasisasi dari orang sana',NULL,NULL,NULL,NULL,NULL,'2020-03-06 05:32:45','rava','2020-04-04 21:02:49','lara',0),
 (3,200003,'CS-2/PW04/1/2020',1,NULL,0,2,'KEGIATAN SUB BAG UMUM','asa','asa','2020-03-06','ass','aaaa','2020-03-03',23,3,0,'asa',NULL,NULL,NULL,NULL,NULL,'2020-03-06 06:25:20','rava','2020-03-06 09:11:10','rava',1),
 (4,200004,NULL,3,NULL,0,1,'KEGIATAN BIDANG AKUNTABILITAS PEMDA','a','w','2020-03-04','q','q','2020-03-04',45,1,1,'',NULL,NULL,NULL,'','0000-00-00','2020-03-09 05:23:38','rava','2020-03-09 05:29:00','rava',0),
 (5,200007,NULL,3,NULL,0,1,'KEGIATAN BIDANG AKUNTABILITAS PEMDA','a','ss','2020-03-16','asa','as','2020-03-17',1,4,0,'asa',NULL,NULL,NULL,NULL,NULL,'2020-03-16 09:13:29','rava',NULL,NULL,0);

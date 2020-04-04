@@ -12,7 +12,7 @@ class vspd extends CI_Controller {
     }
 
 	public function index(){
-		if ($this->session->userdata('cUserId') && $this->session->userdata('iPeran')==1) {
+		if ($this->session->userdata('cUserId')/* && $this->session->userdata('iPeran')==1*/) {
 	       $this->load->view('view_vspd');
 	    }else{
 	    	$this->load->view('view_login');
@@ -34,23 +34,25 @@ class vspd extends CI_Controller {
 			$q = " a.lDeleted=0 ";
 		}
 
+		
+
 
 
 		$sql = "select a.vNip,e.vName,a.dPerjalananStart,a.dPerjalananEnd,a.dTglSPPD,a.vNoSPPD,b.vTujuan,c.cNomorST,
-				a.iOpsiHariLibur,a.iOpsiHariSabtu,a.iOpsiHariMinggu,f.vBidangName 
+				a.iOpsiHariLibur,a.iOpsiHariSabtu,a.iOpsiHariMinggu,f.vBidangName,c.vUraianPenugasan 
 				from cost.cs_detail as a
 				inner join cost.cs_header as b on b.iCsId=a.iCsId
 				inner join cost.st_header as c on c.iStId=b.iStId
 				inner join cost.ms_pegawai as e on e.vNip=a.vNip
 				inner join cost.ms_bidang as f on f.iBidangId=e.iBidangId
-				where ".$q." and 
+				where ".$q."  and 
 				(a.dPerjalananStart between '{$dPerjalananStart}' and '{$dPerjalananEnd}' 
 				or a.dPerjalananEnd between '{$dPerjalananStart}' and '{$dPerjalananEnd}') and a.lDeleted=0";
 
 
 		$query 	= $this->db->query($sql);
 	
-		$html 	= '<table id="example1" class="table table-bordered table-striped" style="white-space: nowrap;">
+		$html 	= '<table id="example1" class="table table-bordered table-striped">
 			<thead>
               <tr>
                	<td>No</td>
@@ -83,7 +85,7 @@ class vspd extends CI_Controller {
 				$html .= "<tr>";
                 $html .= "<td width='50px'>".$no."</td>";
 				$html .= "<td>".$row['cNomorST']."</td>";
-				$html .= "<td>".$row['vName']."</td>";
+				$html .= "<td>".$row['vUraianPenugasan']."</td>";
 				$html .= "<td>".$row['vBidangName']."</td>";
 				$html .= "<td>".$row['vNoSPPD']."</td>";
 				$html .= "<td>".$dTglSPPD."</td>";

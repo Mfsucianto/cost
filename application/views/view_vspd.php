@@ -35,25 +35,78 @@ $this->load->view('template/sidebar');
                 <?php
 
                     $datatmcs = array();
-                    $sql = "select a.vNip,a.vName from cost.ms_pegawai as a WHERE a.lDeleted=0 ";
+
+                    if ($this->session->userdata('iPeran')==1 || $this->session->userdata('iPeran')==6 ){
+                        $qb = "";
+                        $qa = "";
+                    }else{
+                        $qb = " a.iBidangId='".$this->session->userdata('iBidangId')."' AND ";
+                        $qa = " a.iBidangId='".$this->session->userdata('iBidangId')."' AND ";
+                    }
+
+                    if ($this->session->userdata('iPeran')==2 && $this->session->userdata('iBidangId') ==1){
+                        //jika pegawai dan bidang TU
+                        $qb .= " a.iSubBidangId = '".$this->session->userdata('iSubBidangId')."' AND  ";
+                    }
+
+                    if ($this->session->userdata('iPeran')==2){
+                        $qb = " a.vNip='".$this->session->userdata('nip')."' AND ";
+                    }
+
+                    $sql = "select a.vNip,a.vName from cost.ms_pegawai as a WHERE ".$qb." a.lDeleted=0 ";
+
+
                     $query  = $this->db->query($sql);
                     if ($query->num_rows() > 0) {
                         foreach($query->result_array() as $row) {
                             $datatmcs[$row['vNip']] =$row['vNip']." - ". $row['vName'];
+                            $nip = $row['vNip'];
+                            $nama = $row['vName'];
+
                         }
                     }
-                    echo $this->lib_util->drawcombo('vNip','NIP / Nama ',$datatmcs,'300px');
+
+                    if ($this->session->userdata('iPeran')!=2){
+                        echo $this->lib_util->drawcombo('vNip','NIP / Nama ',$datatmcs,'300px');
+                    }else{
+                        echo '<div class="form-group" >
+                                  <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">NIP / Nama</label>
+                                  <div class="col-sm-7">
+                                    <div class="input-group input-group-sm">
+                                        <input type="hidden"   id="vNip" name="vNip" style="width:300px;" class="form-control" value="'.$nip.'" > <span><b>'.$nip.' - '.$nama.'</b></span>
+                                    </div>
+                                    
+                                  </div>
+                                </div>';
+                    }
+                    
 
 
                     $datatmcs = array();
-                    $sql = "select a.iBidangId,a.vBidangName from cost.ms_bidang as a WHERE a.lDeleted=0 ";
+                    $sql = "select a.iBidangId,a.vBidangName from cost.ms_bidang as a WHERE {$qa} a.lDeleted=0 ";
                     $query  = $this->db->query($sql);
                     if ($query->num_rows() > 0) {
                         foreach($query->result_array() as $row) {
                             $datatmcs[$row['iBidangId']] = $row['vBidangName'];
+                            $bidangid = $row['iBidangId'];
+                            $bidangnm = $row['vBidangName'];
                         }
                     }
-                    echo $this->lib_util->drawcombo('iBidangId','Bidang',$datatmcs,'300px');
+
+                    if ($this->session->userdata('iPeran')!=2){
+                        echo $this->lib_util->drawcombo('iBidangId','Bidang',$datatmcs,'300px');
+                    }else{
+                        echo '<div class="form-group" >
+                                  <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">Bidang</label>
+                                  <div class="col-sm-7">
+                                    <div class="input-group input-group-sm">
+                                        <input type="hidden"   id="iBidangId" name="iBidangId" style="width:300px;" class="form-control" value="'.$bidangid.'" > <span><b>'.$bidangnm.'</b></span>
+                                    </div>
+                                    
+                                  </div>
+                                </div>';
+                    }
+                    
 
 
                     
