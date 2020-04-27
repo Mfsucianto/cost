@@ -314,7 +314,7 @@ class st extends CI_Controller {
 		$sql = "select a.iStId,a.vNomorCs,a.iBidangId,a.iSubBidangId,a.iJenisRkt,a.iJenisSt,
 				a.vJenisPenugasan,a.vDasarPenugasan,a.cNoSrtDasar,a.dTglSrtDasar,
 				a.cObyekPenugasan,a.vUraianPenugasan,a.dMulai,a.nJangkaWaktu,a.iSumberDana,
-				a.iDipaId,a.vUraianSumberDana
+				a.iDipaId,a.vUraianSumberDana,a.cNomorST,a.dTglST
 				from cost.st_header as a
 				where a.iStId='".$id."'";
 		$query = $this->db->query($sql);
@@ -838,6 +838,10 @@ class st extends CI_Controller {
 
 	function cetakST2(){
 		$iStId = $_GET['iStId'];
+		$x_nipiKaPer = explode("|",$_GET['nipiKaPer']);
+		$nip_iKaPer = $x_nipiKaPer['0'];
+		$nama_iKaPer = $x_nipiKaPer['1'];
+		$iKaPer = $_GET['iKaPer'];
 
 		$this->load->helper('download'); 
 		
@@ -847,6 +851,10 @@ class st extends CI_Controller {
 		
 		$params = new Java("java.util.HashMap");
 		$params->put('iStId', (int)$iStId);	
+		$params->put('SUBREPORT_DIR', $path);		
+		$params->put('jabatan', $iKaPer);		
+		$params->put('nama_ttd', $nama_iKaPer);		
+		$params->put('nip_ttd', $nip_iKaPer);		
 		$params->put('SUBREPORT_DIR', $path);		
 		
 		$reportAsal   = "st.jrxml";

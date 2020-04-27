@@ -94,7 +94,7 @@ where a.id=$P{id}]]>
 		<band height="107" splitType="Stretch">
 			<image scaleImage="FillFrame">
 				<reportElement x="0" y="0" width="75" height="46"/>
-				<imageExpression class="java.lang.String"><![CDATA["D:\\xampp\\htdocs\\cost\\images\\logo_bpkp.jpg"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR}+"logo_bpkp.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="20"/>

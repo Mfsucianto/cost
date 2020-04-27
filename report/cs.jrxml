@@ -27,6 +27,9 @@
 	<parameter name="dKeluarkanTgl" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["21 Maret 2020"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\xampp\\htdocs\\cost\\images\\"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select a.iCsId,a.dPerjalananStart,a.dPerjalananEnd,a.nLama,a.vNip,b.vName,b.cGolongan,a.nTotalUangHarian,a.nBiayaRepre,a.nTotalTransport,a.nTotalPenginapan,a.nHonorJasa,a.nTotalBiaya,
 a.dTglSPPD,a.vNoSPPD,c.vTujuan,e.dTglST,e.cNomorST,e.vUraianPenugasan,c.vNomorCs,f.vBidangName,
@@ -167,7 +170,7 @@ where a.icsid=$P{icsid}]]>
 			</staticText>
 			<image scaleImage="RetainShape" onErrorType="Blank">
 				<reportElement x="4" y="0" width="97" height="55"/>
-				<imageExpression class="java.lang.String"><![CDATA["D:\\xampp\\htdocs\\cost\\images\\logo_bpkp.jpg"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR}+"logo_bpkp.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="112" y="0" width="199" height="20"/>
@@ -735,16 +738,17 @@ where a.icsid=$P{icsid}]]>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.Long"><![CDATA[$V{nTotalBiaya_1}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="1124" y="0" width="78" height="20"/>
-				<box leftPadding="3" rightPadding="3">
+				<box leftPadding="2">
+					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[""]]></textFieldExpression>
-			</textField>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<text><![CDATA[]]></text>
+			</staticText>
 			<staticText>
 				<reportElement x="1202" y="0" width="151" height="20"/>
 				<box leftPadding="3" rightPadding="3">

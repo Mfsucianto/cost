@@ -4,16 +4,19 @@
 		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select c.vDari,c.vTujuan
+		<![CDATA[select c.vDari as dari,c.vTujuan,date_format(a.dPerjalananStart,'%d %M %Y') as dPerjalananStart
 from cost.cs_detail as a
 left join cost.ms_pegawai as b on b.vNip=a.vNip
 left join cost.cs_header as c on c.iCsId=a.iCsId 
 where a.id=$P{id}]]>
 	</queryString>
-	<field name="vDari" class="java.lang.Object">
+	<field name="dari" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="vTujuan" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dPerjalananStart" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<background>
@@ -32,22 +35,16 @@ where a.id=$P{id}]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[VI.]]></text>
 			</staticText>
-			<staticText>
+			<textField>
 				<reportElement x="287" y="0" width="268" height="112"/>
-				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Top" markup="none"/>
-				<text><![CDATA[Berangkat dari	:	Pekanbaru
-(Tempat Kedudukan)
-
-Ke	:	
-Pada Tanggal	:
-]]></text>
-			</staticText>
+				<textFieldExpression class="java.lang.String"><![CDATA["Berangkat dari : " +$F{dari}+"\n(Tempat Kedudukan)\n\nKe   : "+$F{vTujuan}+"\nPada Tanggal	: "+$F{dPerjalananStart}]]></textFieldExpression>
+			</textField>
 			<staticText>
 				<reportElement x="32" y="112" width="255" height="112"/>
 				<box leftPadding="3">

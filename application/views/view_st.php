@@ -216,6 +216,91 @@ $arryCapFildJs .= ']';
   </div><!-- /.modal -->
 
 
+<!-- ============================Modal Cetak ST=================================== -->
+
+<!--  Modal content for the above example -->
+<div class="modal fade dialog_cetak_st" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabeldialog_cetak_st">
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-content">
+
+    <div class="modal-header">
+     
+      <h4 class="modal-title" id="myLargeModalLabeldialog_cetak_st">Cetak Surat Tugas</h4>
+    </div>
+    <div class="modal-body" id="div_from_cetak">
+        <form class="form-horizontal" id="form_data_cetak_st" name="form_data_cetak_st" autocomplete="off">
+            <?php
+
+                $datatmcs = array();
+                $opt = '<option></option>';
+                $sql = "select vNip,vName from cost.ms_pegawai WHERE lDeleted=0 ";
+                $query  = $this->db->query($sql);
+                if ($query->num_rows() > 0) {
+                    foreach($query->result_array() as $row) {
+                       
+                        $opt .= '<option value="'.$row['vNip']."|".$row['vName'].'"  >'.$row['vNip']." - ".$row['vName'].'</option>';
+                    }
+                }
+
+
+     
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Nomor ST</label>
+                          <div class="col-sm-7">
+                                <span id="span_nomor_st" ></span>
+                               
+                          </div>
+                        </div>';
+
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Nomor ST</label>
+                          <div class="col-sm-7">
+                                <span id="span_tanggalr_st" ></span>
+                          </div>
+                        </div>';
+
+
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-4 control-label" style="font-weight: 400;width:200px;">Kepala Perwakilan</label>
+                          <div class="col-sm-7">
+
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <select class="orm-control input-sm select2" style="width:300px;" id="nipiKaPer_st" name="nipiKaPer_st">
+                                                '.$opt.'
+                                            </select>
+                                        </td>
+                                        <td> &nbsp &nbsp </td>
+                                        <td>
+                                            <select class="orm-control input-sm select2" style="width:300px;" id="iKaPer_st" name="iKaPer_st">
+                                                <option value="Kepala Perwakilan" >Kepala Perwakilan</option>
+                                                <option value="Pelaksana Harian Kepala Perwakilan" >Plh Kepala Perwakilan</option>
+                                                <option value="Pelaksana Tugas Kepala Perwakilan" >Plt Kepala Perwakilan</option>
+
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+
+                                
+                          </div>
+                        </div>';
+               
+            ?>
+        </form>
+    </div>
+    <div  class="box-footer">
+        <button type="button" class="btn btn-warning" onclick="batal_cetak_st()" >Cancel</button>
+       
+        <button type="button" onclick="proses_cetak_st()" class="btn btn-info pull-right">Print</button> &nbsp
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 <iframe height="0" width="0" id="iframe_preview"></iframe>
 
 
@@ -603,7 +688,10 @@ $this->load->view('template/foot');
        $('#iSumberDana').val(rowData['iSumberDana']).trigger('change');
        $('#iDipaId').val(rowData['iDipaId']);
        $('#vUraianSumberDana').val(rowData['vUraianSumberDana']);
-    
+        
+        $('#span_nomor_st').html(rowData['cNomorST']);
+        $('#span_tanggalr_st').html(rowData['dTglST']);
+
         var iSumberDana = rowData['iSumberDana'];
        if (iSumberDana==0){
             $('#div_vUraianSumberDana').hide();
@@ -805,16 +893,27 @@ $this->load->view('template/foot');
     }
 
 
+
     function cetakST() {
-       var iStId = $('#iStId').val();
-       var url = "<?php echo site_url().'/st/cetakST2?iStId='; ?>"+iStId;
-
-       var jwb = confirm('Cetak Data ST ?');
-
-       if (jwb==1){
-            document.getElementById('iframe_preview').src = url;
-       }
-       
-
+        $('.dialog_cetak_st').modal('show');
     }
+    
+    function batal_cetak_st() {
+         $('.dialog_cetak_st').modal('hide');
+    }
+
+    function proses_cetak_st() {
+        var iStId           = $('#iStId').val();
+        var nipiKaPer_st    = $('#nipiKaPer_st').val();
+        var iKaPer_st       = $('#iKaPer_st').val();
+        var url = "<?php echo site_url().'/st/cetakST2?iStId='; ?>"+iStId+'&nipiKaPer='+nipiKaPer_st+'&iKaPer='+iKaPer_st;
+
+        var jwb = confirm('Cetak Data ST ?');
+
+        if (jwb==1){
+            document.getElementById('iframe_preview').src = url;
+        }
+    }
+
+
 </script>
