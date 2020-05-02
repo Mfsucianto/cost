@@ -103,8 +103,8 @@ class pegawai extends CI_Controller {
 				LEFT JOIN cost.ms_bidang AS c ON c.iBidangId=a.iBidangId
 				LEFT JOIN cost.ms_sub_bidang AS d ON d.iSubBidangId=a.iSubBidangId WHERE a.lDeleted=0";
 
-		$query 	= $this->db->get($dataFrom['dbName']);
-	
+		//$query 	= $this->db->get($dataFrom['dbName']);
+		$query = $this->db->query($sql);
 		$html 	= '<table id="example1" class="table table-bordered table-striped" style="white-space: nowrap;">
 			<thead>
               <tr>
@@ -136,9 +136,13 @@ class pegawai extends CI_Controller {
 
                 	if ($f=='iPeran'){
                 		$html .= "<td>".$peran[$row[$f]]."</td>";
+                	}else if ($f=='iJabatanId'){
+                		$html .= "<td>".$row['vJabatanName']."</td>";
                 	}else{
                 		$html .= "<td>".$row[$f]."</td>";
                 	}
+
+
 
 					
 				}

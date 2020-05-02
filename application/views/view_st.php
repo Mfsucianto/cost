@@ -253,7 +253,7 @@ $arryCapFildJs .= ']';
                         </div>';
 
                 echo  '<div class="form-group">
-                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Nomor ST</label>
+                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Tanggal ST</label>
                           <div class="col-sm-7">
                                 <span id="span_tanggalr_st" ></span>
                           </div>
@@ -370,6 +370,9 @@ $this->load->view('template/foot');
             $('#vJenisPenugasan').val('').trigger('change');
             $("#vJenisPenugasan").empty().trigger('change');
 
+            $('#iSubBidangId').val('').trigger('change');
+            $("#iSubBidangId").empty().trigger('change');
+
            if ($(this).val()==1){
 
                 var arr_ = ["RAPAT KOORDINASI","KEGIATAN BAGIAN TATA USAHA","KEGIATAN SUB BAG KEUANGAN","KEGIATAN SUB BAG UMUM","KEGIATAN SUB BAG KEPEGAWAIAN"];
@@ -381,12 +384,24 @@ $this->load->view('template/foot');
                     $('#vJenisPenugasan').append(newOption).trigger('change'); 
                 });
 
+                $('#div_iSubBidangId').show();
+
+                var newOption = new Option('BAGIAN UMUM', '1', false, false);
+                $('#iSubBidangId').append(newOption).trigger('change');
+
+                var newOption = new Option('BAGIAN KEUANGAN', '2', false, false);
+                $('#iSubBidangId').append(newOption).trigger('change');
+
+                var newOption = new Option('BAGIAN KEPEGAWAIAN', '2', false, false);
+                $('#iSubBidangId').append(newOption).trigger('change');
                 
 
            }else{
                 var data = {id: btext, text: btext };
                 var newOption = new Option(data.text, data.id, false, false);
                 $('#vJenisPenugasan').append(newOption).trigger('change'); 
+
+                $('#div_iSubBidangId').hide();
             }
 
         });

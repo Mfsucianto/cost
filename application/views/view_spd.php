@@ -183,10 +183,10 @@ $this->load->view('template/sidebar');
                 $query  = $this->db->query($sql);
                 if ($query->num_rows() > 0) {
                     foreach($query->result_array() as $row) {
-                        $datatmcs[$row['vName']] = $row['vName'];
+                        $datatmcs[$row['vNip']."|".$row['vName']] = $row['vNip']." - ".$row['vName'];
                     }
                 }
-                echo $this->lib_util->drawcombo('vNip_ppk','NIP/Nama PPK',$datatmcs,'300px');
+                echo $this->lib_util->drawcombo('vNip_ppk','NIP/Nama PPK',$datatmcs,'400px');
                 echo $this->lib_util->drawFiledText('Jabatan Baris 1','jabatan1','300px');
                 echo $this->lib_util->drawFiledText('Jabatan Baris 2','jabatan2','300px');
 

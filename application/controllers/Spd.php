@@ -243,11 +243,16 @@ class spd extends CI_Controller {
 
 		$id 			= $_GET['id'];
 		$pejabatTTD 	= $_GET['pejabatTTD'];
-		$vNip_ppk 		= $_GET['vNip_ppk'];
+		$vNip_ppk 		= explode("|", $_GET['vNip_ppk']);
 		$jabatan1 		= $_GET['jabatan1'];
 		$jabatan2 		= $_GET['jabatan2'];
 		$diKelurkandi 	= $_GET['diKelurkandi'];
-		$dKeluarkanTgl 	= $_GET['dKeluarkanTgl'];
+		if ($_GET['dKeluarkanTgl']!=''){
+			$dKeluarkanTgl =  date('d F Y',strtotime($_GET['dKeluarkanTgl']));
+		}else{
+			$dKeluarkanTgl 	= $_GET['dKeluarkanTgl'];
+		}
+		
 		
 		
 		$params = new Java("java.util.HashMap");
@@ -257,7 +262,8 @@ class spd extends CI_Controller {
 		$params->put('tglKeluar', $dKeluarkanTgl);		
 		$params->put('baris1', $jabatan1);		
 		$params->put('baris2', $jabatan2);		
-		$params->put('Nama_pejabat', $vNip_ppk);		
+		$params->put('nip_pejabat', $vNip_ppk['0']);		
+		$params->put('Nama_pejabat', $vNip_ppk['1']);		
 		
 		$reportAsal   = "spd.jrxml";
 		$reportTujuan = "spd.pdf";

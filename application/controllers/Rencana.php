@@ -57,7 +57,7 @@ class rencana extends CI_Controller {
 
 		$query 	= $this->db->query($sql);
 	
-		$html 	= '<table id="example1" class="table table-bordered table-striped" style="white-space: nowrap;">
+		$html 	= '<table id="example1" class="table table-bordered table-striped">
 			<thead>
               <tr>
                	<td>No</td>

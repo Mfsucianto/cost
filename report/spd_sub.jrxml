@@ -3,6 +3,10 @@
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
 	</parameter>
+	<parameter name="Nama_pejabat" class="java.lang.String"/>
+	<parameter name="nip_pejabat" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select c.vDari as dari,c.vTujuan,date_format(a.dPerjalananStart,'%d %M %Y') as dPerjalananStart
 from cost.cs_detail as a
@@ -25,7 +29,7 @@ where a.id=$P{id}]]>
 	<detail>
 		<band height="802">
 			<staticText>
-				<reportElement x="0" y="560" width="32" height="61"/>
+				<reportElement x="0" y="607" width="32" height="61"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -35,18 +39,8 @@ where a.id=$P{id}]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[VI.]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="287" y="0" width="268" height="112"/>
-				<box leftPadding="3">
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement verticalAlignment="Top" markup="none"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["Berangkat dari : " +$F{dari}+"\n(Tempat Kedudukan)\n\nKe   : "+$F{vTujuan}+"\nPada Tanggal	: "+$F{dPerjalananStart}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="32" y="112" width="255" height="112"/>
+				<reportElement x="32" y="159" width="255" height="112"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -66,7 +60,7 @@ Pada tanggal	:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="448" width="32" height="112"/>
+				<reportElement x="0" y="495" width="32" height="112"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -77,7 +71,7 @@ Pada tanggal	:
 				<text><![CDATA[V.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="287" y="112" width="268" height="112"/>
+				<reportElement x="287" y="159" width="268" height="112"/>
 				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -97,7 +91,7 @@ Pada tanggal	:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="448" width="255" height="112"/>
+				<reportElement x="32" y="495" width="255" height="112"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -111,7 +105,7 @@ pada tanggal	:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="224" width="32" height="112"/>
+				<reportElement x="0" y="271" width="32" height="112"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -122,7 +116,7 @@ pada tanggal	:
 				<text><![CDATA[III.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="560" width="523" height="61"/>
+				<reportElement x="32" y="607" width="523" height="61"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -133,7 +127,7 @@ pada tanggal	:
 				<text><![CDATA[Catatan lain-lain]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="621" width="523" height="74"/>
+				<reportElement x="32" y="668" width="523" height="74"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -146,7 +140,7 @@ PPK yang menerbitkan SPD, pegawai yang melakukan perjalana ndinas, para pejabat 
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="336" width="32" height="112"/>
+				<reportElement x="0" y="383" width="32" height="112"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -157,7 +151,7 @@ PPK yang menerbitkan SPD, pegawai yang melakukan perjalana ndinas, para pejabat 
 				<text><![CDATA[IV.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="287" y="224" width="268" height="112"/>
+				<reportElement x="287" y="271" width="268" height="112"/>
 				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -177,7 +171,7 @@ Pada tanggal	:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="336" width="255" height="112"/>
+				<reportElement x="32" y="383" width="255" height="112"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -197,7 +191,7 @@ Pada tanggal	:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="224" width="255" height="112"/>
+				<reportElement x="32" y="271" width="255" height="112"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -217,7 +211,7 @@ Pada tanggal	:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="287" y="448" width="268" height="112"/>
+				<reportElement x="287" y="495" width="268" height="112"/>
 				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -228,7 +222,7 @@ Pada tanggal	:
 				<text><![CDATA[Telah diperiksa dengan keterangan bahwa perjalanan tersebut atas perintahnya dan semata-mata untuk kepentingan jabatan dalam waktu yang sesingkat-singkatnya.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="32" height="112"/>
+				<reportElement x="0" y="0" width="32" height="159"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -239,7 +233,7 @@ Pada tanggal	:
 				<text><![CDATA[I.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="112" width="32" height="112"/>
+				<reportElement x="0" y="159" width="32" height="112"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -250,7 +244,7 @@ Pada tanggal	:
 				<text><![CDATA[II.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="0" width="255" height="112"/>
+				<reportElement x="32" y="0" width="255" height="159"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -261,7 +255,7 @@ Pada tanggal	:
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="621" width="32" height="74"/>
+				<reportElement x="0" y="668" width="32" height="74"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -272,7 +266,7 @@ Pada tanggal	:
 				<text><![CDATA[VII.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="287" y="336" width="268" height="112"/>
+				<reportElement x="287" y="383" width="268" height="112"/>
 				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -291,6 +285,85 @@ Pada tanggal	:
 
 ]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="287" y="0" width="268" height="15"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Brangkat Dari : "+ $F{dari}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="287" y="15" width="268" height="15"/>
+				<box leftPadding="3">
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[(Tempat Kedudukan)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="287" y="30" width="100" height="15"/>
+				<box leftPadding="3"/>
+				<textElement/>
+				<text><![CDATA[Ke]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="287" y="45" width="100" height="15"/>
+				<box leftPadding="3"/>
+				<textElement/>
+				<text><![CDATA[Pada Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="387" y="30" width="12" height="15"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="387" y="45" width="12" height="15"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="399" y="30" width="156" height="15"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vTujuan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="399" y="45" width="156" height="15"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dPerjalananStart}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="287" y="60" width="268" height="59"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Pejabat Pembuat Komitmen]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="287" y="119" width="268" height="15"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{Nama_pejabat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="287" y="134" width="268" height="25"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP : "+$P{nip_pejabat}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

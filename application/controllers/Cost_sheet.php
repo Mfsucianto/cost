@@ -187,7 +187,7 @@ class cost_sheet extends CI_Controller {
 				COALESCE((SELECT iLastNumber FROM cost.counter_cs WHERE iBidangId=b.iBidangId and cTahun='".$cTahun."' ),0) AS iLastNumber
 				from cost.st_header as a
 				left join cost.ms_bidang as b on b.iBidangId=a.iBidangId
-				where a.iStId=1";
+				where a.iStId='".$iStId."' ";
 
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0){
@@ -350,7 +350,14 @@ class cost_sheet extends CI_Controller {
 
 		$post['nTotalUangHarian'] = $nLama * $post['nBiayaUangHarian'];
 		$post['nTotalTransport'] = 2 * $post['nBiayaTransport'];
-		$post['nTotalPenginapan'] = ($nLama-1) * $post['nBiayaPenginapan'];
+
+		if ($nLama > 1){
+			$post['nTotalPenginapan'] = ($nLama-1) * $post['nBiayaPenginapan'];
+		}else{
+			$post['nTotalPenginapan'] =  $post['nBiayaPenginapan'];
+		}
+
+		
 		$post['nLama'] = $nLama;
 
 

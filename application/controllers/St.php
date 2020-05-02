@@ -79,8 +79,10 @@ class st extends CI_Controller {
 				a.dMulai,a.nNilaiPengajuan,a.nRealiasi,b.vBidangName,
 				(select coalesce(sum(nValueAju),0) as nilai_aju 
 					from cost.st_detail_rkt where  iStId=a.iStId and lDeleted=0)  as nilai_aju,
-				(select coalesce(sum(nRealisasi),0) as nilai_realisasi 
-					from cost.st_detail_rkt where  iStId=a.iStId and lDeleted=0)  as nilai_realisasi
+				(select coalesce(sum(dt.nNilaiKwitansi),0) as nNilaiKwitansi
+					from cost.cs_detail as dt
+					inner join cost.cs_header as b on b.iCsId=dt.iCsId
+					where b.iStId = a.iStId and dt.lDeleted=0 and b.lDeleted=0)  as nilai_realisasi
 				FROM cost.st_header as a
 				left join cost.ms_bidang as b on b.iBidangId=a.iBidangId
 				where {$qb} a.lDeleted=0";

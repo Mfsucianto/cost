@@ -107,7 +107,14 @@ $this->load->view('template/foot');
     function refreshData(){
         var data = loadData();
         $('#isi_table').html(data);
-         $('#example1').DataTable({
+        $('#example1').DataTable({
+            scrollY:        300,
+            scrollX:        true,
+            scrollCollapse: true
+           
+        });
+
+        /*$('#example1').DataTable({
             scrollY:        300,
             scrollX:        true,
             scrollCollapse: true,
@@ -115,7 +122,7 @@ $this->load->view('template/foot');
                 leftColumns: 1,
                 rightColumns: 2,
             }
-        });
+        });*/
     }
 
     function loadData(){

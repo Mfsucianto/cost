@@ -45,7 +45,7 @@ CREATE TABLE `counter_cs` (
 /*Data for the table `counter_cs` */
 
 insert  into `counter_cs`(`iBidangId`,`cTahun`,`iLastNumber`) values 
-(3,'2020',13),
+(3,'2020',14),
 (1,'2020',2);
 
 /*Table structure for table `cs_detail` */
@@ -107,9 +107,9 @@ CREATE TABLE `cs_detail` (
 /*Data for the table `cs_detail` */
 
 insert  into `cs_detail`(`id`,`iDipaId`,`iCsId`,`dPerjalananStart`,`dPerjalananEnd`,`nLama`,`iAlatAngkut`,`iOpsiHariLibur`,`iOpsiHariSabtu`,`iOpsiHariMinggu`,`vNip`,`nBiayaUangHarian`,`nTotalUangHarian`,`nBiayaRepre`,`nBiayaTransport`,`nTotalTransport`,`iJenisAkomodasi`,`nBiayaPenginapan`,`nTotalPenginapan`,`nHonorJasa`,`nTotalBiaya`,`dTglSPPD`,`vNoSPPD`,`vJenisSPD`,`iCheckSuratTugas`,`iChekSpd`,`iChekPenginapan`,`iChekTransportasi`,`iChekPengeluaran`,`dTerimaSpj`,`vNomorKwitansi`,`dTglKwitansi`,`cTahunKwitansi`,`dLumpsumpAwal`,`dLumpsumpAkhir`,`nNilaiKwitansi`,`tCreated`,`cCreatedby`,`tUpdated`,`cUpdatedby`,`lDeleted`) values 
-(6,1,5,'2020-03-04','2020-03-09',4,1,1,1,3,'44411122',10000,40000,50000,5000,10000,1,10000,30000,0,130000,'2020-03-11','SPD-2/PW4/3/2020','A',1,1,1,0,0,'2020-03-06','1234','2020-03-04','2020','2020-03-17','2020-03-18',2100000,'2020-03-07 23:10:30','rava','2020-03-29 18:50:13','rava',0),
+(6,1,5,'2020-03-04','2020-03-04',1,1,1,1,3,'44411122',10000,10000,50000,5000,10000,1,10000,10000,0,80000,'2020-03-11','SPD-2/PW4/3/2020','A',1,1,1,0,0,'2020-03-06','1234','2020-03-04','2020','2020-03-17','2020-03-18',2100000,'2020-03-07 23:10:30','rava','2020-04-29 05:49:35','rava',0),
 (7,1,8,'2020-03-09','2020-03-09',1,0,0,0,0,'197706121998111001',0,0,0,0,0,0,0,0,0,0,NULL,NULL,NULL,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,0,'2020-03-09 05:28:02','rava','2020-03-29 18:51:04','rava',0),
-(8,1,5,'2020-03-04','2020-03-05',2,1,1,1,1,'999999999X',30000,60000,20000,10000,20000,1,10000,10000,0,110000,'2020-03-13','SPD-123','SA',1,1,0,0,0,'2020-03-24','KW-11122-PS-22333','2020-03-29','2020','2020-03-17','2020-03-19',1260000,'2020-03-16 05:41:28',NULL,'2020-03-29 18:50:18','rava',0);
+(8,1,5,'2020-03-04','2020-03-05',2,1,1,1,1,'999999999X',30000,60000,20000,10000,20000,1,10000,10000,0,110000,'2020-03-13','SPD-123','SA',1,1,0,0,0,'2020-03-24','KW-11122-PS-22333','2020-03-29','2020','2020-03-17','2020-03-19',1260000,'2020-03-16 05:41:28',NULL,'2020-04-29 04:56:54','rava',0);
 
 /*Table structure for table `cs_detail_kwitansi` */
 
@@ -164,7 +164,7 @@ CREATE TABLE `cs_header` (
   `cUpdatedby` varchar(20) DEFAULT NULL,
   `lDeleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`iCsId`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 /*Data for the table `cs_header` */
 
@@ -176,7 +176,8 @@ insert  into `cs_header`(`iCsId`,`iStId`,`dTanggalCS`,`vNomorCs`,`dMasaStrat`,`d
 (5,1,'2020-03-10','CS-9/PW04/3/2020','2020-03-04','2020-03-06',3,1,'Jakarta','Surabaya','2020-03-07 08:31:47','rava','2020-03-29 18:49:50','rava',0),
 (6,1,'1970-01-01','CS-10/PW04/3/2020','2020-03-05','2020-03-06',1,1,'Jakarta','Bogor','2020-03-07 10:55:23','rava','2020-03-14 04:08:31','rava',0),
 (7,1,'2020-03-07','CS-12/PW04/3/2020','2020-03-04','2020-03-06',2,NULL,NULL,NULL,'2020-03-07 22:36:05','rava',NULL,NULL,0),
-(8,4,'2020-03-09','CS-13/PW04/3/2020','2020-03-09','2020-03-12',2,3,'Jakarta','Jakarta','2020-03-09 05:27:51','rava',NULL,NULL,0);
+(8,4,'2020-03-09','CS-13/PW04/3/2020','2020-03-09','2020-03-12',2,3,'Jakarta','Jakarta','2020-03-09 05:27:51','rava',NULL,NULL,0),
+(9,2,'2020-04-29','CS-14/PW04/3/2020','2020-03-04','2020-03-10',1,1,'Ja','Bo','2020-04-29 05:04:31','rava',NULL,NULL,0);
 
 /*Table structure for table `dipa` */
 

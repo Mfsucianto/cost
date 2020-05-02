@@ -37,7 +37,7 @@ $this->load->view('template/sidebar');
                     
 
                     echo '<div class="form-group" id="div_vNoSPPD">
-                              <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">NOmor SPD</label>
+                              <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">Nomor SPD</label>
                               <div class="col-sm-7">
                                 <div class="input-group input-group-sm">
                                     <input type="text" readonly id="vNoSPPD" class="form-control">
@@ -590,6 +590,13 @@ $this->load->view('template/foot');
         $('#list_data_spd').html(list_data);
         $('#myLargeModalLabel').html('List DIPA');
         $('#example1').DataTable({
+             scrollY:        300,
+            scrollX:        true,
+            scrollCollapse: true,
+            fixedColumns:   {
+                leftColumns: 2,
+                rightColumns: 0,
+            }
         });
 
 
