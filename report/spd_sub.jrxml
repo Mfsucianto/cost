@@ -7,6 +7,7 @@
 	<parameter name="nip_pejabat" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
+	<parameter name="baris1" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select c.vDari as dari,c.vTujuan,date_format(a.dPerjalananStart,'%d %M %Y') as dPerjalananStart
 from cost.cs_detail as a
@@ -29,7 +30,7 @@ where a.id=$P{id}]]>
 	<detail>
 		<band height="802">
 			<staticText>
-				<reportElement x="0" y="607" width="32" height="61"/>
+				<reportElement x="0" y="652" width="32" height="61"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -60,7 +61,7 @@ Pada tanggal	:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="495" width="32" height="112"/>
+				<reportElement x="0" y="495" width="32" height="157"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -91,11 +92,11 @@ Pada tanggal	:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="495" width="255" height="112"/>
+				<reportElement x="32" y="495" width="255" height="59"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Top"/>
@@ -116,7 +117,7 @@ pada tanggal	:
 				<text><![CDATA[III.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="607" width="523" height="61"/>
+				<reportElement x="32" y="652" width="523" height="61"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -127,7 +128,7 @@ pada tanggal	:
 				<text><![CDATA[Catatan lain-lain]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="668" width="523" height="74"/>
+				<reportElement x="32" y="713" width="523" height="74"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -211,11 +212,11 @@ Pada tanggal	:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="287" y="495" width="268" height="112"/>
+				<reportElement x="287" y="495" width="268" height="59"/>
 				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Top" markup="none"/>
@@ -255,7 +256,7 @@ Pada tanggal	:
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="668" width="32" height="74"/>
+				<reportElement x="0" y="713" width="32" height="74"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -340,14 +341,14 @@ Pada tanggal	:
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{dPerjalananStart}]]></textFieldExpression>
 			</textField>
-			<staticText>
+			<textField>
 				<reportElement x="287" y="60" width="268" height="59"/>
 				<box>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center"/>
-				<text><![CDATA[Pejabat Pembuat Komitmen]]></text>
-			</staticText>
+				<textElement textAlignment="Center" markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{baris1}]]></textFieldExpression>
+			</textField>
 			<textField>
 				<reportElement x="287" y="119" width="268" height="15"/>
 				<box>
@@ -358,6 +359,54 @@ Pada tanggal	:
 			</textField>
 			<textField>
 				<reportElement x="287" y="134" width="268" height="25"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP : "+$P{nip_pejabat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="554" width="255" height="70"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{baris1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="623" width="255" height="15"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{Nama_pejabat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="637" width="255" height="15"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP : "+$P{nip_pejabat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="287" y="554" width="268" height="70"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{baris1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="287" y="623" width="268" height="15"/>
+				<box>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{Nama_pejabat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="287" y="637" width="268" height="15"/>
 				<box>
 					<rightPen lineWidth="0.5"/>
 				</box>

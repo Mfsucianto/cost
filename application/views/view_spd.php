@@ -170,13 +170,6 @@ $this->load->view('template/sidebar');
     <div class="modal-body" id="list_data">
         <form class="form-horizontal" id="form_data" name="form_data" autocomplete="off">
             <?php
-                echo '<input type="hidden" readonly class="form-control input-sm" id="id" name="id" value="">';
-
-                 echo '<legend>Cetak SPD</legend>';
-                 echo $this->lib_util->drawcombo('iHalaman','Halaman Depan',array(1=>'Halaman Depan'));
-                 echo $this->lib_util->drawcombo('pejabatTTD','Pejabat Yang Bertandatangan',array(1=>'Penjabat Pembuat Komitmen'));
-
-                 echo '<legend>Pejabat Penandatangan</legend>';
 
                 $datatmcs = array();
                 $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.lDeleted=0 ";
@@ -186,13 +179,49 @@ $this->load->view('template/sidebar');
                         $datatmcs[$row['vNip']."|".$row['vName']] = $row['vNip']." - ".$row['vName'];
                     }
                 }
+
+                echo '<input type="hidden" readonly class="form-control input-sm" id="id" name="id" value="">';
+
+                 echo '<legend>Cetak SPD</legend>';
+                 echo $this->lib_util->drawcombo('iJenisCs','Jenis Costsheet ',array(1=>'Dana Obrik',2=>'Dana DIPA'),'200px');
+                 echo $this->lib_util->drawcombo('pejabatTTD','Pejabat Yang Bertandatangan',$datatmcs,'400px');
+
+                 echo '<legend>Pejabat Penandatangan</legend>';
+
+                
                 echo $this->lib_util->drawcombo('vNip_ppk','NIP/Nama PPK',$datatmcs,'400px');
                 echo $this->lib_util->drawFiledText('Jabatan Baris 1','jabatan1','300px');
                 echo $this->lib_util->drawFiledText('Jabatan Baris 2','jabatan2','300px');
 
                  echo '<legend>Detail Data</legend>';
 
-                echo $this->lib_util->drawFiledText('Nomor SPD','vNoSPPD','300px');
+                //echo $this->lib_util->drawFiledText('Nomor SPD','vNoSPPD','300px');
+
+                echo '<div class="form-group">
+                          <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">Nomor SPD</label>
+                          <div class="col-sm-7">
+                            <div class="input-group input-group-sm">
+                                    
+                                <table>
+                                    <td>
+                                        <input type="text" readonly  value="SPD-" class="form-control input-sm" style="width:54px;">
+                                    </td>
+
+                                   <td>
+                                        <input type="text"  id="nomor_urut_spd" class="form-control input-sm" style="width:70px;">
+                                    </td>
+                                   
+                                    <td>
+                                        <input type="hidden" readonly id="vNoSPPD" class="form-control input-sm">
+                                        <input type="text" readonly id="nomor_tahun_spd" class="form-control input-sm" style="width:100px;">
+                                    </td>
+                                </table>
+                                
+                            </div>
+                            
+                          </div>
+                        </div>';
+
                 echo $this->lib_util->drawFiledText('Tanggal SPD','dTglSPPD','100px');
                 echo $this->lib_util->drawFiledText('Jenis SPD','vJenisSPD','100px');
                 echo $this->lib_util->drawcombo('iJenisAkomodasi','Jenis Akomodasi ',array(0=>'',1=>'Fullboard',2=>'Non Fullboard'));
@@ -289,27 +318,81 @@ $this->load->view('template/foot');
 <script type="text/javascript">
 
     $(document).ready(function() {
-       
+        $('#nomor_urut_spd').autoNumeric('init', {vMin:'0', vMax:'999999'});
+
+        $('#nomor_urut_spd').keyup(function() {
+            var nomor_urut_spd  = stripCharacters($('#nomor_urut_spd').val());
+            var nomor_tahun_spd = $('#nomor_tahun_spd').val();
+
+            vNoSPPD = "SPD-"+nomor_urut_spd+nomor_tahun_spd;
+            if (nomor_urut_spd!='' ){
+                $('#vNoSPPD').val(vNoSPPD);
+            }else{
+                $('#vNoSPPD').val('');
+            }
+        });
+
+        $('#diKelurkandi').val('Pekanbaru');
+
         $('#dKeluarkanTgl').datepicker({
             format: 'dd-mm-yyyy',
             autoclose : true,
             todayHighlight : true,
             disableTouchKeyboard : true
         });
+
+        $('#iJenisCs').change(function() {
+            if ($(this).val()==2){
+                $('#pejabatTTD').val('Pejabat Pembuat Komitmen ');
+            }else if ($(this).val()==1){
+                $('#pejabatTTD').val('Pejabat Yang Memberikan Wewenang');
+            }else{
+                $('#pejabatTTD').val('');
+            }
+        });
     });
+
 
 
     function cetakDataSPD() {
         var id = $('#id').val();
-        var iHalaman = $('#iHalaman').val();
+        var iJenisCs = $('#iJenisCs').val();
         var pejabatTTD = $('#pejabatTTD').val();
         var vNip_ppk = $('#vNip_ppk').val();
         var jabatan1 = $('#jabatan1').val();
         var jabatan2 = $('#jabatan2').val();
         var diKelurkandi = $('#diKelurkandi').val();
         var dKeluarkanTgl = $('#dKeluarkanTgl').val();
+        var vNoSPPD = $('#vNoSPPD').val();
 
-        var url = "<?php echo site_url();?>/spd/cetakspd?id="+id+"&pejabatTTD="+pejabatTTD+"&vNip_ppk="+vNip_ppk+"&jabatan1="+jabatan1+"&jabatan2="+jabatan2+"&diKelurkandi="+diKelurkandi+"&dKeluarkanTgl="+dKeluarkanTgl
+        if (vNoSPPD==''){
+            custom_alert('','Lengkapi Nomor SPD');
+            return false;
+        }
+
+        
+
+        if (iJenisCs==''){
+            custom_alert('','Pilih Jenis Costsheet');
+            return false;
+        }
+
+        if (vNip_ppk==''){
+            custom_alert('','Pilih NIP/Nama PPK');
+            return false;
+        }
+
+        if (diKelurkandi==''){
+            custom_alert('','Lengkapi Dikeluarkan Di');
+            return false;
+        }
+
+        if (dKeluarkanTgl==''){
+            custom_alert('','Lengkapi Tanggal dikeluarkan');
+            return false;
+        }
+
+        var url = "<?php echo site_url();?>/spd/cetakspd?id="+id+"&pejabatTTD="+pejabatTTD+"&vNip_ppk="+vNip_ppk+"&jabatan1="+jabatan1+"&jabatan2="+jabatan2+"&diKelurkandi="+diKelurkandi+"&dKeluarkanTgl="+dKeluarkanTgl+"&vNoSPPD="+vNoSPPD
 
         var jwb = confirm('Cetak Data Cost Sheet ?');
 
@@ -413,9 +496,28 @@ $this->load->view('template/foot');
         rowData  = JSON.parse(list_data);
 
         $('#id').val(id).val();
-        $('#vNoSPPD').val(rowData['vNoSPPD']).val();
-        $('#vJenisSPD').val(rowData['vJenisSPD']).val();
-        $('#dTglSPPD').val(rowData['dTglSPPD']).val();
+        vNoSPPD         = rowData['vNoSPPD'];
+        nomor_bidang    = rowData['iNomor'];
+        tahun           = new Date().getFullYear();
+        if (vNoSPPD=='' ||vNoSPPD==null ){
+            $('#vNoSPPD').val('');
+            $('#nomor_urut_spd').val('');
+            $('#nomor_tahun_spd').val('/PW04/'+nomor_bidang+'/'+tahun);
+        }else{
+            //SPD-16/PW04/1/2020
+            s_nospd = vNoSPPD.split('/');
+            no_u    = s_nospd['0'].split('-');
+
+            $('#nomor_urut_spd').val(no_u['1']);
+            $('#nomor_tahun_spd').val('/PW04/'+s_nospd['2']+'/'+s_nospd['3']);
+            $('#vNoSPPD').val(rowData['vNoSPPD']);
+        }
+        
+
+
+
+        $('#vJenisSPD').val(rowData['vJenisSPD']);
+        $('#dTglSPPD').val(rowData['dTglSPPD']);
         $('#iJenisAkomodasi').val(rowData['iJenisAkomodasi']).trigger('change');
         $('#vNip').val(rowData['vNip']+' / '+rowData['vName']);
         $('#dPerjalananStart').val(rowData['dPerjalananStart']);
@@ -457,6 +559,33 @@ $this->load->view('template/foot');
     }
 
 
+    function  batal_spd(id,vNoSPPD) {
+        var jwb = confirm('Batalkan Nomor SPD '+vNoSPPD+' ?');
+
+        if (jwb==1){
+            var btl = prosesBatalSPD(id,1);
+            searchSPD();
+        }
+    }
+
+    function aktifkan_spd(id,vNoSPPD) {
+        var jwb = confirm('Aktifkan Nomor SPD '+vNoSPPD+' ?');
+
+        if (jwb==1){
+            var btl = prosesBatalSPD(id,0);
+            searchSPD();
+        }
+    }
+
+    function prosesBatalSPD(id,iBatalSPD) {
+        var url = "<?php echo site_url().'/spd/batalSPD'; ?>";
+        return $.ajax({
+            type: 'POST', 
+            url: url,
+            data:'id='+id+'&iBatalSPD='+iBatalSPD,
+            async:false
+        }).responseText
+    }
 
     function getFormDataSPD(id) {
          var url = "<?php echo site_url().'/spd/getFormDataSPD'; ?>";

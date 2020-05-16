@@ -31,7 +31,7 @@ class spd extends CI_Controller {
 
 
 
-		$sql = "select a.id,st.iBarcode,st.cNomorST,c.vNomorCs,a.vNip,b.vName,a.vNoSPPD,a.dTglSPPD 
+		$sql = "select a.id,st.iBarcode,st.cNomorST,c.vNomorCs,a.vNip,b.vName,a.vNoSPPD,a.dTglSPPD,a.iBatalSPD 
 				from cost.cs_detail as a
 				left join cost.ms_pegawai as b on b.vNip=a.vNip
 				inner join cost.cs_header as c on c.iCsId=a.iCsId
@@ -61,7 +61,14 @@ class spd extends CI_Controller {
 			foreach($query->result_array() as $row) {
 				$no++;
 				$id = $row['id'];
+				$vNoSPPD = $row['vNoSPPD'];
+				$iBatalSPD = $row['iBatalSPD'];
 
+				if ($iBatalSPD==1){
+					$col = "style='color:red'";
+				}else{
+					$col = "";
+				}
 				
 				$html .= "<tr>";
                 $html .= "<td width='50px'>".$no."</td>";
@@ -81,9 +88,20 @@ class spd extends CI_Controller {
 				$html .= "<td>".$row['vNomorCs']."</td>";
 				$html .= "<td>".$row['vNip']."</td>";
 				$html .= "<td>".$row['vName']."</td>";
-				$html .= "<td>".$row['vNoSPPD']."</td>";
-				$html .= "<td>".$dTglSPPD."</td>";
-				$html .= "<td style='text-align:center;' ><a  href='javasript:void(0)' data-toggle='modal' data-target='#modal-info' onclick='edit(\"".$id."\")' ><i class='fa fa-edit'></i></a></td>";
+				$html .= "<td ".$col." >".$row['vNoSPPD']."</td>";
+				$html .= "<td ".$col." >".$dTglSPPD."</td>";
+				$html .= "<td style='text-align:center;' ><a  href='javasript:void(0)' data-toggle='modal' data-target='#modal-info' onclick='edit(\"".$id."\")' ><i class='fa fa-edit'></i></a> ";
+
+				if ($row['vNoSPPD']!='' && $iBatalSPD==0){
+					$html .= "<button type='button' onclick='batal_spd(\"".$id."\",\"".$vNoSPPD."\")' class='btn btn-block btn-warning btn-xs'>Batal SPD</button>";
+				}else if ( $iBatalSPD==1){
+					$html .= "<button type='button' onclick='aktifkan_spd(\"".$id."\",\"".$vNoSPPD."\")' class='btn btn-block btn-warning btn-xs'>Aktifkan SPD</button>";
+				}
+				$html .= "</td>";
+						
+
+
+				
 				
                 $html .= "</tr>";
 
@@ -135,11 +153,13 @@ class spd extends CI_Controller {
 		$id = $_POST['id'];
 		
 		$sql = "select a.vNoSPPD,a.dTglSPPD,a.vJenisSPD,a.iJenisAkomodasi,a.vNip,b.vName,
-				a.dPerjalananStart,a.dPerjalananEnd,c.vDari,c.vTujuan,a.iAlatAngkut,st.iSumberDana,st.vUraianPenugasan 
+				a.dPerjalananStart,a.dPerjalananEnd,c.vDari,c.vTujuan,a.iAlatAngkut,st.iSumberDana,st.vUraianPenugasan,
+				bd.iNomor
 				from cost.cs_detail as a
 				left join cost.ms_pegawai as b on b.vNip=a.vNip
 				left join cost.cs_header as c on c.iCsId=a.iCsId 
 				left join cost.st_header as st on st.iStId=c.iStId
+				inner join cost.ms_bidang as bd on bd.iBidangId = st.iBidangId
 				where a.id='".$id."' ";
 
 		$query = $this->db->query($sql);
@@ -170,7 +190,7 @@ class spd extends CI_Controller {
 
 		$sql = "select a.vNoSPPD,a.dTglSPPD,a.vJenisSPD,a.iJenisAkomodasi,a.vNip,b.vName,
 			a.dPerjalananStart,a.dPerjalananEnd,c.vDari,c.vTujuan,a.iAlatAngkut,st.iSumberDana,st.vUraianPenugasan,
-			st.iBidangId,bd.vNickName
+			st.iBidangId,bd.vNickName,a.iBatalSPD
 			from cost.cs_detail as a
 			left join cost.ms_pegawai as b on b.vNip=a.vNip
 			left join cost.cs_header as c on c.iCsId=a.iCsId 
@@ -212,13 +232,19 @@ class spd extends CI_Controller {
 			foreach($query->result_array() as $row) {
 				$no++;
 				$dTglSPPD =  date('d-m-Y',strtotime($row['dTglSPPD']));
-				
-				$html .= "<tr>";
+				$iBatalSPD = $row['iBatalSPD'];
+				if ($iBatalSPD==1){
+					$col = "style='color:red'";
+				}else{
+					$col = "";
+				}
+
+				$html .= "<tr ".$col.">";
                 $html .= "<td width='50px'>".$no."</td>";
 				$html .= "<td>".$row['vNip']."</td>";
 				$html .= "<td>".$row['vName']."</td>";
 				$html .= "<td>".$row['vNickName']."</td>";
-				$html .= "<td>".$row['vNoSPPD']."</td>";
+				$html .= "<td  >".$row['vNoSPPD']."</td>";
 				$html .= "<td>".$dTglSPPD."</td>";
 				$html .= "<td>".$row['vJenisSPD']."</td>";
 				$html .= "<td>".$arry_akom[$row['iJenisAkomodasi']]."</td>";
@@ -242,6 +268,7 @@ class spd extends CI_Controller {
 		
 
 		$id 			= $_GET['id'];
+		$vNoSPPD 			= str_replace("/", "-", $_GET['vNoSPPD']);
 		$pejabatTTD 	= $_GET['pejabatTTD'];
 		$vNip_ppk 		= explode("|", $_GET['vNip_ppk']);
 		$jabatan1 		= $_GET['jabatan1'];
@@ -254,6 +281,12 @@ class spd extends CI_Controller {
 		}
 		
 		
+		$sql = "select nLama from cost.cs_detail where id = '".$id."'  ";
+		$query = $this->db->query($sql);
+		$row = $query->row();
+		$nLama = $row->nLama;
+
+		$lama = $nLama." (".ucwords($this->Terbilang($nLama)).") Hari";
 		
 		$params = new Java("java.util.HashMap");
 		$params->put('id', (int)$id);	
@@ -264,9 +297,11 @@ class spd extends CI_Controller {
 		$params->put('baris2', $jabatan2);		
 		$params->put('nip_pejabat', $vNip_ppk['0']);		
 		$params->put('Nama_pejabat', $vNip_ppk['1']);		
+		$params->put('lama', $lama);		
+		$params->put('pejabatTTD', $pejabatTTD);		
 		
 		$reportAsal   = "spd.jrxml";
-		$reportTujuan = "spd.pdf";
+		$reportTujuan = "SPD_".$vNoSPPD.".pdf";
 
 				
 		$nama_file = explode('.', $reportAsal);		
@@ -278,9 +313,36 @@ class spd extends CI_Controller {
 	}
 	
 
+	function Terbilang($x){
+		
+		$x = intval($x);
+		  $abil = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+		  if ($x < 12)
+			return $abil[$x];
+		  elseif ($x < 20)
+			return $this->Terbilang($x - 10) . " belas";
+		  elseif ($x < 100)
+			return  $this->Terbilang($x / 10) . " puluh" .  $this->Terbilang($x % 10);
+		  elseif ($x < 200)
+			return " seratus" .  $this->Terbilang($x - 100);
+		  elseif ($x < 1000)
+			return  $this->Terbilang($x / 100) . " ratus" .  $this->Terbilang($x % 100);
+		  elseif ($x < 2000)
+			return " seribu" .  $this->Terbilang($x - 1000);
+		  elseif ($x < 1000000)
+			return  $this->Terbilang($x / 1000) . " ribu" .  $this->Terbilang($x % 1000);
+		  elseif ($x < 1000000000)
+			return  $this->Terbilang($x / 1000000) . " juta" .  $this->Terbilang($x % 1000000);
+	}
+
+
+
 	function getListDataST(){
-		$sql = "select a.iStId,a.iBarcode,a.iBidangId,a.cNomorST,a.vUraianPenugasan,
-				(select vNickName from cost.ms_bidang where iBidangId=a.iBidangId) as nama_bidang
+		$sql = "SELECT a.iStId,a.iBarcode,a.iBidangId,a.cNomorST,a.vUraianPenugasan,
+				(select vNickName from cost.ms_bidang where iBidangId=a.iBidangId) as nama_bidang,
+				(SELECT dt.vNoSPPD FROM cost.cs_detail AS dt
+					INNER JOIN cost.cs_header AS dh ON dh.iCsId=dt.iCsId
+					WHERE dh.iStId=a.iStId ORDER BY dt.vNoSPPD DESC LIMIT 1) AS vNoSPPD
 				from st_header as a where a.lDeleted=0  order by a.iBarcode DESC";
 
 		$query 	= $this->db->query($sql);
@@ -294,6 +356,7 @@ class spd extends CI_Controller {
                	<td>Nomor ST</td>
                	<td>Bidang</td>
                	<td>Uraian Penugasan</td>
+               	<td>Status</td>
               </tr>
             </thead>
             <tbody>';
@@ -301,6 +364,13 @@ class spd extends CI_Controller {
 		if ($query->num_rows() > 0) {
 			foreach($query->result_array() as $row) {
 				$no++;
+
+				if ($row['vNoSPPD']!=''){
+					$status = 'Sudah Proses SPD';
+				}else{
+					$status  = '';
+				}
+
 				$html .= "<tr>";
                 $html .= "<td style='width:5%;' >".$no."</td>";
                	$html .= "<td  style='width:5%' align='center'  > 
@@ -314,6 +384,7 @@ class spd extends CI_Controller {
 				$html .= "<td>".$row['cNomorST']."</td>";
 				$html .= "<td>".$row['nama_bidang']."</td>";
 				$html .= "<td>".$row['vUraianPenugasan']."</td>";
+				$html .= "<td>".$status."</td>";
                 $html .= "</tr>";
 			}
 		}
@@ -322,6 +393,26 @@ class spd extends CI_Controller {
 		echo $html;
 		exit();
 
+	}
+
+	function batalSPD(){
+		$id = $_POST['id'];
+		$iBatalSPD = $_POST['iBatalSPD'];
+		
+		$cUserId 	= $this->session->userdata('cUserId');
+
+		try {
+
+			$sql = "UPDATE cost.cs_detail SET iBatalSPD='".$iBatalSPD."',tUpdated=CURRENT_TIMESTAMP,
+					cUpdatedBy='".$cUserId."' WHERE id='".$id."'";
+			$this->db->query($sql);
+
+			$x = 1;
+		} catch (Exception $e) {
+			$x = 0;
+		}
+
+		echo $x;
 	}
 
 }

@@ -9,6 +9,28 @@ class lib_util {
 	}
 
 
+	function Terbilang($x){
+		
+		$x = intval($x);
+		  $abil = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+		  if ($x < 12)
+			return $abil[$x];
+		  elseif ($x < 20)
+			return $this->Terbilang($x - 10) . " belas";
+		  elseif ($x < 100)
+			return  $this->Terbilang($x / 10) . " puluh" .  $this->Terbilang($x % 10);
+		  elseif ($x < 200)
+			return " seratus" .  $this->Terbilang($x - 100);
+		  elseif ($x < 1000)
+			return  $this->Terbilang($x / 100) . " ratus" .  $this->Terbilang($x % 100);
+		  elseif ($x < 2000)
+			return " seribu" .  $this->Terbilang($x - 1000);
+		  elseif ($x < 1000000)
+			return  $this->Terbilang($x / 1000) . " ribu" .  $this->Terbilang($x % 1000);
+		  elseif ($x < 1000000000)
+			return  $this->Terbilang($x / 1000000) . " juta" .  $this->Terbilang($x % 1000000);
+	}
+
 	
 	function hitungLamaPerjalanan($iOpsiHariLibur, $iOpsiHariSabtu, $iOpsiHariMinggu, $dstart, $dend){
 		$start 		= new DateTime($dstart);

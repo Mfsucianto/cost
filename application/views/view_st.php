@@ -142,6 +142,7 @@ $arryCapFildJs .= ']';
                     
 
                     echo $this->lib_util->drawFiledText('Tanggal Mulai','dMulai','100px');
+                    echo $this->lib_util->drawFiledText('Tanggal Akhir','dAkhir','100px');
                     echo $this->lib_util->drawFiledText('Jangka Waktu Penugasan (hari)','nJangkaWaktu','100px');
 
                     echo "<legend></legend>";
@@ -338,6 +339,12 @@ $this->load->view('template/foot');
             todayHighlight : true
         });
 
+        $('#dAkhir').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose : true,
+            todayHighlight : true
+        });
+
 
         $('#nJangkaWaktu').autoNumeric('init', {vMin:'0', vMax:'99999'});
         
@@ -478,6 +485,7 @@ $this->load->view('template/foot');
         $('#cObyekPenugasan').val('');
         $('#vUraianPenugasan').val('');
         $('#dMulai').val('');
+        $('#dAkhir').val('');
         $('#nJangkaWaktu').val('');
         $('#iSumberDana').val('').trigger('change');
         $('#iDipaId').val('');
@@ -573,6 +581,11 @@ $this->load->view('template/foot');
 
         if ($('#dMulai').val()==''){
             custom_alert('','Lengkapi Tanggal Mulai','info');
+            return false;
+        } 
+
+        if ($('#dAkhir').val()==''){
+            custom_alert('','Lengkapi Tanggal Akhir','info');
             return false;
         } 
 
@@ -699,6 +712,7 @@ $this->load->view('template/foot');
        $('#cObyekPenugasan').val(rowData['cObyekPenugasan']);
        $('#vUraianPenugasan').val(rowData['vUraianPenugasan']);
        $('#dMulai').val(rowData['dMulai']);
+       $('#dAkhir').val(rowData['dAkhir']);
        $('#nJangkaWaktu').val(rowData['nJangkaWaktu']);
        $('#iSumberDana').val(rowData['iSumberDana']).trigger('change');
        $('#iDipaId').val(rowData['iDipaId']);
@@ -921,7 +935,8 @@ $this->load->view('template/foot');
         var iStId           = $('#iStId').val();
         var nipiKaPer_st    = $('#nipiKaPer_st').val();
         var iKaPer_st       = $('#iKaPer_st').val();
-        var url = "<?php echo site_url().'/st/cetakST2?iStId='; ?>"+iStId+'&nipiKaPer='+nipiKaPer_st+'&iKaPer='+iKaPer_st;
+        var nJangkaWaktu       = $('#nJangkaWaktu').val();
+        var url = "<?php echo site_url().'/st/cetakST2?iStId='; ?>"+iStId+'&nipiKaPer='+nipiKaPer_st+'&iKaPer='+iKaPer_st+'&nJangkaWaktu='+nJangkaWaktu;
 
         var jwb = confirm('Cetak Data ST ?');
 

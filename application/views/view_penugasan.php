@@ -54,7 +54,45 @@ $this->load->view('template/sidebar');
 
                 <?php
                     echo '<input type="hidden" readonly class="form-control input-sm" id="iStId" name="iStId" value="0">';
-                    echo $this->lib_util->drawFiledText('Nomor ST','cNomorST','300px');
+                   
+                    echo '<div class="form-group" id="div_cNomorST">
+                              <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">Nomor ST</label>
+                              <div class="col-sm-7">
+                                <div class="input-group input-group-sm">
+                                    <table >
+                                        <tr>
+                                            <td>
+                                                <select class="select2" style="width:70px;" id="jenis_nomor_st" >
+                                                    <option></option>
+                                                    <option value="V" >V</option>
+                                                    <option value="S" >S</option>
+                                                    <option value="ST" >ST</option>
+                                                </select> 
+                                            </td>
+                                            <td>
+                                                -
+                                            </td>
+                                            <td>
+                                                <input type="text"  id="nomor_urut_st" class="form-control input-sm" style="width:70px;">
+                                            </td>
+                                            <td>
+                                                -
+                                            </td>
+
+                                            <td>
+                                                <input type="hidden" readonly id="cNomorST" class="form-control input-sm">
+                                                <input type="text" readonly id="nomor_tahun_st" class="form-control input-sm">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                    
+                                    
+                                </div>
+                                
+                              </div>
+                            </div>';
+
                     echo $this->lib_util->drawFiledText('Tanggal ST','dTglST','100px');
                 ?>
                 
@@ -89,7 +127,7 @@ $this->load->view('template/foot');
 
     $(document).ready(function() {
         refreshData();
-
+        $('#nomor_urut_st').autoNumeric('init', {vMin:'0', vMax:'999999'});
        
         var dateToday = new Date();
         $('#dTglST').datepicker({
@@ -97,6 +135,33 @@ $this->load->view('template/foot');
             autoclose : true,
             todayHighlight : true,
             endDate: dateToday
+        });
+
+        $('#jenis_nomor_st').change(function() {
+            var jenis_nomor_st = $('#jenis_nomor_st').val();
+            var nomor_urut_st  = stripCharacters($('#nomor_urut_st').val());
+            var nomor_tahun_st = $('#nomor_tahun_st').val();
+
+            cNomorST = jenis_nomor_st+"-"+nomor_urut_st+nomor_tahun_st;
+            if (jenis_nomor_st!='' && nomor_urut_st!='' ){
+                $('#cNomorST').val(cNomorST);
+            }else{
+                $('#cNomorST').val('');
+            }
+            
+        });
+
+        $('#nomor_urut_st').keyup(function() {
+            var jenis_nomor_st = $('#jenis_nomor_st').val();
+            var nomor_urut_st  = stripCharacters($('#nomor_urut_st').val());
+            var nomor_tahun_st = $('#nomor_tahun_st').val();
+
+            cNomorST = jenis_nomor_st+"-"+nomor_urut_st+nomor_tahun_st;
+            if (jenis_nomor_st!='' && nomor_urut_st!='' ){
+                $('#cNomorST').val(cNomorST);
+            }else{
+                $('#cNomorST').val('');
+            }
         });
 
     });
@@ -163,9 +228,27 @@ $this->load->view('template/foot');
         }
     }
 
-    function edit(id,nomorst,tglst){
+    function edit(id,nomorst,tglst,nomor_bidang){
         
         $('.modal-title').html('Edit ST');
+
+        
+        //ST-1/PW04/6/2020
+
+        if (nomorst==''){
+            tahun = new Date().getFullYear();
+
+            $('#jenis_nomor_st').val('').trigger('change');
+            $('#nomor_urut_st').val('');
+            $('#nomor_tahun_st').val('/PW04/'+nomor_bidang+'/'+tahun);
+        }else{
+            var s_nomor =  nomorst.split("/");
+            var j_st    =  s_nomor['0'].split('-');
+
+            $('#jenis_nomor_st').val(j_st['0']).trigger('change');
+            $('#nomor_urut_st').val(j_st['1']);
+            $('#nomor_tahun_st').val('/PW04/'+s_nomor['2']+'/'+s_nomor['3']);
+        }
 
         $('#iStId').val(id);
         $('#cNomorST').val(nomorst);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="st" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="st" language="groovy" pageWidth="612" pageHeight="792" columnWidth="512" leftMargin="50" rightMargin="50" topMargin="20" bottomMargin="20">
 	<parameter name="iStId" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
 	</parameter>
@@ -15,23 +15,33 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["D:\\xampp\\htdocs\\cost\\images\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="jangka_waktu" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[select b.vName,a.vNip,c.vJabatanName,
+		<![CDATA[SELECT b.vName,a.vNip,c.vJabatanName,
 e.iStId,e.cNomorST,e.dTglST,e.vUraianPenugasan,e.nJangkaWaktu,e.iSumberDana,e.vUraianSumberDana,
-case 
-	when e.iSumberDana = 1 then "Dipa Perwakilan"
-	when e.iSumberDana = 2 then "SKPA"
-	when e.iSumberDana = 3 then "Droping"
-	when e.iSumberDana = 4 then "Pihak Ke III"
-	when e.iSumberDana = 5 then "Unit BPKP Lain"
-	when e.iSumberDana = 6 then "Sharing"
-	else "-"
-end as sumber_anggaran
-				from cost.st_detail_team  as a
-				inner join cost.ms_pegawai as b on b.vNip=a.vNip
-				left join  cost.ms_jabatan as c on c.iJabatanId=b.iJabatanId
-				inner join cost.st_header as e on e.iStId=a.iStId
-				where a.iStId=$P{iStId}]]>
+CASE 
+	WHEN e.iSumberDana = 1 THEN "Dipa Perwakilan"
+	WHEN e.iSumberDana = 2 THEN "SKPA"
+	WHEN e.iSumberDana = 3 THEN "Droping"
+	WHEN e.iSumberDana = 4 THEN "Pihak Ke III"
+	WHEN e.iSumberDana = 5 THEN "Unit BPKP Lain"
+	WHEN e.iSumberDana = 6 THEN "Sharing"
+	ELSE "-"
+END AS sumber_anggaran,
+CASE 
+	WHEN e.iSumberDana = 1 THEN "Perwakilan BPKP Provinsi Riau"
+	ELSE e.vUraianSumberDana
+END AS sumber_anggaran_baru,
+f.iNomor AS nomor_bidang,YEAR(CURDATE()) AS tahun,
+date_format(e.dMulai,'%d %M %Y') as dMulai, coalesce(DATE_FORMAT(e.dAkhir,'%d %M %Y'),'')AS dAkhir 
+				FROM cost.st_detail_team  AS a
+				INNER JOIN cost.ms_pegawai AS b ON b.vNip=a.vNip
+				LEFT JOIN  cost.ms_jabatan AS c ON c.iJabatanId=b.iJabatanId
+				INNER JOIN cost.st_header AS e ON e.iStId=a.iStId
+				LEFT JOIN cost.ms_bidang AS f ON f.iBidangId=e.iBidangId
+				WHERE a.iStId=$P{iStId}]]>
 	</queryString>
 	<field name="vName" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -66,60 +76,107 @@ end as sumber_anggaran
 	<field name="sumber_anggaran" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="sumber_anggaran_baru" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nomor_bidang" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tahun" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dMulai" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dAkhir" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="72" splitType="Stretch">
+		<band height="98" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="16" width="572" height="20"/>
+				<reportElement x="53" y="16" width="459" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[BADAN PENGAWASAN KEUANGAN DAN PEMBANGUNAN]]></text>
 			</staticText>
-			<image onErrorType="Blank">
-				<reportElement x="3" y="12" width="67" height="55"/>
+			<image scaleImage="FillFrame" onErrorType="Blank">
+				<reportElement x="3" y="12" width="83" height="44"/>
 				<imageExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR}+"logo_bpkp.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="0" y="36" width="572" height="20"/>
+				<reportElement x="53" y="36" width="459" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PERWAKILAN PROVINSI RIAU]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="85" width="509" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="53" y="56" width="459" height="12"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Jalan Jenderal Sudirman Nomor 10 Pekanbaru 28282]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="53" y="68" width="459" height="12"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Telp.: (0761) 857400,39414,39415 Fax.: (0761) 35001 E-mail: riau@bpkp.go.id]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="74" splitType="Stretch">
+		<band height="62" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="3" width="572" height="20"/>
+				<reportElement x="0" y="3" width="512" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[S U R A T  T U G A S]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="23" width="572" height="20"/>
+				<reportElement x="0" y="23" width="512" height="20">
+					<printWhenExpression><![CDATA[$F{cNomorST} != ""]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{cNomorST}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Nomor : "+$F{cNomorST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="23" width="509" height="20">
+					<printWhenExpression><![CDATA[$F{cNomorST}==""
+]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Nomor : ............/PW04/"+$F{nomor_bidang}+"/"+$F{tahun}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="66" splitType="Stretch">
+		<band height="75" splitType="Stretch">
 			<staticText>
-				<reportElement x="33" y="18" width="539" height="19"/>
-				<textElement>
-					<font size="12"/>
+				<reportElement x="4" y="0" width="463" height="46"/>
+				<textElement lineSpacing="1_1_2">
+					<font fontName="Arial" size="12" isStrikeThrough="false"/>
 				</textElement>
-				<text><![CDATA[Kepala Perwakilan Badan Pengawasan Keuangan dan Pembangunan Provinsi Riau dengan ini menugasi:]]></text>
+				<text><![CDATA[       Kepala Perwakilan Badan Pengawasan Keuangan dan Pembangunan Provinsi Riau dengan ini menugasi:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="33" y="46" width="34" height="20"/>
+				<reportElement x="4" y="55" width="34" height="20"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -127,12 +184,12 @@ end as sumber_anggaran
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="67" y="46" width="189" height="20"/>
+				<reportElement x="38" y="55" width="189" height="20"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -140,12 +197,12 @@ end as sumber_anggaran
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NAMA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="256" y="46" width="144" height="20"/>
+				<reportElement x="227" y="55" width="144" height="20"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -153,12 +210,12 @@ end as sumber_anggaran
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NIP]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="400" y="46" width="138" height="20"/>
+				<reportElement x="371" y="55" width="141" height="20"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -166,7 +223,7 @@ end as sumber_anggaran
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[JABATAN]]></text>
 			</staticText>
@@ -174,92 +231,100 @@ end as sumber_anggaran
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement x="33" y="0" width="34" height="20"/>
-				<box leftPadding="3" rightPadding="3">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="4" y="0" width="34" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_COUNT}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="67" y="0" width="189" height="20"/>
-				<box leftPadding="3" rightPadding="3">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="38" y="0" width="189" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vName}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="256" y="0" width="144" height="20"/>
-				<box leftPadding="3" rightPadding="3">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="227" y="0" width="144" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vNip}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="400" y="0" width="138" height="20"/>
-				<box leftPadding="3" rightPadding="3">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="371" y="0" width="141" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vJabatanName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<summary>
-		<band height="235" splitType="Stretch">
+		<band height="383" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="33" y="30" width="539" height="20" isPrintWhenDetailOverflows="true"/>
-				<textElement>
-					<font size="12"/>
+				<reportElement positionType="Float" x="5" y="44" width="507" height="60" isPrintWhenDetailOverflows="true"/>
+				<textElement lineSpacing="1_1_2">
+					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["\n     Kegiatan tersebut dilaksanakan selama "+$F{nJangkaWaktu}+" Hari Biaya sehubungan penugasan tersebut menjadi beban anggaran "+$F{sumber_anggaran}+" "+$F{vUraianSumberDana}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["\n     Kegiatan tersebut dilaksanakan selama "+$P{jangka_waktu}+" mulai tanggal "+$F{dMulai}+" sampai dengan "+$F{dAkhir}+ ". Biaya sehubungan penugasan tersebut menjadi beban anggaran "+$F{sumber_anggaran_baru}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="33" y="10" width="539" height="20" isPrintWhenDetailOverflows="true"/>
-				<textElement>
-					<font size="12"/>
+				<reportElement x="4" y="12" width="507" height="31" isPrintWhenDetailOverflows="true"/>
+				<textElement lineSpacing="1_1_2">
+					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["     Untuk "+$F{vUraianPenugasan}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd MMMMM yyyy" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="378" y="101" width="188" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12"/>
+				<reportElement positionType="Float" x="270" y="194" width="226" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{dTglST}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" x="378" y="121" width="187" height="20"/>
-				<textElement textAlignment="Right" markup="none">
-					<font size="12"/>
+				<reportElement positionType="Float" x="270" y="214" width="225" height="20"/>
+				<textElement markup="none">
+					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{jabatan}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" x="378" y="196" width="187" height="15"/>
+				<reportElement positionType="Float" x="270" y="289" width="225" height="15"/>
 				<box>
 					<bottomPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Right" markup="none">
-					<font isUnderline="false"/>
+				<textElement markup="none">
+					<font fontName="Arial" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{nama_ttd}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" x="378" y="211" width="187" height="15"/>
-				<textElement textAlignment="Right" markup="none">
-					<font isUnderline="false"/>
+				<reportElement positionType="Float" x="270" y="304" width="225" height="15"/>
+				<textElement markup="none">
+					<font fontName="Arial" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{nip_ttd}]]></textFieldExpression>
 			</textField>

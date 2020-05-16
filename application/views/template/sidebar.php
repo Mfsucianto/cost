@@ -19,7 +19,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="image" style="padding-left: 25px;">
-              <img src="<?php echo base_url("images/user/".$vImage) ?>" class="img-circle" alt="User Image" style='width: 150px;height: 150px;' >
+              <img src="<?php echo base_url("images/user/".$vImage) ?>" class="img-circle" alt="" style='width: 150px;height: 150px;' >
             </div>
             <div class="info">
                 <center>

@@ -51,7 +51,7 @@ class Auth extends CI_Controller {
 			$this->db->join('cost.ms_bidang as c', 'c.iBidangId = a.iBidangId','left');
 			$this->db->join('cost.ms_sub_bidang as d', 'd.iSubBidangId = a.iSubBidangId','left');
 			$this->db->where('a.cUserId',$userid);
-			$this->db->where(" a.vPassword=MD5('".$password."')");
+			$this->db->where(" a.vPassword='".$password."'");
 			$query = $this->db->get();
 
 			

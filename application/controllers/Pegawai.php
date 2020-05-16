@@ -161,6 +161,7 @@ class pegawai extends CI_Controller {
 	function simpanData(){
 		$dataFrom 	= $this->dataFrom;
 
+		
 		$primaryKey = $_POST[$dataFrom['primaryKey']];
 		$cUserId 	= $this->session->userdata('cUserId');
 		$uniqid     = $_POST['uniqid'];
@@ -168,17 +169,20 @@ class pegawai extends CI_Controller {
 
 		unset($post['uniqid']);
 
-		if ($post['vPassword']==''){
+		/*if ($post['vPassword']==''){
 			unset($post['vPassword']);	
 		}else{
 			$post['vPassword'] = do_hash($post['vPassword'],'md5');
-		}
+		}*/
 
 		if ($uniqid!=''){
 			$post['vImage'] = $uniqid;
+		}else{
+			$post['vImage'] = '';
 		}
 		
 		$post['vNip'] = str_replace(" ", "", $post['vNip']);
+
 
 		if ($primaryKey > 0) {
 			try {
@@ -195,8 +199,6 @@ class pegawai extends CI_Controller {
 			
 		}else{
 			unset($post['iPegawaiId']);
-
-
 			try {
 
 				$post['tCreated'] = date('Y-m-d H:i:s');
@@ -242,7 +244,10 @@ class pegawai extends CI_Controller {
 
 		if ($query->num_rows() > 0) {
 			$row 			= $query->row();
-
+			if ($row->vImage==''){
+				$row->vImage = '';
+			}
+			
 			echo json_encode($row);
 
 		}

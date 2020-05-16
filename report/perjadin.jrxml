@@ -409,6 +409,9 @@ where b.id = $P{id}]]>
 			</staticText>
 			<subreport>
 				<reportElement x="31" y="15" width="200" height="15"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id}]]></subreportParameterExpression>
+				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "kwitansi_transport.jasper"]]></subreportExpression>
 			</subreport>

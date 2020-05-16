@@ -57,7 +57,7 @@ class rencana extends CI_Controller {
 
 		$query 	= $this->db->query($sql);
 	
-		$html 	= '<table id="example1" class="table table-bordered table-striped">
+		$html 	= '<table id="example1" class="table table-bordered table-striped" style="width:100%">
 			<thead>
               <tr>
                	<td>No</td>
@@ -68,6 +68,7 @@ class rencana extends CI_Controller {
                	<td>Nama</td>
                	<td>Nomor SPPD</td>
                	<td>Tgl SPPD</td>
+               	<td>Status</td>
                
                
               </tr>
@@ -115,7 +116,11 @@ class rencana extends CI_Controller {
 				$nSisaPaguAkhir = $row['fJumlahAnggaran'] - $row['nNilaiKwitansi'];
 				
 				
-
+				if ($row['vNomorKwitansi']==''){
+					$status = '';
+				}else{
+					$status = 'Sudah Proses SPJ';
+				}
 				$nLama = $this->lib_util->hitungLamaPerjalanan2($row['iOpsiHariLibur'],$row['iOpsiHariSabtu'],$row['iOpsiHariMinggu'],$row['dPerjalananStart'],$row['dPerjalananEnd']);
 
 				$html .= "<tr>";
@@ -151,7 +156,7 @@ class rencana extends CI_Controller {
                 			\"".$dLumpsumpAwal."\",
                 			\"".$dLumpsumpAkhir."\",
                 			\"".number_format($row['fJumlahAnggaran'])."\",
-                			\"".number_format($nSisaPaguAkhir)."\",
+                			\"".number_format($nSisaPaguAkhir)."\"
 
                 			)' />
                 		</td>";	
@@ -162,6 +167,7 @@ class rencana extends CI_Controller {
 				$html .= "<td>".$row['vName']."</td>";
 				$html .= "<td>".$row['vNoSPPD']."</td>";
 				$html .= "<td>".$dTglSPPD."</td>";
+				$html .= "<td>".$status."</td>";
                 $html .= "</tr>";
 
 			}
@@ -621,7 +627,8 @@ class rencana extends CI_Controller {
 		$nm_pejabat 	= $x_vPejabatKwitansi['1'];
 		$dibuat_di 		= $_GET['dibuatdiKwitansi'];
 		$tgl_dibuat 	= $_GET['tgl_dibuatKwitansi'];
-		$terbilang 	= $_GET['terbilang'];
+		$terbilang 		= $_GET['terbilang'];
+		$vNomorKwitansi 	= str_replace("/","_",$_GET['vNomorKwitansi']);
 
 		$params = new Java("java.util.HashMap");
 		$params->put('id', (int)$id);	
@@ -635,7 +642,7 @@ class rencana extends CI_Controller {
 		$params->put('terbilang', $terbilang);		
 		
 		$reportAsal   = "kwitansi.jrxml";
-		$reportTujuan = "kwitansi_.pdf";
+		$reportTujuan = "kwitansi_".$vNomorKwitansi.".pdf";
 
 				
 		$nama_file = explode('.', $reportAsal);		

@@ -38,10 +38,13 @@ class monitoring_anggaran extends CI_Controller {
 				a.fJumlahAnggaran,
 				(select coalesce(sum(dt.nNilaiKwitansi),0) as nNilaiKwitansi
 				from cost.cs_detail as dt
-				where dt.iDipaId=a.id and dt.lDeleted=0 ) as nNilaiKwitansi,
+				inner join cost.cs_header as b on b.iCsId=dt.iCsId
+				where dt.iDipaId=a.id and dt.lDeleted=0 and b.iJenisPerDinas=1 ) as nNilaiKwitansi,
+
 				(select coalesce(sum(dt.nTotalBiaya),0) as nTotalBiaya
 				from cost.cs_detail as dt
-				where dt.iDipaId=a.id  and dt.lDeleted=0 and dt.nNilaiKwitansi=0 ) as nTotalBiaya,
+				inner join cost.cs_header as b on b.iCsId=dt.iCsId
+				where dt.iDipaId=a.id  and dt.lDeleted=0 and dt.nNilaiKwitansi=0 and b.iJenisPerDinas=1 ) as nTotalBiaya,
 				(select vNickName from cost.ms_bidang where iBidangId=a.iBidangId) as nama_bidang
 				from cost.dipa  as a where ".$qb." a.cTahun='{$cTahun}' and a.lDeleted = 0";
 

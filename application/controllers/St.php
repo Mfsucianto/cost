@@ -55,7 +55,13 @@ class st extends CI_Controller {
 
 		
 		$arr_jenis = array(''=>'',0=>'PKAU',1=>'PKPT',2=>'NON PKPT');
-		$arr_sumberdana = array(0=>'',1=>'DIPA PERWAKILAN',2=>'SKPA',3=>'DROPING',4=>'PIHAK III',4=>'UNIT BPKP LAIN',5=>'SHARING');
+		$arr_sumberdana = array(0=>'',
+								1=>'DIPA PERWAKILAN',
+                                2=>'SKPA',
+                                3=>'DROPING',
+                                4=>'PIHAK III',
+                                5=>'UNIT BPKP LAIN',
+                                6=>'SHARING');
 		
 
 
@@ -81,8 +87,8 @@ class st extends CI_Controller {
 					from cost.st_detail_rkt where  iStId=a.iStId and lDeleted=0)  as nilai_aju,
 				(select coalesce(sum(dt.nNilaiKwitansi),0) as nNilaiKwitansi
 					from cost.cs_detail as dt
-					inner join cost.cs_header as b on b.iCsId=dt.iCsId
-					where b.iStId = a.iStId and dt.lDeleted=0 and b.lDeleted=0)  as nilai_realisasi
+					inner join cost.cs_header as b on b.iCsId=dt.iCsId 
+					where b.iStId = a.iStId and dt.lDeleted=0 and b.lDeleted=0 and b.iJenisPerDinas=1)  as nilai_realisasi
 				FROM cost.st_header as a
 				left join cost.ms_bidang as b on b.iBidangId=a.iBidangId
 				where {$qb} a.lDeleted=0";
@@ -198,6 +204,7 @@ class st extends CI_Controller {
 
 		$post['dTglSrtDasar'] = date('Y-m-d',strtotime($post['dTglSrtDasar']));
 		$post['dMulai'] = date('Y-m-d',strtotime($post['dMulai']));
+		$post['dAkhir'] = date('Y-m-d',strtotime($post['dAkhir']));
 		$post['nJangkaWaktu'] = str_replace(",", '', $post['nJangkaWaktu']);
 
 		$iRktId = array();
@@ -315,7 +322,7 @@ class st extends CI_Controller {
 		
 		$sql = "select a.iStId,a.vNomorCs,a.iBidangId,a.iSubBidangId,a.iJenisRkt,a.iJenisSt,
 				a.vJenisPenugasan,a.vDasarPenugasan,a.cNoSrtDasar,a.dTglSrtDasar,
-				a.cObyekPenugasan,a.vUraianPenugasan,a.dMulai,a.nJangkaWaktu,a.iSumberDana,
+				a.cObyekPenugasan,a.vUraianPenugasan,a.dMulai,a.dAkhir,a.nJangkaWaktu,a.iSumberDana,
 				a.iDipaId,a.vUraianSumberDana,a.cNomorST,a.dTglST
 				from cost.st_header as a
 				where a.iStId='".$id."'";
@@ -325,6 +332,10 @@ class st extends CI_Controller {
 
 			$row->dTglSrtDasar  = date('d-m-Y',strtotime($row->dTglSrtDasar));
 			$row->dMulai 		= date('d-m-Y',strtotime($row->dMulai));
+			if ($row->dAkhir!=''){
+				$row->dAkhir 		= date('d-m-Y',strtotime($row->dAkhir));
+			}
+			
 
 			$sql = 'SELECT cKodeDipa,vNamaItem FROM cost.dipa WHERE id="'.$row->iDipaId.'"';
 			$query = $this->db->query($sql);
@@ -402,10 +413,13 @@ class st extends CI_Controller {
 		$sql = "SELECT a.id,a.cTahun,a.cKodeDipa,a.vNamaItem,a.cKodeAccount,a.iJenis,a.fJumlahAnggaran,
 				(select coalesce(sum(dt.nNilaiKwitansi),0) as nNilaiKwitansi
 				from cost.cs_detail as dt
-				where dt.iDipaId=a.id and dt.lDeleted=0 ) as nNilaiKwitansi,
+				INNER JOIN cost.cs_header AS c ON c.iCsId=dt.iCsId
+				where dt.iDipaId=a.id and dt.lDeleted=0 and c.iJenisPerDinas=1 ) as nNilaiKwitansi,
+
 				(select coalesce(sum(dt.nTotalBiaya),0) as nTotalBiaya
-				from cost.cs_detail as dt
-				where dt.iDipaId=a.id  and  dt.lDeleted=0 and dt.nNilaiKwitansi=0 ) as nTotalBiaya
+					from cost.cs_detail as dt
+					INNER JOIN cost.cs_header AS c ON c.iCsId=dt.iCsId
+					where dt.iDipaId=a.id  and  dt.lDeleted=0 and dt.nNilaiKwitansi=0 and c.iJenisPerDinas=1 ) as nTotalBiaya
 				FROM cost.dipa AS a WHERE a.cTahun='{$cTahun}' AND a.iBidangId='{$iBidangId}' AND a.lDeleted=0;";
 
 		$query = $this->db->query($sql);
@@ -505,7 +519,7 @@ class st extends CI_Controller {
 					from
 						cost.st_detail_rkt as rd
 					inner join cost.st_header as rh on
-						rh.iStId = rh.iStId
+						rh.iStId = rd.iStId
 					where
 						rd.iRktId = a.id 
 						and rd.lDeleted = 0
@@ -527,7 +541,6 @@ class st extends CI_Controller {
 					a.iDipaId ='{$iDipaId}' 
 					and lDeleted = 0;
 				";
-
 		$query = $this->db->query($sql);
 
 		$html 	= '<table id="list_popup" class="table table-bordered table-striped" style="width:100%">
@@ -844,6 +857,9 @@ class st extends CI_Controller {
 		$nip_iKaPer = $x_nipiKaPer['0'];
 		$nama_iKaPer = $x_nipiKaPer['1'];
 		$iKaPer = $_GET['iKaPer'];
+		$nJangkaWaktu = $_GET['nJangkaWaktu'];
+
+		$lama = $nJangkaWaktu." (".ucwords($this->lib_util->Terbilang($nJangkaWaktu)).") Hari";
 
 		$this->load->helper('download'); 
 		
@@ -858,6 +874,7 @@ class st extends CI_Controller {
 		$params->put('nama_ttd', $nama_iKaPer);		
 		$params->put('nip_ttd', $nip_iKaPer);		
 		$params->put('SUBREPORT_DIR', $path);		
+		$params->put('jangka_waktu', $lama);		
 		
 		$reportAsal   = "st.jrxml";
 		$reportTujuan = "surat_tugas.pdf";
@@ -873,6 +890,8 @@ class st extends CI_Controller {
 
 	function cetakCs(){
 		$iCsId 		= $_GET['iCsId'];
+		$iStId 		= $_GET['iStId'];
+
 		$nipDalnis 	= explode("|", $_GET['nipDalnis']);
 		$nipKabag 	= explode("|", $_GET['nipKabag']);
 		$iKabag 	= $_GET['iKabag'];
@@ -880,6 +899,33 @@ class st extends CI_Controller {
 		$iKaPer 	= $_GET['iKaPer'];
 		$diKelurkandi 	= $_GET['diKelurkandi'];
 		$dKeluarkanTgl 	= $_GET['dKeluarkanTgl'];
+		$nipKorwas		= explode("|", $_GET['nipKorwas']);
+		$nipp3a			= explode("|", $_GET['nipp3a']);
+		$niptu			= explode("|", $_GET['niptu']);
+		$nipkeuangan	= explode("|", $_GET['nipkeuangan']);
+
+		$nama_keg   = "";
+		$nomor_pkpt = "";
+		$sql = "SELECT a.iRktId,a.nValue,b.cNomorRkt,b.cNamaItem
+				from st_detail_rkt as a
+				inner join cost.rkt as b on b.id = a.iRktId 
+				where a.iStId = '{$iStId}' and a.lDeleted = 0";
+		$query = $this->db->query($sql);
+
+		$jum = $query->num_rows();
+
+		if ($query->num_rows()>0){
+			$r = $query->row();
+
+			if ($jum > 1 ){
+				$nama_keg   .= "- ".$r->cNamaItem." ";
+				$nomor_pkpt .= "- ".$r->cNomorRkt." ";
+			}else{
+				$nama_keg   .= $r->cNamaItem." ";
+				$nomor_pkpt .= $r->cNomorRkt." ";
+			}
+			
+		}		
 
 		$this->load->helper('download'); 
 		
@@ -888,7 +934,7 @@ class st extends CI_Controller {
 		
 		
 		$params = new Java("java.util.HashMap");
-		$params->put('icsId', (int)$iCsId);	
+		$params->put('icsid', (int)$iCsId);	
 		$params->put('SUBREPORT_DIR', $path);		
 		$params->put('nip_kaper', $nipiKaPer['0']);		
 		$params->put('nama_kaper', $nipiKaPer['1']);		
@@ -897,7 +943,24 @@ class st extends CI_Controller {
 		$params->put('nip_kasubag', $nipDalnis['0']);		
 		$params->put('nama_kasubag', $nipDalnis['1']);
 		$params->put('diKelurkandi',$diKelurkandi);		
-		$params->put('dKeluarkanTgl',$dKeluarkanTgl);		
+		$params->put('dKeluarkanTgl',date('d F Y',strtotime($dKeluarkanTgl)));
+		$params->put('nip_korwas', $nipKorwas['0']);		
+		$params->put('nama_korwas', $nipKorwas['1']);
+
+		$params->put('nip_p3a', $nipp3a['0']);		
+		$params->put('nama_p3a', $nipp3a['1']);
+
+		$params->put('nip_tu', $niptu['0']);		
+		$params->put('nama_tu', $niptu['1']);
+
+		$params->put('nip_keuangan', $nipkeuangan['0']);		
+		$params->put('nama_keuangan', $nipkeuangan['1']);
+
+		$params->put('nama_keg', $nama_keg);
+		$params->put('nomor_pkpt', $nomor_pkpt);
+
+		
+
 		
 		$reportAsal   = "cs.jrxml";
 		$reportTujuan = "cost_sheet.pdf";

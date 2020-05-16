@@ -145,7 +145,7 @@
                           </div>
                         </div>';
 
-                echo "<div id='non_nihil' style='display:none;' >";
+                echo "<div id='non_nihil' >";
 
                     echo $this->lib_util->drawcombo('iAlatAngkut','Alat Angkutan ',array(0=>'',
                                                                                                 1=>'Pesawat Terbang',
@@ -231,11 +231,49 @@
                 }
 
 
-     
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Kepala Bagian Tata Usaha</label>
+                          <div class="col-sm-7">
+                                <select class="orm-control input-sm select2" style="width:500px;" id="niptu" name="niptu">
+                                    '.$opt.'
+                                </select>
+                          </div>
+                        </div>';
+
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Kasubbag Keuangan</label>
+                          <div class="col-sm-7">
+                                <select class="orm-control input-sm select2" style="width:500px;" id="nipkeuangan" name="nipkeuangan">
+                                    '.$opt.'
+                                </select>
+                          </div>
+                        </div>';
+
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Korwas P3A</label>
+                          <div class="col-sm-7">
+                                <select class="orm-control input-sm select2" style="width:500px;" id="nipp3a" name="nipp3a">
+                                    '.$opt.'
+                                </select>
+                          </div>
+                        </div>';
+
+
+                echo  '<div class="form-group">
+                          <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Korwas JFA</label>
+                          <div class="col-sm-7">
+                                <select class="orm-control input-sm select2" style="width:500px;" id="nipKorwas" name="nipKorwas">
+                                   
+                                </select>
+                          </div>
+                        </div>';
+
+                echo "<legend></legend>";
+
                 echo  '<div class="form-group">
                           <label for="username" class="col-sm-3 control-label" style="font-weight: 400;width:200px;">Dalnis/KaSubBag</label>
                           <div class="col-sm-7">
-                                <select class="orm-control input-sm select2" style="width:300px;" id="nipDalnis" name="nipDalnis">
+                                <select class="orm-control input-sm select2" style="width:500px;" id="nipDalnis" name="nipDalnis">
                                     '.$opt.'
                                 </select>
                           </div>
@@ -326,12 +364,12 @@
 
        $("#iJenisPerDinas").change(function() {
             
-            if ($(this).val()==1 || $(this).val()==2){
+            /*if ($(this).val()==1 || $(this).val()==2){
                 $('#non_nihil').show();
             }else{
                 $('#non_nihil').hide();
                 
-            }
+            }*/
         });
 
         dMulai = $('#dMulai').val();
@@ -357,6 +395,13 @@
  
 
         
+        $('#dKeluarkanTgl').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose : true,
+            todayHighlight : true,
+            disableTouchKeyboard : true
+        });
+
         $('#dMasaStrat').datepicker({
             format: 'dd-mm-yyyy',
             autoclose : true,
@@ -500,6 +545,7 @@
         $('#text_vNomorCs').html(rowDatacs['vNomorCs']);
         //$('#text_vNomorCs').html(rowDatacs['vNomorCs']);
       
+        
 
         $('#iCsId').val(rowDatacs['iCsId']);
         $('#dTanggalCS').val(rowDatacs['dTanggalCS']);
@@ -514,9 +560,26 @@
         var tabel_personil = getTablePeronilCS(id,rowDatacs['iJenisPerDinas']);
         $('#div_list_personil').html(tabel_personil);
 
-
+        var korwas = getDataKorwas(rowDatacs['iBidangId']);
+        var rowDatakorwas  = JSON.parse(korwas);
+        for(i=0;i<rowDatakorwas.length;i++) {
+            
+            var newOption = new Option(rowDatakorwas[i].value, rowDatakorwas[i].key, false, false);
+            $('#nipKorwas').append(newOption).trigger('change');
+        }
 
     }  
+
+
+    function getDataKorwas(iBidangId) {
+        var url = "<?php echo site_url().'/cost_sheet/getDataKorwas'; ?>";
+        return $.ajax({
+            type: 'POST',
+            data:'iBidangId='+iBidangId, 
+            url: url,
+            async:false
+        }).responseText
+     }
 
     function getEditDataCS(id) {
         var url = "<?php echo site_url().'/cost_sheet/getDataEdit'; ?>";
@@ -682,7 +745,7 @@
         $('#div_nHonorJasa').hide();
         $('#div_iJenisAkomodasi').hide();
 
-        if (iJenisPerDinas==1){
+        //if (iJenisPerDinas==1){
             
             $('#div_nBiayaUangHarian').show();
             $('#div_nBiayaRepre').show();
@@ -690,9 +753,9 @@
             $('#div_nBiayaPenginapan').show();
             $('#div_nHonorJasa').show();
             $('#div_iJenisAkomodasi').show();
-        }else if (iJenisPerDinas==2){
-            $('#div_nBiayaUangHarian').show();
-        }
+        //}else if (iJenisPerDinas==2){
+            //$('#div_nBiayaUangHarian').show();
+        //}
 
         $('#nBiayaUangHarian').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
         $('#nBiayaRepre').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
@@ -727,7 +790,7 @@
         var nHonorJasa       = $('#nHonorJasa').val();
         var iCsId            = $('#iCsId').val();
         var iCsDetailId      = $('#iCsDetailId').val();
-
+      
         if (vNip_cs==''){
             custom_alert('','Pilih Personil');
             return false;
@@ -744,7 +807,7 @@
         }
 
 
-        if ($('#iJenisPerDinas').val()==1 || $('#iJenisPerDinas').val()==2){
+        //if ($('#iJenisPerDinas').val()==1 || $('#iJenisPerDinas').val()==2){
 
             if ($('#iAlatAngkut').val() == '' || $('#iAlatAngkut').val()==0 ){
                 custom_alert('','Pilih Alat Angkut');
@@ -762,15 +825,15 @@
                 custom_alert('','Pilih Opsi Hari Minggu');
                 return false;
             }
-        }
+       // }
 
 
-        if (iJenisPerDinas!=3){
+        /*if (iJenisPerDinas!=3){
             if (nBiayaUangHarian==''){
                 custom_alert('Lengkapi Uang Harian');
                 return false;
             }
-        }else if (iJenisPerDinas==1){
+        }else if (iJenisPerDinas==1){*/
             if (nBiayaRepre==''){
                 custom_alert('Lengkapi Biaya Representatif');
                 return false;
@@ -796,7 +859,7 @@
                 //custom_alert('Lengkapi Honor Jasa Profesi');
                 //return false;
             }
-        }
+        //}
 
         
 
@@ -818,7 +881,7 @@
             $.ajax({
                 url: url,
                 type: 'post',
-                data: 'iCsId='+iCsId+'&iCsDetailId='+iCsDetailId+'&vNip='+vNip_cs+'&nBiayaUangHarian='+nBiayaUangHarian+'&nBiayaRepre='+nBiayaRepre+'&nBiayaTransport='+nBiayaTransport+'&iJenisAkomodasi='+iJenisAkomodasi+'&nBiayaPenginapan='+nBiayaPenginapan+'&nHonorJasa='+nHonorJasa+'&dPerjalananStart='+dPerjalananStart+ '&dPerjalananEnd='+dPerjalananEnd+ '&iAlatAngkut='+iAlatAngkut+ '&iOpsiHariLibur='+iOpsiHariLibur+ '&iOpsiHariSabtu='+iOpsiHariSabtu+ '&iOpsiHariMinggu='+iOpsiHariMinggu+'&iStId='+iStId+'&iDipaId='+iDipaId,
+                data: 'iCsId='+iCsId+'&iCsDetailId='+iCsDetailId+'&vNip='+vNip_cs+'&nBiayaUangHarian='+nBiayaUangHarian+'&nBiayaRepre='+nBiayaRepre+'&nBiayaTransport='+nBiayaTransport+'&iJenisAkomodasi='+iJenisAkomodasi+'&nBiayaPenginapan='+nBiayaPenginapan+'&nHonorJasa='+nHonorJasa+'&dPerjalananStart='+dPerjalananStart+ '&dPerjalananEnd='+dPerjalananEnd+ '&iAlatAngkut='+iAlatAngkut+ '&iOpsiHariLibur='+iOpsiHariLibur+ '&iOpsiHariSabtu='+iOpsiHariSabtu+ '&iOpsiHariMinggu='+iOpsiHariMinggu+'&iStId='+iStId+'&iDipaId='+iDipaId+'&iJenisPerDinas='+iJenisPerDinas,
                 success: function(data) {
                     if (data == '') {
                         
@@ -896,7 +959,7 @@
 
         
 
-        if (iJenisPerDinas==1){
+        //if (iJenisPerDinas==1){
             
             $('#div_nBiayaUangHarian').show();
             $('#div_nBiayaRepre').show();
@@ -904,9 +967,9 @@
             $('#div_nBiayaPenginapan').show();
             $('#div_nHonorJasa').show();
             $('#div_iJenisAkomodasi').show();
-        }else if (iJenisPerDinas==2){
+       /* }else if (iJenisPerDinas==2){
             $('#div_nBiayaUangHarian').show();
-        }
+        }*/
 
         $('#nBiayaUangHarian').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
         $('#nBiayaRepre').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
@@ -966,6 +1029,7 @@
 
      function proses_cetak_cs() {
         var iCsId       = $('#iCsId').val();
+        var iStId       = $('#iStId').val();
         var nipDalnis   = $('#nipDalnis').val();
         var nipKabag    = $('#nipKabag').val();
         var iKabag      = $('#iKabag').val();
@@ -973,9 +1037,17 @@
         var iKaPer      = $('#iKaPer').val();
         var diKelurkandi = $('#diKelurkandi').val();
         var dKeluarkanTgl = $('#dKeluarkanTgl').val();
+        var nipKorwas   = $('#nipKorwas').val();
+        var nipp3a      = $('#nipp3a').val();
+        var niptu       = $('#niptu').val();
+        var nipkeuangan = $('#nipkeuangan').val();
 
+        if (nipDalnis == "" || nipKabag == "" || iKabag == "" || nipiKaPer == "" || iKaPer == "" || diKelurkandi == "" || dKeluarkanTgl == "" || nipKorwas == "" || nipp3a == "" || niptu == "" || nipkeuangan == "" ){
+            custom_alert("Lengkapi Parameter Cetak ini");
+            return false
+        }
 
-        var url = "<?php echo site_url().'/st/cetakCs?iCsId='; ?>"+iCsId+"&nipDalnis="+nipDalnis+"&nipKabag="+nipKabag+"&iKabag="+iKabag+"&nipiKaPer="+nipiKaPer+"&iKaPer="+iKaPer+'&diKelurkandi='+diKelurkandi+'&dKeluarkanTgl='+dKeluarkanTgl;
+        var url = "<?php echo site_url().'/st/cetakCs?iCsId='; ?>"+iCsId+"&nipDalnis="+nipDalnis+"&nipKabag="+nipKabag+"&iKabag="+iKabag+"&nipiKaPer="+nipiKaPer+"&iKaPer="+iKaPer+'&diKelurkandi='+diKelurkandi+'&dKeluarkanTgl='+dKeluarkanTgl+"&nipKorwas="+nipKorwas+"&nipp3a="+nipp3a+"&niptu="+niptu+"&nipkeuangan="+nipkeuangan+"&iStId="+iStId;
 
         var jwb = confirm('Cetak Data Cost Sheet ?');
 

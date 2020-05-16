@@ -24,8 +24,15 @@ class penugasan extends CI_Controller {
 
 	
 		$arr_jenis = array(''=>'',0=>'PKAU',1=>'PKPT',2=>'NON PKPT');
-		$arr_sumberdana = array(0=>'',1=>'DIPA PERWAKILAN',2=>'SKPA',3=>'DROPING',4=>'PIHAK III',4=>'UNIT BPKP LAIN',5=>'SHARING');
 		
+		$arr_sumberdana = array(0=>'',
+								1=>'DIPA PERWAKILAN',
+                                2=>'SKPA',
+                                3=>'DROPING',
+                                4=>'PIHAK III',
+                                5=>'UNIT BPKP LAIN',
+                                6=>'SHARING');
+
 		if ($this->session->userdata('iPeran')==1 || $this->session->userdata('iPeran')==6 ){
 		 	$qb = "";
 		 }else{
@@ -44,7 +51,7 @@ class penugasan extends CI_Controller {
 
 
 		$sql = "SELECT a.iStId,a.iBidangId,a.iJenisRkt,a.cNomorST,a.dTglST,a.iSumberDana,a.vUraianPenugasan,
-				a.dMulai,a.nNilaiPengajuan,a.nRealiasi,b.vBidangName,
+				a.dMulai,a.nNilaiPengajuan,a.nRealiasi,b.vBidangName,b.iNomor as nomor_bidang,
 				(select coalesce(sum(nValueAju),0) as nilai_aju 
 					from cost.st_detail_rkt where  iStId=a.iStId and lDeleted=0)  as nilai_aju,
 				(select coalesce(sum(nRealisasi),0) as nilai_realisasi 
@@ -55,7 +62,7 @@ class penugasan extends CI_Controller {
 
 		$query 	= $this->db->query($sql);
 	
-		$html 	= '<table id="example1" class="table table-bordered table-striped" style="white-space: nowrap;">
+		$html 	= '<table id="example1" class="table table-bordered table-striped" >
 			<thead>
               <tr>
                	<td>No</td>
@@ -88,7 +95,7 @@ class penugasan extends CI_Controller {
 
 				if ($this->session->userdata('iPeran')==1){
 					$btn_edit =  " <a  href='javasript:void(0)' data-toggle='modal' data-target='#modal-info' 
-									onclick='edit(\"".$id."\",\"".$row['cNomorST']."\",\"".$dTglST."\")' ><i class='fa fa-edit pull-right'></i></a>";
+									onclick='edit(\"".$id."\",\"".$row['cNomorST']."\",\"".$dTglST."\",\"".$row['nomor_bidang']."\")' ><i class='fa fa-edit pull-right'></i></a>";
 				}else{
 					$btn_edit =  "";
 				}
@@ -110,11 +117,11 @@ class penugasan extends CI_Controller {
 				
 				$html .= "<td></td>";
 				$html .= "<td>".$row['vBidangName']."</td>";
-				$html .= "<td>".$arr_jenis[$row['iJenisRkt']]."</td>";
+				$html .= "<td style='white-space: nowrap;' >".$arr_jenis[$row['iJenisRkt']]."</td>";
 				$html .= "<td>".$row['vUraianPenugasan']."</td>";
 				$html .= "<td  >".$nomor_rkt."</td>";
-				$html .= "<td>".$row['cNomorST']."</td>";
-				$html .= "<td>".$dTglST."</td>";
+				$html .= "<td style='white-space: nowrap;' >".$row['cNomorST']."</td>";
+				$html .= "<td style='white-space: nowrap;' >".$dTglST."</td>";
 				
 				
                 $html .= "</tr>";

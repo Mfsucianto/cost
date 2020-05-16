@@ -153,7 +153,7 @@ if (isset($dataFrom['changeFiled'])){
                     echo "<legend></legend>";
 
                     echo $this->lib_util->drawFiledText('User Id','cUserId','300px');
-                    echo $this->lib_util->drawFiledText('Password','vPassword','300px','password');
+                    echo $this->lib_util->drawFiledText('Password','vPassword','300px');
 
                 ?>
                     <div class="form-group">
@@ -287,6 +287,17 @@ $this->load->view('template/foot');
         for (var i = 0; i < arrayLength; i++) {
             $('#'+arrFiled[i]).val('');
         }
+
+
+        $('#cSex').val('').trigger('change');
+        $('#iJabatanId').val('').trigger('change');
+        $('#iBidangId').val('').trigger('change');
+        $('#iSubBidangId').val('').trigger('change');
+        $('#iPeran').val('').trigger('change');
+
+        $('#cUserId').val('');
+        $('#vPassword').val('');
+
         $('#section_list').hide();
         $('#from_add').show();
         $('#imagePleace').hide();
@@ -422,7 +433,7 @@ $this->load->view('template/foot');
         }
 
         $('#cUserId').val(rowData['cUserId']);
-        $('#vPassword').val('');
+        $('#vPassword').val(rowData['vPassword']);
        
     }
 

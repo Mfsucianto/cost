@@ -89,7 +89,7 @@ $this->load->view('template/sidebar');
         <div class="box-footer" >
             
             <button type="button" class="btn bg-navy "  onclick="simpanData()" >Simpan</button>
-            <button type="button" class="btn btn-info pull-right "  onclick="nextKwitansi()" >Lanjut Ke Kwitansi <i class="fa  fa-forward"></i></button>
+            <button type="button" class="btn btn-info pull-right "  onclick="nextKwitansi()" >Lanjut Ke Kuitansi <i class="fa  fa-forward"></i></button>
             
         </div><!-- /.box-footer-->
     </div><!-- /.box -->
@@ -105,7 +105,7 @@ $this->load->view('template/sidebar');
     <!-- Default box -->
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title">Kwitansi</h3>
+            <h3 class="box-title">Kuitansi</h3>
             <div class="box-tools pull-right">
                 
                
@@ -123,10 +123,10 @@ $this->load->view('template/sidebar');
 
                     echo $this->lib_util->drawFiledText('Tahun DIPA','cTahun','100px');
                     echo $this->lib_util->drawFiledText('Kode DIPA','cKodeDipa','300px');
-                    echo $this->lib_util->drawFiledText('Nomor Kwitansi','vNomorKwitansi','200px');
-                    echo $this->lib_util->drawFiledText('Tanggal Kwitansi','dTglKwitansi','200px');
+                    echo $this->lib_util->drawFiledText('Nomor Kuitansi','vNomorKwitansi','200px');
+                    echo $this->lib_util->drawFiledText('Tanggal Kuitansi','dTglKwitansi','200px');
                     echo $this->lib_util->drawFiledText('Sisa Pagu Awal','nSisaPaguAwal','200px');
-                    echo $this->lib_util->drawFiledText('Kwitansi ini','nNilaiKwitansi','200px');
+                    echo $this->lib_util->drawFiledText('Kuitansi ini','nNilaiKwitansi','200px');
                     echo $this->lib_util->drawFiledText('Sisa Pagu Akhir','nSisaPaguAkhir','200px');
 
 
@@ -178,7 +178,7 @@ $this->load->view('template/sidebar');
             
             <button type="button" class="btn btn-info "  onclick="backToRencana()" ><i class="fa  fa-backward"></i> Kembali Ke Data Rencana</button>
             <button type="button" class="btn bg-navy "  onclick="simpanDataKwitansi()" >Simpan</button>
-            <button type="button" class="btn bg-navy "  onclick="cetakKwitansi()" >Cetak Kwitansi</button>
+            <button type="button" class="btn bg-navy "  onclick="cetakKwitansi()" >Cetak Kuitansi</button>
             <button type="button" class="btn btn-info pull-right "  onclick="nextDpr()" >Lanjut Ke DPR <i class="fa  fa-forward"></i></button>
             
         </div><!-- /.box-footer-->
@@ -207,8 +207,8 @@ $this->load->view('template/sidebar');
                     
                     echo '<input type="hidden" readonly class="form-control input-sm" id="id_dpr" name="id_dpr" value="0">';
 
-                    echo $this->lib_util->drawFiledText('Nomor Kwitansi','vNomorKwitansiDPR','200px');
-                    echo $this->lib_util->drawFiledText('Tanggal Kwitansi','dTglKwitansiDPR','200px');
+                    echo $this->lib_util->drawFiledText('Nomor Kuitansi','vNomorKwitansiDPR','200px');
+                    echo $this->lib_util->drawFiledText('Tanggal Kuitansi','dTglKwitansiDPR','200px');
                    
                    
                     echo "<legend></legend>";
@@ -221,7 +221,7 @@ $this->load->view('template/sidebar');
         </div><!-- /.box-body -->
         <div class="box-footer" >
             
-            <button type="button" class="btn btn-info "  onclick="nextKwitansi()" ><i class="fa  fa-backward"></i> Kembali Ke Kwitansi</button>
+            <button type="button" class="btn btn-info "  onclick="nextKwitansi()" ><i class="fa  fa-backward"></i> Kembali Ke Kuitansi</button>
             <button type="button" class="btn bg-navy "  onclick="simpanDataDpr()" >Simpan</button>
             <button type="button" class="btn bg-navy "  onclick="cetakDpr()" >Cetak DPR</button>
             <button type="button" class="btn bg-navy "  onclick="cetakRincianPerjadin()" >Cetak Rincian Biaya Perjadin</button>
@@ -258,7 +258,7 @@ $this->load->view('template/sidebar');
 
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="label_modal_kwitansi">Cetak Kwitansi </h4>
+          <h4 class="modal-title" id="label_modal_kwitansi">Cetak Kuitansi </h4>
         </div>
         <div class="modal-body">
             <div>
@@ -428,6 +428,29 @@ $this->load->view('template/foot');
 
 
 
+        
+
+        
+        $('#tgl_dibuatKwitansi').datepicker({
+            format: 'dd MM yyyy',
+            autoclose : true,
+            todayHighlight : true,
+            disableTouchKeyboard : true
+        });
+
+        $('#tgl_dibuatdpr').datepicker({
+            format: 'dd MM yyyy',
+            autoclose : true,
+            todayHighlight : true,
+            disableTouchKeyboard : true
+        });
+
+        $('#tgl_dibuatperjadin').datepicker({
+            format: 'dd MM yyyy',
+            autoclose : true,
+            todayHighlight : true,
+            disableTouchKeyboard : true
+        });
 
 
         $('#dTerimaSpj').datepicker({
@@ -589,15 +612,7 @@ $this->load->view('template/foot');
         var list_data = getListDataSpd();
         $('#list_data_spd').html(list_data);
         $('#myLargeModalLabel').html('List DIPA');
-        $('#example1').DataTable({
-             scrollY:        300,
-            scrollX:        true,
-            scrollCollapse: true,
-            fixedColumns:   {
-                leftColumns: 2,
-                rightColumns: 0,
-            }
-        });
+        $('#example1').DataTable();
 
 
 
@@ -894,12 +909,12 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
         var nNilaiKwitansi  = $('#nNilaiKwitansi').val();
 
         if (vNomorKwitansi==''){
-            custom_alert('','Masukan Nomor Kwitansi');
+            custom_alert('','Masukan Nomor Kuitansi');
             return false;
         }
 
         if (dTglKwitansi==''){
-            custom_alert('','Masukan Tanggal Kwitansi');
+            custom_alert('','Masukan Tanggal Kuitansi');
             return false;
         }
 
@@ -911,7 +926,7 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
         }
 
          if (nNilaiKwitansi=='' || nNilaiKwitansi==0){
-            custom_alert('','Nilai Kwitansi Masih 0');
+            custom_alert('','Nilai Kuitansi Masih 0');
             return false;
         }
 
@@ -1006,21 +1021,31 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
 
     function cetakKwitansi() {
+        if ($('#cetakKwitansi').val()==''){
+            custom_alert('','Masukan Nomor Kuitansi');
+            $('#cetakKwitansi').focus();
+            return false;
+        }
         $('.modal_cetak_kwitansi').modal('show');
     }
 
     function prosesCetakKwitansi() {
         var id = $('#id').val();
+        var vNomorKwitansi    = $('#vNomorKwitansi').val();
         var vPejabatKwitansi    = $('#vPejabatKwitansi').val();
         var vBendaharaKwitansi  = $('#vBendaharaKwitansi').val();
         var dibuatdiKwitansi    = $('#dibuatdiKwitansi').val();
         var tgl_dibuatKwitansi  = $('#tgl_dibuatKwitansi').val();
         var terbilang  = $('#terbilang').val();
 
+        if (vPejabatKwitansi == "" || vBendaharaKwitansi == "" || dibuatdiKwitansi == "" || tgl_dibuatKwitansi == ""){
+            custom_alert('','Lengkapi data cetakan');
+            return false();
+        }
 
-        var url = "<?php echo site_url();?>/rencana/cetakkwitansi?id="+id+"&vPejabatKwitansi="+vPejabatKwitansi+"&vBendaharaKwitansi="+vBendaharaKwitansi+"&dibuatdiKwitansi="+dibuatdiKwitansi+"&tgl_dibuatKwitansi="+tgl_dibuatKwitansi+'&terbilang='+terbilang
+        var url = "<?php echo site_url();?>/rencana/cetakkwitansi?id="+id+"&vPejabatKwitansi="+vPejabatKwitansi+"&vBendaharaKwitansi="+vBendaharaKwitansi+"&dibuatdiKwitansi="+dibuatdiKwitansi+"&tgl_dibuatKwitansi="+tgl_dibuatKwitansi+'&terbilang='+terbilang+"&vNomorKwitansi="+vNomorKwitansi
 
-        var jwb = confirm('Cetak Kwitansi ?');
+        var jwb = confirm('Cetak Kuitansi ?');
 
         if (jwb==1){
             document.getElementById('iframe_preview').src = url;
@@ -1041,7 +1066,11 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
         var tgl_dibuatperjadin  = $('#tgl_dibuatperjadin').val();
         var terbilang  = $('#terbilang').val();
 
-
+        if (vPejabatperjadin == "" || vBendaharaperjadin == "" || dibuatdiperjadin == "" || tgl_dibuatperjadin == ""){
+            custom_alert('','Lengkapi data cetakan');
+            return false();
+        }
+        
         var url = "<?php echo site_url();?>/rencana/cetakperjadin?id="+id+"&vPejabatperjadin="+vPejabatperjadin+"&vBendaharaperjadin="+vBendaharaperjadin+"&dibuatdiperjadin="+dibuatdiperjadin+"&tgl_dibuatperjadin="+tgl_dibuatperjadin+'&terbilang='+terbilang
 
         var jwb = confirm('Cetak Rincian Biaya Perjadin ?');
@@ -1062,7 +1091,10 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
         var dibuatdidpr    = $('#dibuatdidpr').val();
         var tgl_dibuatdpr  = $('#tgl_dibuatdpr').val();
         
-
+        if (vPejabatdpr == "" || dibuatdidpr == "" || tgl_dibuatdpr == ""){
+            custom_alert('','Lengkapi data cetakan');
+            return false();
+        }
         var url = "<?php echo site_url();?>/rencana/cetakdpr?id="+id+"&vPejabatdpr="+vPejabatdpr+"&dibuatdidpr="+dibuatdidpr+"&tgl_dibuatdpr="+tgl_dibuatdpr
 
         var jwb = confirm('Cetak DPR ?');
