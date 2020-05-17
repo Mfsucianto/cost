@@ -33,7 +33,8 @@ $this->load->view('template/sidebar');
                 
 
                 <?php
-                    
+                   
+
                     //echo $this->lib_util->drawFiledText('ID ST','iBarcode','300px');
                     echo '<div class="form-group" id="div_iBarcode">
                               <label for="username" class="col-sm-4 control-label" style="font-weight: 300;">ID ST</label>
@@ -159,7 +160,7 @@ $this->load->view('template/sidebar');
 
 
 <!--  Modal content for the above example -->
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+<div class="modal fade bs-example-modal-lg combo_modal"  role="dialog" aria-labelledby="myLargeModalLabel" style="overflow:auto;">
 <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
 
@@ -171,6 +172,7 @@ $this->load->view('template/sidebar');
         <form class="form-horizontal" id="form_data" name="form_data" autocomplete="off">
             <?php
 
+                
                 $datatmcs = array();
                 $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.lDeleted=0 ";
                 $query  = $this->db->query($sql);
@@ -180,16 +182,15 @@ $this->load->view('template/sidebar');
                     }
                 }
 
-                echo '<input type="hidden" readonly class="form-control input-sm" id="id" name="id" value="">';
+                 echo '<input type="hidden" readonly class="form-control input-sm" id="id" name="id" value="">';
 
                  echo '<legend>Cetak SPD</legend>';
-                 echo $this->lib_util->drawcombo('iJenisCs','Jenis Costsheet ',array(1=>'Dana Obrik',2=>'Dana DIPA'),'200px');
-                 echo $this->lib_util->drawcombo('pejabatTTD','Pejabat Yang Bertandatangan',$datatmcs,'400px');
-
+                 echo $this->lib_util->drawcombo_onmodal('iJenisCs','Jenis Costsheet ',array(1=>'Dana Obrik',2=>'Dana DIPA'),'200px');
+                 echo $this->lib_util->drawFiledText('Pejabat Yang Bertandatangan','pejabatTTD','300px');
                  echo '<legend>Pejabat Penandatangan</legend>';
 
                 
-                echo $this->lib_util->drawcombo('vNip_ppk','NIP/Nama PPK',$datatmcs,'400px');
+                echo $this->lib_util->drawcombo_onmodal('vNip_ppk','NIP/Nama PPK',$datatmcs,'400px');
                 echo $this->lib_util->drawFiledText('Jabatan Baris 1','jabatan1','300px');
                 echo $this->lib_util->drawFiledText('Jabatan Baris 2','jabatan2','300px');
 
@@ -502,7 +503,7 @@ $this->load->view('template/foot');
         if (vNoSPPD=='' ||vNoSPPD==null ){
             $('#vNoSPPD').val('');
             $('#nomor_urut_spd').val('');
-            $('#nomor_tahun_spd').val('/PW04/'+nomor_bidang+'/'+tahun);
+            $('#nomor_tahun_spd').val('/PW04/1/'+tahun);
         }else{
             //SPD-16/PW04/1/2020
             s_nospd = vNoSPPD.split('/');

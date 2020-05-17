@@ -4,26 +4,19 @@
 		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select a.iJenis,a.nHari,FORMAT(a.nBiaya,0) as biaya,FORMAT(a.nJumlah,0) as jumlah,a.vTransDari,a.vTransTujuan,a.vKeterangan
+		<![CDATA[select CONCAT("Transport Dari ",a.vTransDari," - ",a.vTransTujuan," PP") as ket,
+FORMAT(a.nJumlah,0,'id_ID') as jumlah,a.vKeterangan
 from cost.cs_detail_kwitansi as a
-where a.iCsDetailId = $P{id} and a.iJenis =4]]>
+where a.iCsDetailId = $P{id} and a.iJenis =4
+union
+select vPerincian as ket,FORMAT(a.nJumlah,0,'id_ID') as jumlah,'' as vKeterangan 
+from cost.cd_detail_dpr as a
+where a.iCsDetailId = $P{id}]]>
 	</queryString>
-	<field name="iJenis" class="java.lang.Boolean">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="nHari" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="biaya" class="java.lang.String">
+	<field name="ket" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="jumlah" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="vTransDari" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="vTransTujuan" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="vKeterangan" class="java.lang.String">
@@ -43,9 +36,9 @@ where a.iCsDetailId = $P{id} and a.iJenis =4]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["Transport Dari "+$F{vTransDari}+ " - "+$F{vTransTujuan}+" PP"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["  - "+$F{ket}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="">
 				<reportElement x="247" y="0" width="100" height="15"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.0"/>
@@ -54,7 +47,7 @@ where a.iCsDetailId = $P{id} and a.iJenis =4]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["Rp. " +$F{jumlah}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Rp. "+$F{jumlah}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="347" y="0" width="194" height="15"/>

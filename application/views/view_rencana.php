@@ -123,7 +123,17 @@ $this->load->view('template/sidebar');
 
                     echo $this->lib_util->drawFiledText('Tahun DIPA','cTahun','100px');
                     echo $this->lib_util->drawFiledText('Kode DIPA','cKodeDipa','300px');
-                    echo $this->lib_util->drawFiledText('Nomor Kuitansi','vNomorKwitansi','200px');
+                    //echo $this->lib_util->drawFiledText('Nomor Kuitansi','vNomorKwitansi','200px');
+                    echo '<div class="form-group" id="div_vNomorKwitansi">
+                              <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">Nomor Kuitansi</label>
+                              <div class="col-sm-7">
+                                <div class="input-group input-group-sm">
+                                   <input type="text" readonly style="width:200px" class="form-control input-sm" id="vNomorKwitansi" name="vNomorKwitansi" >
+                                </div>
+                                
+                              </div>
+                            </div>';
+
                     echo $this->lib_util->drawFiledText('Tanggal Kuitansi','dTglKwitansi','200px');
                     echo $this->lib_util->drawFiledText('Sisa Pagu Awal','nSisaPaguAwal','200px');
                     echo $this->lib_util->drawFiledText('Kuitansi ini','nNilaiKwitansi','200px');
@@ -164,6 +174,7 @@ $this->load->view('template/sidebar');
                   $this->load->view('view_kwitansi_penginapan');
                   $this->load->view('view_kwitansi_repre');
                   $this->load->view('view_kwitansi_transport');
+                  $this->load->view('view_dpr');
 
                   echo $this->lib_util->drawFiledText('Total','nNilaiKwitansi2','200px');
                   echo $this->lib_util->drawFiledText('Terbilang','terbilang');
@@ -177,9 +188,12 @@ $this->load->view('template/sidebar');
         <div class="box-footer" >
             
             <button type="button" class="btn btn-info "  onclick="backToRencana()" ><i class="fa  fa-backward"></i> Kembali Ke Data Rencana</button>
-            <button type="button" class="btn bg-navy "  onclick="simpanDataKwitansi()" >Simpan</button>
+            <button type="button" class="btn bg-navy pull-right"  onclick="simpanDataKwitansi()" >Simpan</button>
             <button type="button" class="btn bg-navy "  onclick="cetakKwitansi()" >Cetak Kuitansi</button>
-            <button type="button" class="btn btn-info pull-right "  onclick="nextDpr()" >Lanjut Ke DPR <i class="fa  fa-forward"></i></button>
+           
+            <button type="button" class="btn bg-navy "  onclick="cetakDpr()" >Cetak DPR</button> &nbsp
+            <button type="button" class="btn bg-navy "  onclick="cetakRincianPerjadin()" >Cetak Rincian Biaya Perjadin</button> &nbsp
+
             
         </div><!-- /.box-footer-->
     </div><!-- /.box -->
@@ -212,7 +226,7 @@ $this->load->view('template/sidebar');
                    
                    
                     echo "<legend></legend>";
-                    $this->load->view('view_dpr');
+                    //$this->load->view('view_dpr');
                 ?>
                 
 
@@ -252,7 +266,7 @@ $this->load->view('template/sidebar');
 
 
 <!--  Modal content for the above example -->
-  <div class="modal fade modal_cetak_kwitansi" tabindex="-1" role="dialog" aria-labelledby="label_modal_kwitansi">
+  <div class="modal fade modal_cetak_kwitansi combo_modal " tabindex="-1" role="dialog" aria-labelledby="label_modal_kwitansi">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
 
@@ -265,17 +279,35 @@ $this->load->view('template/sidebar');
                 <form class="form-horizontal" id="form_data_dpr" name="form_data_dpr" autocomplete="off">
                     <?php
                         $datatmcs = array();
-                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.lDeleted=0 ";
+                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.iJabatanId in (5,1,2) and a.lDeleted=0 order by a.vName ASC ";
                         $query  = $this->db->query($sql);
                         if ($query->num_rows() > 0) {
                             foreach($query->result_array() as $row) {
-                                $datatmcs[$row['vNip']."|".$row['vName']] = $row['vName'];
+                                $datatmcs[$row['vNip']."|".$row['vName']] = $row['vNip']." - ".$row['vName'];
                             }
                         }
-                        echo $this->lib_util->drawcombo('vPejabatKwitansi','Pilih Pejabat Pembuat Komitmen',$datatmcs,'300px');
-                        echo $this->lib_util->drawcombo('vBendaharaKwitansi','Pilih Bendahara',$datatmcs,'300px');
+                        echo $this->lib_util->drawcombo_onmodal('vPejabatKwitansi','Pilih Pejabat Pembuat Komitmen',$datatmcs,'500px');
 
-                        echo $this->lib_util->drawFiledText('Dibuat Di ','dibuatdiKwitansi','300px');
+                        
+                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.iJabatanId in (22) and a.lDeleted=0 order by a.vName ASC ";
+                        $query  = $this->db->query($sql);
+                        $opt = '';
+                        if ($query->num_rows() > 0) {
+                            foreach($query->result_array() as $row) {
+                               $opt .= '<option value="'.$row['vNip']."|".$row['vName'].'"  >'.$row['vNip']." - ".$row['vName'].'</option>';
+                            }
+                        }
+
+                        echo  '<div class="form-group" id="div_vBendaharaKwitansi">
+                                  <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">Bendahara</label>
+                                  <div class="col-sm-7">
+                                        <select class="orm-control input-sm select2_modal" style="width:500px;" id="vBendaharaKwitansi" name="vBendaharaKwitansi">
+                                            '.$opt.'
+                                        </select>
+                                  </div>
+                                </div>';
+                       
+                        echo $this->lib_util->drawFiledText('Dibuat Di ','dibuatdiKwitansi','200px');
                         echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatKwitansi','200px');
                    ?>
                 </form>
@@ -298,7 +330,7 @@ $this->load->view('template/sidebar');
 
 
 <!--  Modal content cetak DPR -->
-  <div class="modal fade modal_cetak_dpr" tabindex="-1" role="dialog" aria-labelledby="label_modal_dpr">
+  <div class="modal fade modal_cetak_dpr "  role="dialog" aria-labelledby="label_modal_dpr" style="overflow:hidden;">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
 
@@ -311,14 +343,14 @@ $this->load->view('template/sidebar');
                 <form class="form-horizontal" id="form_data_dpr" name="form_data_dpr" autocomplete="off">
                     <?php
                         $datatmcs = array();
-                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.lDeleted=0 ";
+                         $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.iJabatanId in (5,1,2) and a.lDeleted=0 order by a.vName ASC ";
                         $query  = $this->db->query($sql);
                         if ($query->num_rows() > 0) {
                             foreach($query->result_array() as $row) {
-                                $datatmcs[$row['vNip']."|".$row['vName']] = $row['vName'];
+                                $datatmcs[$row['vNip']."|".$row['vName']] = $row['vNip']." - ".$row['vName'];
                             }
                         }
-                        echo $this->lib_util->drawcombo('vPejabatdpr','Pilih Pejabat Pembuat Komitmen',$datatmcs,'300px');
+                        echo $this->lib_util->drawcombo('vPejabatdpr','Pilih Pejabat Pembuat Komitmen',$datatmcs,'500px');
                       
                         echo $this->lib_util->drawFiledText('Dibuat Di ','dibuatdidpr','300px');
                         echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatdpr','200px');
@@ -354,15 +386,34 @@ $this->load->view('template/sidebar');
                 <form class="form-horizontal" id="form_data_dpr" name="form_data_dpr" autocomplete="off">
                     <?php
                         $datatmcs = array();
-                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.lDeleted=0 ";
+                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.iJabatanId in (5,1,2) and a.lDeleted=0 order by a.vName ASC ";
                         $query  = $this->db->query($sql);
                         if ($query->num_rows() > 0) {
                             foreach($query->result_array() as $row) {
-                                $datatmcs[$row['vNip']."|".$row['vName']] = $row['vName'];
+                                $datatmcs[$row['vNip']."|".$row['vName']] = $row['vNip']." - ".$row['vName'];
                             }
                         }
-                        echo $this->lib_util->drawcombo('vPejabatperjadin','Pilih Pejabat Pembuat Komitmen',$datatmcs,'300px');
-                        echo $this->lib_util->drawcombo('vBendaharaperjadin','Pilih Bendahara',$datatmcs,'300px');
+                        echo $this->lib_util->drawcombo('vPejabatperjadin','Pilih Pejabat Pembuat Komitmen',$datatmcs,'500px');
+                       
+                        $sql = "select a.vNip,a.vName FROM cost.ms_pegawai as a  where a.iJabatanId in (22) and a.lDeleted=0 order by a.vName ASC ";
+                        $query  = $this->db->query($sql);
+                        $opt = '';
+                        if ($query->num_rows() > 0) {
+                            foreach($query->result_array() as $row) {
+                               $opt .= '<option value="'.$row['vNip']."|".$row['vName'].'"  >'.$row['vNip']." - ".$row['vName'].'</option>';
+                            }
+                        }
+
+                        echo  '<div class="form-group" id="div_vBendaharaperjadin">
+                                  <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">Bendahara</label>
+                                  <div class="col-sm-7">
+                                        <select class="orm-control input-sm select2_modal" style="width:500px;" id="vBendaharaperjadin" name="vBendaharaperjadin">
+                                            '.$opt.'
+                                        </select>
+                                  </div>
+                                </div>';
+
+
 
                         echo $this->lib_util->drawFiledText('Dibuat Di ','dibuatdiperjadin','300px');
                         echo $this->lib_util->drawFiledText('Tanggal','tgl_dibuatperjadin','200px');
@@ -400,6 +451,9 @@ $this->load->view('template/foot');
 
     $(document).ready(function() {
         
+        $('#dibuatdidpr').val('Pekanbaru');
+        $('#dibuatdiKwitansi').val('Pekanbaru');
+        $('#dibuatdiperjadin').val('Pekanbaru');
         //$('#id').prop('disabled', true);
         $('#vNoSPPD').prop('disabled', true);
         $('#dTglSPPD').prop('disabled', true);
@@ -715,9 +769,9 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
                 row_content   = '<tr>';
                 row_content  += '<td><input type="hidden" readonly class="penugasan_iJenis" name="penugasan_iJenis[]" value="'+pt[i].iJenis+'" ><input style="width: 90%;text-align:right;" type="text" class="penugasan_nHari" name="penugasan_nHari[]" value="'+pt[i].nHari+'" data-a-dec="." data-a-sep=","  ></td>'
 
-                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penugasan_nBiaya" name="penugasan_nBiaya[]" value="'+pt[i].nBiaya+'" data-a-dec="." data-a-sep="," ></td>'
+                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penugasan_nBiaya" name="penugasan_nBiaya[]" value="'+stripCharacters(pt[i].nBiaya)+'" data-a-dec="." data-a-sep="," ></td>'
 
-                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penugasan_nJumlah" name="penugasan_nJumlah[]" value="'+pt[i].nJumlah+'" data-a-dec="." data-a-sep="," readonly ></td>'
+                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penugasan_nJumlah" name="penugasan_nJumlah[]" value="'+stripCharacters(pt[i].nJumlah)+'" data-a-dec="." data-a-sep="," readonly ></td>'
 
                 row_content += '<td><textarea style="width: 100%;" class="penugasan_vKeterangan" name="penugasan_vKeterangan[]" >'+pt[i].vKeterangan+'</textarea></td>';
 
@@ -725,6 +779,8 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
                 row_content  += '</tr>';
                 jQuery("#tabel_detail_penugasan tbody").append(row_content);
+                $('.penugasan_nJumlah').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
+                $('.penugasan_nBiaya').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
                 sum_value_penugasan();
             }
 
@@ -733,9 +789,9 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
                 row_content   = '<tr>';
                 row_content  += '<td><input type="hidden" readonly class="penginapan_iJenis" name="penginapan_iJenis[]" value="'+pt[i].iJenis+'" ><input style="width: 90%;text-align:right;" type="text" class="penginapan_nHari" name="penginapan_nHari[]" value="'+pt[i].nHari+'" data-a-dec="." data-a-sep=","  ></td>'
 
-                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penginapan_nBiaya" name="penginapan_nBiaya[]" value="'+pt[i].nBiaya+'" data-a-dec="." data-a-sep="," ></td>'
+                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penginapan_nBiaya" name="penginapan_nBiaya[]" value="'+stripCharacters(pt[i].nBiaya)+'" data-a-dec="." data-a-sep="," ></td>'
 
-                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penginapan_nJumlah" name="penginapan_nJumlah[]" value="'+pt[i].nJumlah+'" data-a-dec="." data-a-sep="," readonly ></td>'
+                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="penginapan_nJumlah" name="penginapan_nJumlah[]" value="'+stripCharacters(pt[i].nJumlah)+'" data-a-dec="." data-a-sep="," readonly ></td>'
 
                 row_content += '<td><textarea style="width: 100%;" class="penginapan_vKeterangan" name="penginapan_vKeterangan[]" >'+pt[i].vKeterangan+'</textarea></td>';
 
@@ -743,7 +799,8 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
                 row_content  += '</tr>';
                 jQuery("#tabel_detail_penginapan tbody").append(row_content);
-
+                $('.penginapan_nJumlah').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
+                $('.penginapan_nBiaya').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
                 sum_value_penginapan();
             }
 
@@ -752,9 +809,9 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
                 row_content   = '<tr>';
                 row_content  += '<td><input type="hidden" readonly class="repre_iJenis" name="repre_iJenis[]" value="'+pt[i].iJenis+'" ><input style="width: 90%;text-align:right;" type="text" class="repre_nHari" name="repre_nHari[]" value="'+pt[i].nHari+'" data-a-dec="." data-a-sep=","  ></td>'
 
-                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="repre_nBiaya" name="repre_nBiaya[]" value="'+pt[i].nBiaya+'" data-a-dec="." data-a-sep="," ></td>'
+                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="repre_nBiaya" name="repre_nBiaya[]" value="'+stripCharacters(pt[i].nBiaya)+'" data-a-dec="." data-a-sep="," ></td>'
 
-                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="repre_nJumlah" name="repre_nJumlah[]" value="'+pt[i].nJumlah+'" data-a-dec="." data-a-sep="," readonly ></td>'
+                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="repre_nJumlah" name="repre_nJumlah[]" value="'+stripCharacters(pt[i].nJumlah)+'" data-a-dec="." data-a-sep="," readonly ></td>'
 
                 row_content += '<td><textarea style="width: 100%;" class="repre_vKeterangan" name="repre_vKeterangan[]" >'+pt[i].vKeterangan+'</textarea></td>';
 
@@ -762,17 +819,35 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
                 row_content  += '</tr>';
                 jQuery("#tabel_detail_repre tbody").append(row_content);
-
+                $('.trans_nBiaya').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
                 sum_value_repre();
             }
 
             if (pt[i].iJenis==4){
-                $('.vTransDari').val(pt[i].vTransDari);
+             /*   $('.vTransDari').val(pt[i].vTransDari);
                 $('.vTransTujuan').val(pt[i].vTransTujuan);
                 $('.trans_nBiaya').val(pt[i].nJumlah);
-                $('.trans_vKeterangan').val(pt[i].vKeterangan);
+                $('.trans_vKeterangan').val(pt[i].vKeterangan);*/
 
-                sum_nilaikwitansi();
+                var row_content = '';
+
+                row_content   = '<tr>';
+              
+                row_content  += '<td><input style="width: 90%;text-align:left;" type="text" class="vTransDari" name="vTransDari[]" value="'+pt[i].vTransDari+'" ></td>'
+
+                row_content  += '<td><input style="width: 90%;text-align:left;" type="text" class="vTransTujuan" name="vTransTujuan[]" value="'+pt[i].vTransTujuan+'" ></td>'
+
+                row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="trans_nBiaya" name="trans_nBiaya[]" value="'+pt[i].nJumlah+'" data-a-dec="." data-a-sep="," onkeyup="sum_nilaikwitansi()" ></td>'
+
+                row_content += '<td><textarea style="width: 100%;" class="trans_vKeterangan" name="trans_vKeterangan[]">'+pt[i].vKeterangan+'</textarea></td>';
+
+                row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_transport(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
+
+                row_content  += '</tr>';
+                
+                jQuery("#tabel_detail_transport tbody").append(row_content);
+                $('.trans_nBiaya').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
+                sum_value_trans();
             }
         }
     }
@@ -794,18 +869,23 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
         no = 0;
         for(i=0;i<pt.length;i++) {
             no++;
+            console.log(pt[i].nJumlah)
             var row_content = '';
             row_content   = '<tr>';
             row_content  += '<td><span class="tabel_detail_dpr_num">'+no+'</span></td>';
 
             row_content  += '<td><input style="width: 90%;text-align:left;" type="text" class="dpr_vPerincian" name="dpr_vPerincian[]" value="'+pt[i].vPerincian+'"  ></td>'
-            row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="dpr_nJumlah" name="dpr_nJumlah[]" value="'+pt[i].nJumlah+'" data-a-dec="." data-a-sep=","  ></td>'
+            row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="dpr_nJumlah" name="dpr_nJumlah[]" value="'+stripCharacters(pt[i].nJumlah)+'" data-a-dec="." data-a-sep=","  ></td>'
             row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_dpr(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
             row_content  += '</tr>';
+           
             jQuery("#tabel_detail_dpr tbody").append(row_content);
-
+            $('.dpr_nJumlah').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
+             
         }
+       
         sum_value_dpr();
+
 
     }
 
@@ -909,8 +989,8 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
         var nNilaiKwitansi  = $('#nNilaiKwitansi').val();
 
         if (vNomorKwitansi==''){
-            custom_alert('','Masukan Nomor Kuitansi');
-            return false;
+            //custom_alert('','Masukan Nomor Kuitansi');
+            //return false;
         }
 
         if (dTglKwitansi==''){
@@ -940,8 +1020,10 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
                 type: 'post',
                 data: $('#form_data_kwitansi').serialize(),
                 success: function(data) {
-                    if (data == 1) {
+                    x_data = data.split('|');
+                    if (x_data['0'] == 1) {
                         custom_alert('',"Data berhasil disimpan",'success');
+                        $('#vNomorKwitansi').val(x_data['1']);
                         return false;
                     }else {
                        alert("Data Gagal disimpan");
@@ -1022,8 +1104,9 @@ vJabatanName, vUraianPenugasan, alat_angkut, nLama, dPerjalananStart, dPerjalana
 
     function cetakKwitansi() {
         if ($('#cetakKwitansi').val()==''){
-            custom_alert('','Masukan Nomor Kuitansi');
-            $('#cetakKwitansi').focus();
+            //custom_alert('','Masukan Nomor Kuitansi');
+            //$('#cetakKwitansi').focus();
+            custom_alert('','Simpan data terlebih dahulu');
             return false;
         }
         $('.modal_cetak_kwitansi').modal('show');

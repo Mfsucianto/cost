@@ -220,7 +220,7 @@ $arryCapFildJs .= ']';
 <!-- ============================Modal Cetak ST=================================== -->
 
 <!--  Modal content for the above example -->
-<div class="modal fade dialog_cetak_st" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabeldialog_cetak_st">
+<div class="modal fade dialog_cetak_st combo_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabeldialog_cetak_st">
 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
   <div class="modal-content">
 
@@ -268,13 +268,13 @@ $arryCapFildJs .= ']';
                                 <table>
                                     <tr>
                                         <td>
-                                            <select class="orm-control input-sm select2" style="width:300px;" id="nipiKaPer_st" name="nipiKaPer_st">
+                                            <select class="orm-control input-sm select2_modal" style="width:300px;" id="nipiKaPer_st" name="nipiKaPer_st">
                                                 '.$opt.'
                                             </select>
                                         </td>
                                         <td> &nbsp &nbsp </td>
                                         <td>
-                                            <select class="orm-control input-sm select2" style="width:300px;" id="iKaPer_st" name="iKaPer_st">
+                                            <select class="orm-control input-sm select2_modal" style="width:300px;" id="iKaPer_st" name="iKaPer_st">
                                                 <option value="Kepala Perwakilan" >Kepala Perwakilan</option>
                                                 <option value="Pelaksana Harian Kepala Perwakilan" >Plh Kepala Perwakilan</option>
                                                 <option value="Pelaksana Tugas Kepala Perwakilan" >Plt Kepala Perwakilan</option>

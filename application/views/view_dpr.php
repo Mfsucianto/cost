@@ -47,10 +47,10 @@
 <script src="<?php echo base_url('assets/AdminLTE-2.0.5/plugins/jQuery/jQuery-2.1.3.min.js') ?>"></script>
 
 <script type="text/javascript">
-	/*$(document).ready(function() {
-		$('.detail_rkt_nValue').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
+	$(document).ready(function() {
+		$('.dpr_nJumlah').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
 
-	});*/
+	});
 
 
 	$('#tabel_detail_dpr').on('keyup', '.dpr_nJumlah', function(){
@@ -61,31 +61,16 @@
 
 
 	function  addrow_dpr() {
-		var row = $('table#tabel_detail_dpr tbody tr:last').clone();
+		var row_content = '';
+        row_content   = '<tr>';
+        row_content  += '<td><span class="tabel_detail_dpr_num">1</span></td>';
 
-		$("span.tabel_detail_dpr_num:first").text('1');
-		var n = $("span.tabel_detail_dpr_num:last").text();
+        row_content  += '<td><input style="width: 90%;text-align:left;" type="text" class="dpr_vPerincian" name="dpr_vPerincian[]"   ></td>'
+        row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="dpr_nJumlah" name="dpr_nJumlah[]" value="" data-a-dec="." data-a-sep=","  ></td>'
+        row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_dpr(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
+        row_content  += '</tr>';
+        jQuery("#tabel_detail_dpr tbody").append(row_content);
 
-		if (n.length == 0) {
-
-			var row_content = '';
-	        row_content   = '<tr>';
-	        row_content  += '<td><span class="tabel_detail_dpr_num">1</span></td>';
-
-	        row_content  += '<td><input style="width: 90%;text-align:left;" type="text" class="dpr_vPerincian" name="dpr_vPerincian[]"   ></td>'
-	        row_content  += '<td><input style="width: 90%;text-align:right;" type="text" class="dpr_nJumlah" name="dpr_nJumlah[]" value="" data-a-dec="." data-a-sep=","  ></td>'
-	        row_content  += '<td style="text-align:center;"><a href="javascript:;" onclick="del_row_dpr(this)"><i class="fa fa-fw fa-trash"></i></a></span></td>';
-	        row_content  += '</tr>';
-	        jQuery("#tabel_detail_dpr tbody").append(row_content);
-		}else{
-			var no = parseInt(n);
-			var c = no + 1;
-			$('table#tabel_detail_dpr tbody tr:last').after(row);
-			$('table#tabel_detail_dpr tbody tr:last input').val("");
-			$('table#tabel_detail_dpr tbody tr:last div').text("");
-			$("span.tabel_detail_dpr_num:last").text(c);	
-		}
-		
 
         $('.dpr_nJumlah').autoNumeric('init', {vMin:'0', vMax:'999999999999999999'});
 
@@ -108,6 +93,7 @@
 		$('.dpr_nJumlah').each(function() {
 			if ($('.dpr_nJumlah').eq(i).val() != '') {				
 				total += parseInt(stripCharacters($('.dpr_nJumlah').eq(i).val()));
+				//console.log($('.dpr_nJumlah').eq(i).val());
 			}
 
 			i++;
@@ -118,7 +104,6 @@
 		sum_nilaikwitansi();
 	}
 
-	
-	
+
 
 </script>

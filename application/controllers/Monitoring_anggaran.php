@@ -35,16 +35,17 @@ class monitoring_anggaran extends CI_Controller {
 		}
 
 		$sql = "select a.cTahun,a.iBidangId,a.cKodeDipa,a.vNamaItem,a.cKodeAccount,
+				(SELECT vUraian FROM cost.ms_account WHERE cKodeAccount=a.cKodeAccount) as urian_account,
 				a.fJumlahAnggaran,
 				(select coalesce(sum(dt.nNilaiKwitansi),0) as nNilaiKwitansi
 				from cost.cs_detail as dt
 				inner join cost.cs_header as b on b.iCsId=dt.iCsId
-				where dt.iDipaId=a.id and dt.lDeleted=0 and b.iJenisPerDinas=1 ) as nNilaiKwitansi,
+				where dt.iDipaId=a.id and dt.lDeleted=0 and b.iJenisPerDinas=1 and dt.iBatalSPD=0 ) as nNilaiKwitansi,
 
 				(select coalesce(sum(dt.nTotalBiaya),0) as nTotalBiaya
 				from cost.cs_detail as dt
 				inner join cost.cs_header as b on b.iCsId=dt.iCsId
-				where dt.iDipaId=a.id  and dt.lDeleted=0 and dt.nNilaiKwitansi=0 and b.iJenisPerDinas=1 ) as nTotalBiaya,
+				where dt.iDipaId=a.id  and dt.lDeleted=0 and dt.nNilaiKwitansi=0 and b.iJenisPerDinas=1 and dt.iBatalSPD=0 ) as nTotalBiaya,
 				(select vNickName from cost.ms_bidang where iBidangId=a.iBidangId) as nama_bidang
 				from cost.dipa  as a where ".$qb." a.cTahun='{$cTahun}' and a.lDeleted = 0";
 
@@ -58,6 +59,7 @@ class monitoring_anggaran extends CI_Controller {
                	<td>Bidang</td>
                	<td>Kode DIPA/RKAKL</td>
                	<td>Kode Mata Anggaran</td>
+               	<td>Uraian Kode Mata Anggaran</td>
                	<td>Anggaran</td>
                	<td>Realisasi</td>
                	<td>Outstanding</td>
@@ -75,6 +77,7 @@ class monitoring_anggaran extends CI_Controller {
 				$html .= "<td>".$row['nama_bidang']."</td>";
 				$html .= "<td>".$row['cKodeDipa']."</td>";
 				$html .= "<td>".$row['cKodeAccount']."</td>";
+				$html .= "<td>".$row['urian_account']."</td>";
 				$html .= "<td align='right' >".number_format($row['fJumlahAnggaran'])."</td>";
 				$html .= "<td align='right' >".number_format($row['nNilaiKwitansi'])."</td>";
 				$html .= "<td align='right' >".number_format($row['nTotalBiaya'])."</td>";

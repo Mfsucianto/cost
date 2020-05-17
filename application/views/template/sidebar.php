@@ -40,10 +40,10 @@
              
 
             <?php
-                //$peran = array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan');
+                //$peran = array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan',7=>'Admin SPD');
 
 
-                if ($iPeran==1){
+                if ($iPeran==1){ //Admin
                     ?>
 
                     <li  id='side_menu_utama'>
@@ -70,6 +70,23 @@
 
 
                     <?php
+                }else if ($iPeran==7){ //Admin SPD
+                    ?>
+
+                   
+
+                    <li id="side_menu_st">
+                         <a href="<?php echo site_url('?id=2') ?>"  > <i><span class="glyphicon glyphicon-duplicate"></span></i> <span>ST & Cost Sheet</span> <span class="pull-right-container"> </span> </a> 
+                    </li> 
+
+                    <li>
+                         <a href="<?php echo site_url('/spd') ?>"> <i><span class="glyphicon glyphicon-file"></span></i> <span>SPD</span> <span class="pull-right-container"> </span> </a> 
+                    </li>
+
+                   
+
+
+                    <?php
                 }else if ($iPeran < 99){
                     ?>
                         <li >
@@ -84,9 +101,17 @@
                              <a href="<?php echo site_url('vspd') ?>"  > <i><span class="glyphicon glyphicon-duplicate"></span></i> <span>View SPD</span> <span class="pull-right-container"> </span> </a> 
                         </li>
 
-                        <li >
-                             <a href="<?php echo site_url('monitoring_anggaran') ?>"  > <i><span class="glyphicon glyphicon-duplicate"></span></i> <span>Monitoring</span> <span class="pull-right-container"> </span> </a> 
-                        </li>
+                        <?php 
+                            if ($iPeran!=2){
+                                ?>
+                                     <li >
+                                         <a href="<?php echo site_url('monitoring_anggaran') ?>"  > <i><span class="glyphicon glyphicon-duplicate"></span></i> <span>Monitoring</span> <span class="pull-right-container"> </span> </a> 
+                                    </li>
+
+                                <?php
+                            }
+                        ?>
+                       
 
                     <?php
                 }

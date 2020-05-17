@@ -363,7 +363,7 @@ Pada tanggal	:
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["NIP : "+$P{nip_pejabat}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$P{nip_pejabat}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="32" y="554" width="255" height="70"/>
@@ -387,7 +387,7 @@ Pada tanggal	:
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["NIP : "+$P{nip_pejabat}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$P{nip_pejabat}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="287" y="554" width="268" height="70"/>
@@ -411,7 +411,7 @@ Pada tanggal	:
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["NIP : "+$P{nip_pejabat}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$P{nip_pejabat}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

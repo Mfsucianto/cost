@@ -30,7 +30,7 @@
 	<queryString>
 		<![CDATA[select 
 b.vNomorKwitansi,date_format(b.dTglSPPD,'%d %M %Y') as dTglSPPD,b.vNoSPPD,
-FORMAT(b.nNilaiKwitansi,0) as nilai_kwitansi,c.vDari,c.vTujuan,st.cNomorST,d.cKodeDipa,
+FORMAT(b.nNilaiKwitansi,0,'id_ID') as nilai_kwitansi,c.vDari,c.vTujuan,st.cNomorST,d.cKodeDipa,
 date_format(b.dLumpsumpAkhir,'%d %M %Y') as dLumpsumpAkhir,date_format(b.dLumpsumpAwal,'%d %M %Y') as dLumpsumpAwal,
 b.vNip,(select vName from cost.ms_pegawai where vNip=b.vNip) as vName
 from  cost.cs_detail as b
@@ -51,7 +51,7 @@ where b.id = $P{id}]]>
 	<field name="nilai_kwitansi" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="vDari" class="java.lang.Object">
+	<field name="vDari" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="vTujuan" class="java.lang.String">
@@ -166,11 +166,6 @@ where b.id = $P{id}]]>
 				<text><![CDATA[Keterangan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="11" width="172" height="15"/>
-				<textElement/>
-				<text><![CDATA[Yang bertanda tangan dibawah ini ]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="0" y="26" width="172" height="15"/>
 				<textElement/>
 				<text><![CDATA[Lampiran SPD Nomor]]></text>
@@ -179,11 +174,6 @@ where b.id = $P{id}]]>
 				<reportElement x="0" y="41" width="172" height="15"/>
 				<textElement/>
 				<text><![CDATA[Tanggal SPD]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="172" y="11" width="12" height="15"/>
-				<textElement/>
-				<text><![CDATA[:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="172" y="26" width="12" height="15"/>
@@ -208,9 +198,9 @@ where b.id = $P{id}]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="50" splitType="Stretch">
+		<band height="45" splitType="Stretch">
 			<subreport>
-				<reportElement x="31" y="30" width="541" height="20"/>
+				<reportElement x="31" y="30" width="541" height="15"/>
 				<subreportParameter name="id">
 					<subreportParameterExpression><![CDATA[$P{id}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -218,7 +208,7 @@ where b.id = $P{id}]]>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "kwitansi_detail.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="31" height="50" isPrintWhenDetailOverflows="true"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="31" height="45" isPrintWhenDetailOverflows="true"/>
 				<box leftPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -504,7 +494,7 @@ where b.id = $P{id}]]>
 			<textField>
 				<reportElement x="346" y="175" width="226" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{vNip}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$F{vNip}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="7" y="160" width="226" height="15"/>
@@ -514,12 +504,12 @@ where b.id = $P{id}]]>
 			<textField>
 				<reportElement x="7" y="175" width="226" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{nip_bendahara}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$P{nip_bendahara}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="422" width="203" height="15"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{nip_pejabat}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+ $P{nip_pejabat}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="407" width="203" height="15"/>

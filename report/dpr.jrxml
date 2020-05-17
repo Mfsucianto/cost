@@ -19,7 +19,8 @@
 		<![CDATA[select 
 b.vNip,p.vName,(select vJabatanName from cost.ms_jabatan where iJabatanId=p.iJabatanId) as vJabatanName,
 date_format(b.dTglSPPD,'%d %M %Y') as dTglSPPD,b.vNoSPPD,
-a.vPerincian,a.nJumlah,format(a.nJumlah,0) as jumlah 
+a.vPerincian,a.nJumlah,format(a.nJumlah,0,'id_ID') as jumlah,
+format((select sum(nJumlah) from cost.cd_detail_dpr where iCsDetailId=a.iCsDetailId),0,'id_ID') as jumlah_all
 from cost.cd_detail_dpr as a
 inner join cost.cs_detail as b on b.id=a.iCsDetailId 
 inner join cost.cs_header as c on c.iCsId=b.iCsId
@@ -50,6 +51,9 @@ where b.id = $P{id}]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="jumlah" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jumlah_all" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="nJumlah_1" class="java.lang.Long" calculation="Sum">
@@ -246,7 +250,7 @@ where b.id = $P{id}]]>
 				</textElement>
 				<text><![CDATA[JUMLAH]]></text>
 			</staticText>
-			<textField pattern="###0">
+			<textField pattern="">
 				<reportElement x="379" y="0" width="100" height="20"/>
 				<box leftPadding="2" rightPadding="2">
 					<topPen lineWidth="0.5"/>
@@ -255,12 +259,12 @@ where b.id = $P{id}]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression class="java.lang.Long"><![CDATA[$V{nJumlah_1}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Rp. "+$F{jumlah_all}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="18" y="33" width="514" height="50"/>
 				<textElement/>
-				<text><![CDATA[Jumlah uang tersebut pada angka 1 diatas benar-benar dikeluarkan untuk pelaksanaan perjalanan dinas diaksud dan apabila dikemudian hari terdapat kelebihan atas pembayaran, kami bersedia untuk menyetorkan kelebihan tersebut ke Kas Negara. ]]></text>
+				<text><![CDATA[Jumlah uang tersebut pada angka 1 diatas benar-benar dikeluarkan untuk pelaksanaan perjalanan dinas dimaksud dan apabila dikemudian hari terdapat kelebihan atas pembayaran, kami bersedia untuk menyetorkan kelebihan tersebut ke Kas Negara. ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="33" width="18" height="20"/>
@@ -294,7 +298,7 @@ Pejabat Pembuat Komitmen
 			<textField>
 				<reportElement x="313" y="260" width="219" height="15"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{vNip}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$F{vNip}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="313" y="245" width="219" height="15"/>
@@ -309,7 +313,7 @@ Pejabat Pembuat Komitmen
 			<textField>
 				<reportElement x="0" y="260" width="201" height="15"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{nip_pejabat}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$P{nip_pejabat}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

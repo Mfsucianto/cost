@@ -188,13 +188,13 @@ class spd extends CI_Controller {
 			$qb = " AND st.iBidangId='".$iBidangId."' ";
 		}
 
-		$sql = "select a.vNoSPPD,a.dTglSPPD,a.vJenisSPD,a.iJenisAkomodasi,a.vNip,b.vName,
+		$sql = "SELECT a.vNoSPPD,a.dTglSPPD,a.vJenisSPD,a.iJenisAkomodasi,a.vNip,b.vName,
 			a.dPerjalananStart,a.dPerjalananEnd,c.vDari,c.vTujuan,a.iAlatAngkut,st.iSumberDana,st.vUraianPenugasan,
 			st.iBidangId,bd.vNickName,a.iBatalSPD
 			from cost.cs_detail as a
 			left join cost.ms_pegawai as b on b.vNip=a.vNip
-			left join cost.cs_header as c on c.iCsId=a.iCsId 
-			left join cost.st_header as st on st.iStId=c.iStId
+			INNER join cost.cs_header as c on c.iCsId=a.iCsId 
+			INNER join cost.st_header as st on st.iStId=c.iStId
 			left join cost.ms_bidang as bd on bd.iBidangId =st.iBidangId
 			where date_format(a.dTglSPPD,'%Y')='{$cTahun}' and a.lDeleted=0 ".$qb;
 
@@ -239,6 +239,7 @@ class spd extends CI_Controller {
 					$col = "";
 				}
 
+				
 				$html .= "<tr ".$col.">";
                 $html .= "<td width='50px'>".$no."</td>";
 				$html .= "<td>".$row['vNip']."</td>";
@@ -275,7 +276,7 @@ class spd extends CI_Controller {
 		$jabatan2 		= $_GET['jabatan2'];
 		$diKelurkandi 	= $_GET['diKelurkandi'];
 		if ($_GET['dKeluarkanTgl']!=''){
-			$dKeluarkanTgl =  date('d F Y',strtotime($_GET['dKeluarkanTgl']));
+			$dKeluarkanTgl =  $this->lib_util->tgl_indo(date('Y-m-d',strtotime($_GET['dKeluarkanTgl'])));
 		}else{
 			$dKeluarkanTgl 	= $_GET['dKeluarkanTgl'];
 		}

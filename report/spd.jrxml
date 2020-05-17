@@ -741,7 +741,7 @@ where a.id=$P{id}]]>
 			<textField>
 				<reportElement x="344" y="435" width="211" height="15"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA["NIP :"+$P{nip_pejabat}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$P{nip_pejabat}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd MMMMM yyyy">
 				<reportElement positionType="Float" x="237" y="80" width="21" height="20"/>

@@ -4,7 +4,7 @@
 		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select a.iJenis,a.nHari,FORMAT(a.nBiaya,0) as biaya,FORMAT(a.nJumlah,0) as jumlah,a.vTransDari,a.vTransTujuan,a.vKeterangan
+		<![CDATA[select a.iJenis,a.nHari,FORMAT(a.nBiaya,0,'id_ID') as biaya,FORMAT(a.nJumlah,0,'id_ID') as jumlah,a.vTransDari,a.vTransTujuan,a.vKeterangan
 from cost.cs_detail_kwitansi as a
 where a.iCsDetailId = $P{id} and a.iJenis =2]]>
 	</queryString>

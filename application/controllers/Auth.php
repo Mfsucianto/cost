@@ -58,7 +58,7 @@ class Auth extends CI_Controller {
 			if ($query->num_rows() > 0) {
 				$row = $query->row();
 
-				$list_level = array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan');
+				$list_level = array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan',7=>'Admin SPD');
 
 
 			   	$sess_data['logged_in'] 		= TRUE;

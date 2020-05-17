@@ -148,7 +148,7 @@ if (isset($dataFrom['changeFiled'])){
                     echo $this->lib_util->drawcombo('iSubBidangId','Sub Bidang',$datchgsubbid,'300px');
 
 
-                    echo $this->lib_util->drawcombo('iPeran','Peran',array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan'),'300px');
+                    echo $this->lib_util->drawcombo('iPeran','Peran',array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan',7=>'Admin SPD'),'300px');
 
                     echo "<legend></legend>";
 

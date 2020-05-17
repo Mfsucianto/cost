@@ -55,7 +55,7 @@ class pegawai extends CI_Controller {
     						),
         		'iPeran' => array(
         						'type' => 'combobox',
-        						'data' => array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan')
+        						'data' => array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan',7=>'Admin SPD')
         					),
         		'cSex' => array(
         					'type' => 'combobox',
@@ -118,7 +118,7 @@ class pegawai extends CI_Controller {
             <tbody>';
         $no=0;
         
-        $peran = array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan');
+        $peran = array(0=>'',1=>'Admin',2=>'Pegawai',3=>'Kepala Bagian',4=>'Sub Bagian',5=>'Skretaris Bidang',6=>'Kepala Perwakilan',7=>'Admin SPD');
 
 		if ($query->num_rows() > 0) {
 			foreach($query->result_array() as $row) {

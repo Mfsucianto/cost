@@ -351,9 +351,11 @@ class cost_sheet extends CI_Controller {
 		$iStId 		= $_POST['iStId'];
 		$iCsDetailId 		= $_POST['iCsDetailId'];
 		$iJenisPerDinas		= $_POST['iJenisPerDinas'];
+		$iSumberDana		= $_POST['iSumberDana'];
 		unset($post['iCsDetailId']);
 		unset($post['iStId']);
 		unset($post['iJenisPerDinas']);
+		unset($post['iSumberDana']);
 
 		$post['nBiayaUangHarian'] 	= str_replace(",", "",$post['nBiayaUangHarian']);
 		$post['nBiayaRepre'] 		= str_replace(",", "",$post['nBiayaRepre']);
@@ -389,11 +391,11 @@ class cost_sheet extends CI_Controller {
 		$post['nTotalBiaya'] = $post['nTotalUangHarian'] + $post['nBiayaRepre'] + $post['nTotalTransport'] + $post['nTotalPenginapan'];
 
 		//cek plafon yg tersedia
-		if ($iJenisPerDinas==1){
-			$sqlc = "SELECT coalesce(sum(nValueAju),0) as nValueAju
-				coalesce((select sum(b.nTotalBiaya) from cs_detail as b 
+		if ($iJenisPerDinas==1 && $iSumberDana==1){
+			$sqlc = "SELECT coalesce(sum(nValueAju),0) as nValueAju,
+				coalesce((select sum(b.nTotalBiaya) from cost.cs_detail as b 
 				inner join cost.cs_header as c on c.iCsId=b.iCsId
-				WHERE c.iStId='{$iStId}' and b.lDeleted=0 and c.lDeleted=0 and b.id!='{$iCsDetailId}' and c.iJenisPerDinas=1 ),0) as terpakai_cs
+				WHERE c.iStId='{$iStId}' and b.lDeleted=0 and c.lDeleted=0 and b.id!='{$iCsDetailId}' and c.iJenisPerDinas=1 and b.iBatalSPD=0 ),0) as terpakai_cs
 				from cost.st_detail_rkt  as a where a.iStId='{$iStId}' and a.lDeleted=0";
 
 			$queryc = $this->db->query($sqlc);
@@ -402,7 +404,7 @@ class cost_sheet extends CI_Controller {
 				$saldo 	 = $rc->nValueAju - $rc->terpakai_cs;
 				
 				if ($post['nTotalBiaya'] > $saldo){
-					echo "Biaya tidak tersedia" .$post['nTotalBiaya']." > ".$saldo;
+					echo "Biaya tidak tersedia";
 					exit();
 				}
 			}	

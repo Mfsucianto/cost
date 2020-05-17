@@ -253,6 +253,30 @@ class lib_util {
 		return $html;
 	}
 
+	function drawcombo_onmodal($filed,$caption,$data,$width='100%'){
+
+		
+
+		$x = '<select class="orm-control input-sm select2_modal" style="width:'.$width.';" id="'.$filed.'" name="'.$filed.'">
+					<option></option>
+				';
+        
+		foreach($data as $k => $v) {
+			$x .= '<option value="'.$k.'"  >'.$v.'</option>';
+		}
+        	          	     
+        $x .= '</select>';
+
+
+        $html = '<div class="form-group" id="div_'.$filed.'">
+              <label for="username" class="col-sm-4 control-label" style="font-weight: 400;">'.$caption.'</label>
+              <div class="col-sm-7">
+                	'.$x.'
+              </div>
+            </div>';
+		return $html;
+	}
+
 	function drawBindFiled($value,$text,$dbname){
 		$datchg = array();
         $sql = "SELECT iJabatanId,vJabatanName FROM  ms_jabatan order by vJabatanName ASC";
@@ -446,7 +470,29 @@ class lib_util {
 	}
 
 
-	
+	function tgl_indo($tanggal){
+		$bulan = array (
+			1 =>   'Januari',
+			'Februari',
+			'Maret',
+			'April',
+			'Mei',
+			'Juni',
+			'Juli',
+			'Agustus',
+			'September',
+			'Oktober',
+			'November',
+			'Desember'
+		);
+		$pecahkan = explode('-', $tanggal);
+		
+		// variabel pecahkan 0 = tanggal
+		// variabel pecahkan 1 = bulan
+		// variabel pecahkan 2 = tahun
+	 
+		return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+	}
 
 }
 

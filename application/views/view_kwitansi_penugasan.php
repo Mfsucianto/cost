@@ -162,9 +162,27 @@
 		});
 
 		
-		if ($('.trans_nBiaya').val() != ''){
-			total += parseInt(stripCharacters($('.trans_nBiaya').val()));
-		}
+
+
+		var i			=0;
+		$('.trans_nBiaya').each(function() {
+			if ($('.trans_nBiaya').eq(i).val() != '') {				
+				total += parseInt(stripCharacters($('.trans_nBiaya').eq(i).val()));
+			}
+
+			i++;
+		});
+
+		var i			=0;
+		$('.dpr_nJumlah').each(function() {
+			if ($('.dpr_nJumlah').eq(i).val() != '') {				
+				total += parseInt(stripCharacters($('.dpr_nJumlah').eq(i).val()));
+			}
+
+			i++;
+		});
+
+
 		//total += parseInt(stripCharacters($('.trans_nBiaya').val()));
 
 		var say = terbilang(total);

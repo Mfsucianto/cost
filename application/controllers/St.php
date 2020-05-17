@@ -88,7 +88,7 @@ class st extends CI_Controller {
 				(select coalesce(sum(dt.nNilaiKwitansi),0) as nNilaiKwitansi
 					from cost.cs_detail as dt
 					inner join cost.cs_header as b on b.iCsId=dt.iCsId 
-					where b.iStId = a.iStId and dt.lDeleted=0 and b.lDeleted=0 and b.iJenisPerDinas=1)  as nilai_realisasi
+					where b.iStId = a.iStId and dt.lDeleted=0 and b.lDeleted=0 and b.iJenisPerDinas=1 and dt.iBatalSPD=0)  as nilai_realisasi
 				FROM cost.st_header as a
 				left join cost.ms_bidang as b on b.iBidangId=a.iBidangId
 				where {$qb} a.lDeleted=0";
@@ -264,20 +264,23 @@ class st extends CI_Controller {
 		$sql = "DELETE FROM cost.st_detail_rkt WHERE iStId=".$last_id;
 		$this->db->query($sql);
 
-		foreach($iRktId as $key=>$value) {
-			foreach($value as $k=>$v) {
-				$data_rkt = array(
-					'iStId' 	=> $last_id,
-					'iRktId'	=> $v,
-					'nValueAju'	=> $nValue[0][$k],
-					'nValue'	=> $nValue[0][$k],
-					'tCreated' 	=> date('Y-m-d H:i:s'),
-					'cCreatedby' => $cUserId
-				);
+		if ($_POST['iSumberDana']==1){
+			foreach($iRktId as $key=>$value) {
+				foreach($value as $k=>$v) {
+					$data_rkt = array(
+						'iStId' 	=> $last_id,
+						'iRktId'	=> $v,
+						'nValueAju'	=> $nValue[0][$k],
+						'nValue'	=> $nValue[0][$k],
+						'tCreated' 	=> date('Y-m-d H:i:s'),
+						'cCreatedby' => $cUserId
+					);
 
-				$this->db->insert('st_detail_rkt',$data_rkt);
-			}
-		}	
+					$this->db->insert('st_detail_rkt',$data_rkt);
+				}
+			}	
+		}
+		
 
 		echo $x;
 		exit();
@@ -404,6 +407,10 @@ class st extends CI_Controller {
 		
 	}
 
+	function listSaldoRKT($iStId){
+		
+	}
+
 	function getListDataDipa(){
 
 		$cTahun 	= date('Y',strtotime($_POST['cTahun']));
@@ -414,12 +421,12 @@ class st extends CI_Controller {
 				(select coalesce(sum(dt.nNilaiKwitansi),0) as nNilaiKwitansi
 				from cost.cs_detail as dt
 				INNER JOIN cost.cs_header AS c ON c.iCsId=dt.iCsId
-				where dt.iDipaId=a.id and dt.lDeleted=0 and c.iJenisPerDinas=1 ) as nNilaiKwitansi,
+				where dt.iDipaId=a.id and dt.lDeleted=0 and c.iJenisPerDinas=1 and dt.iBatalSPD=0 ) as nNilaiKwitansi,
 
 				(select coalesce(sum(dt.nTotalBiaya),0) as nTotalBiaya
 					from cost.cs_detail as dt
 					INNER JOIN cost.cs_header AS c ON c.iCsId=dt.iCsId
-					where dt.iDipaId=a.id  and  dt.lDeleted=0 and dt.nNilaiKwitansi=0 and c.iJenisPerDinas=1 ) as nTotalBiaya
+					where dt.iDipaId=a.id  and  dt.lDeleted=0 and dt.nNilaiKwitansi=0 and c.iJenisPerDinas=1 and dt.iBatalSPD=0 ) as nTotalBiaya
 				FROM cost.dipa AS a WHERE a.cTahun='{$cTahun}' AND a.iBidangId='{$iBidangId}' AND a.lDeleted=0;";
 
 		$query = $this->db->query($sql);
@@ -898,11 +905,12 @@ class st extends CI_Controller {
 		$nipiKaPer 	= explode("|",$_GET['nipiKaPer']);
 		$iKaPer 	= $_GET['iKaPer'];
 		$diKelurkandi 	= $_GET['diKelurkandi'];
-		$dKeluarkanTgl 	= $_GET['dKeluarkanTgl'];
+		$dKeluarkanTgl 	= $this->lib_util->tgl_indo(date('Y-m-d',strtotime($_GET['dKeluarkanTgl'])));
 		$nipKorwas		= explode("|", $_GET['nipKorwas']);
 		$nipp3a			= explode("|", $_GET['nipp3a']);
 		$niptu			= explode("|", $_GET['niptu']);
 		$nipkeuangan	= explode("|", $_GET['nipkeuangan']);
+		$SaldoRKT       = $this->cekSaldoRKT($iStId);
 
 		$nama_keg   = "";
 		$nomor_pkpt = "";
@@ -943,7 +951,7 @@ class st extends CI_Controller {
 		$params->put('nip_kasubag', $nipDalnis['0']);		
 		$params->put('nama_kasubag', $nipDalnis['1']);
 		$params->put('diKelurkandi',$diKelurkandi);		
-		$params->put('dKeluarkanTgl',date('d F Y',strtotime($dKeluarkanTgl)));
+		$params->put('dKeluarkanTgl',$dKeluarkanTgl);
 		$params->put('nip_korwas', $nipKorwas['0']);		
 		$params->put('nama_korwas', $nipKorwas['1']);
 

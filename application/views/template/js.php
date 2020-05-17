@@ -40,6 +40,13 @@
     	});
 
 
+    	$('.select2_modal').select2({
+    		placeholder: "--select--",
+    		allowClear: true,
+    		dropdownParent: $(".combo_modal")
+    	});
+
+
     	$('.datepicker').datepicker({
     		format: 'dd-mm-yyyy',
             autoclose : true,

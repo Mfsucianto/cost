@@ -30,7 +30,7 @@
 	<queryString>
 		<![CDATA[select 
 b.vNomorKwitansi,date_format(b.dTglSPPD,'%d %M %Y') as dTglSPPD,b.vNoSPPD,
-FORMAT(b.nNilaiKwitansi,0) as nilai_kwitansi,c.vDari,c.vTujuan,st.cNomorST,d.cKodeDipa,
+FORMAT(b.nNilaiKwitansi,0,'id_ID') as nilai_kwitansi,c.vDari,c.vTujuan,st.cNomorST,d.cKodeDipa,
 date_format(b.dLumpsumpAkhir,'%d %M %Y') as dLumpsumpAkhir,date_format(b.dLumpsumpAwal,'%d %M %Y') as dLumpsumpAwal,
 b.vNip,(select vName from cost.ms_pegawai where vNip=b.vNip) as vName
 from  cost.cs_detail as b
@@ -51,7 +51,7 @@ where b.id = $P{id}]]>
 	<field name="nilai_kwitansi" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="vDari" class="java.lang.Object">
+	<field name="vDari" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="vTujuan" class="java.lang.String">
@@ -494,11 +494,11 @@ where b.id = $P{id}]]>
 			</staticText>
 			<subreport>
 				<reportElement x="31" y="15" width="200" height="15"/>
-				<subreportParameter name="SUBREPORT_DIR">
-					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="id">
 					<subreportParameterExpression><![CDATA[$P{id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "kwitansi_transport.jasper"]]></subreportExpression>
@@ -592,7 +592,7 @@ where b.id = $P{id}]]>
 			<textField>
 				<reportElement x="425" y="181" width="147" height="15"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{vNip}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$F{vNip}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="224" y="168" width="170" height="15"/>
@@ -602,12 +602,12 @@ where b.id = $P{id}]]>
 			<textField>
 				<reportElement x="224" y="183" width="167" height="15"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{nip_bendahara}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$P{nip_bendahara}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="181" width="172" height="15"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{nip_pejabat}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIP "+$P{nip_pejabat}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="166" width="172" height="15"/>

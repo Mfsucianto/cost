@@ -774,6 +774,7 @@
         var iStId           = $('#iStId').val();
         var vNip_cs          = $('#vNip_cs').val();
         var iJenisPerDinas = $('#iJenisPerDinas').val();
+        var iSumberDana = $('#iSumberDana').val();
 
         var dPerjalananStart    = $('#dPerjalananStart').val()
         var dPerjalananEnd      = $('#dPerjalananEnd').val()
@@ -881,7 +882,7 @@
             $.ajax({
                 url: url,
                 type: 'post',
-                data: 'iCsId='+iCsId+'&iCsDetailId='+iCsDetailId+'&vNip='+vNip_cs+'&nBiayaUangHarian='+nBiayaUangHarian+'&nBiayaRepre='+nBiayaRepre+'&nBiayaTransport='+nBiayaTransport+'&iJenisAkomodasi='+iJenisAkomodasi+'&nBiayaPenginapan='+nBiayaPenginapan+'&nHonorJasa='+nHonorJasa+'&dPerjalananStart='+dPerjalananStart+ '&dPerjalananEnd='+dPerjalananEnd+ '&iAlatAngkut='+iAlatAngkut+ '&iOpsiHariLibur='+iOpsiHariLibur+ '&iOpsiHariSabtu='+iOpsiHariSabtu+ '&iOpsiHariMinggu='+iOpsiHariMinggu+'&iStId='+iStId+'&iDipaId='+iDipaId+'&iJenisPerDinas='+iJenisPerDinas,
+                data: 'iCsId='+iCsId+'&iCsDetailId='+iCsDetailId+'&vNip='+vNip_cs+'&nBiayaUangHarian='+nBiayaUangHarian+'&nBiayaRepre='+nBiayaRepre+'&nBiayaTransport='+nBiayaTransport+'&iJenisAkomodasi='+iJenisAkomodasi+'&nBiayaPenginapan='+nBiayaPenginapan+'&nHonorJasa='+nHonorJasa+'&dPerjalananStart='+dPerjalananStart+ '&dPerjalananEnd='+dPerjalananEnd+ '&iAlatAngkut='+iAlatAngkut+ '&iOpsiHariLibur='+iOpsiHariLibur+ '&iOpsiHariSabtu='+iOpsiHariSabtu+ '&iOpsiHariMinggu='+iOpsiHariMinggu+'&iStId='+iStId+'&iDipaId='+iDipaId+'&iJenisPerDinas='+iJenisPerDinas+'&iSumberDana='+iSumberDana,
                 success: function(data) {
                     if (data == '') {
                         
